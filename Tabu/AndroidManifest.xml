@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="es.uca.tabu"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/loginYourAccount"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="es.uca.tabu.LoginActivity"
+            android:configChanges="locale|orientation"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="es.uca.tabu.RegisterActivity"
+            android:configChanges="locale|orientation"
+            android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name="es.uca.tabu.MainMenuActivity"
+            android:label="@string/title_activity_main_menu"
+            android:parentActivityName="es.uca.tabu.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.uca.tabu.LoginActivity" />
+        </activity>
+        <activity
+            android:name="es.uca.tabu.PlayMenuActivity"
+            android:label="@string/title_activity_play_menu"
+            android:parentActivityName="es.uca.tabu.MainMenuActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.uca.tabu.MainMenuActivity" />
+        </activity>
+    </application>
+
+</manifest>

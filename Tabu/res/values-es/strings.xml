@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tabú</string>
+    <string name="action_settings">Opciones</string>
+    <string name="hello_world">Hola Mundo!</string>
+    <string name="new_register">¿Nuevo en Tabú? ¡Registrate aquí!</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Entrar</string>
+    <string name="fullName">Nombre completo</string>
+    <string name="newAccount">Registra una cuenta nueva</string>
+    <string name="existingAccount">¡Ya tengo una cuenta! Entrar aquí</string>
+    <string name="title_activity_register">Registrar una nueva cuenta</string>
+    <string name="loginYourAccount">Entrar a tu cuenta</string>
+    <string name="title_activity_main_menu">Menú principal</string>
+    <string name="play">Jugar</string>
+    <string name="stats">Estadísticas</string>
+    <string name="dictionary">Diccionario</string>
+    <string name="newdef">Nueva definición</string>
+
+</resources>
