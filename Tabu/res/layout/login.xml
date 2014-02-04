@@ -35,9 +35,9 @@
             android:id="@+id/footer"
             android:layout_width="fill_parent"
             android:layout_height="90dip"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true" 
-            android:background="@layout/footer_repeat">
+            android:layout_alignParentBottom="true"
+            android:background="@layout/footer_repeat"
+            android:orientation="vertical" >
         </LinearLayout>
         <!-- Footer Ends -->
 
@@ -61,6 +61,7 @@
 
             <EditText
                 android:id="@+id/reg_email"
+                android:inputType="textEmailAddress"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
@@ -79,8 +80,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:password="true"
+                android:inputType="textPassword"
                 android:singleLine="true" />
+
+            <!-- Remember me -->
+
+            <CheckBox
+                android:id="@+id/rememberMeCheckBox"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/rememberMe" />
+
             <!-- Login button -->
 
             <Button

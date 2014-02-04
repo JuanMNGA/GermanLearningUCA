@@ -38,6 +38,7 @@
     <!--  Login Activity -->
     <string name="logging"> Autenticando usuario...</string>
     <string name="userNotExists"> Usuario o contraseña incorrectos</string>
+    <string name="rememberMe"> Recuerdame</string>
     
     <!-- General -->
     <string name="ok"> Ok </string>

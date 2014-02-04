@@ -17,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,6 +28,10 @@ public class LoginActivity extends Activity {
 	private static String KEY_SUCCESS = "success";
 	private static String KEY_NOMBRE = "nombre";
 	private static String KEY_EMAIL = "email";
+	
+    private CheckBox saveLoginCheckBox;
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,18 @@ public class LoginActivity extends Activity {
 
 		// setting default screen to login.xml
 		setContentView(R.layout.login);
+		
+		// Load default options if rememberMe is checked
+		saveLoginCheckBox = (CheckBox)findViewById(R.id.rememberMeCheckBox);
+		loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
+        
+        if (loginPreferences.getBoolean("saveLogin", false)) {
+        	((EditText) findViewById(R.id.reg_email)).setText(loginPreferences.getString("email", ""));
+        	((EditText) findViewById(R.id.reg_password)).setText(loginPreferences.getString("password", ""));
+            saveLoginCheckBox.setChecked(true);
+        }
+		
 
 		TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
 
@@ -70,7 +87,20 @@ public class LoginActivity extends Activity {
 					dialog = ProgressDialog.show(LoginActivity.this, " ", 
 							getResources().getString(R.string.logging), true);
 					
+					//If there is access to Internet
 					if(ConnectionManager.getInstance(LoginActivity.this).networkWorks()) {
+						
+						// Save remember me options
+			            if (saveLoginCheckBox.isChecked()) {
+			                loginPrefsEditor.putBoolean("saveLogin", true);
+			                loginPrefsEditor.putString("email", email);
+			                loginPrefsEditor.putString("password", pass);
+			                loginPrefsEditor.commit();
+			            } else {
+			                loginPrefsEditor.clear();
+			                loginPrefsEditor.commit();
+			            }
+						
 						// Login the user
 						new loginUserTask().execute(
 								email,
@@ -83,6 +113,7 @@ public class LoginActivity extends Activity {
 				}
 			}
 		});
+        
 	}
 
 	@Override

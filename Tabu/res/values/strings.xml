@@ -39,6 +39,7 @@
     <!--  Login Activity -->
     <string name="logging"> Logging...</string>
     <string name="userNotExists"> Incorrect email or password!</string>
+    <string name="rememberMe"> Remember Me</string>
     
     <!-- General -->
     <string name="ok"> Ok </string>
