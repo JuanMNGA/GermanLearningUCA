@@ -21,5 +21,28 @@
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_play_menu">Play Menu</string>
+    <string name="title_activity_new_definition">New Definition</string>
+    <string name="Send"> Send </string>
+    <string name="writeNewDef"> New Definition... </string>
+    <string name="definitionBody"> Body Definition </string>
+    <string name="title_activity_dictionary">Dictionary</string>
+    
+    <!--  Register Activity -->
+    <string name="invalidName"> Invalid Name</string>
+    <string name="invalidEmail"> Invalid Email</string>
+    <string name="invalidPass"> Invalid Password</string>
+    <string name="sending"> Sending...</string>
+    <string name="userReg"> You are now registered!</string>
+    <string name="userNotReg"> User already exists </string>
+    <string name="regError"> Error occured in registration</string>
 
+    <!--  Login Activity -->
+    <string name="logging"> Logging...</string>
+    <string name="userNotExists"> Incorrect email or password!</string>
+    
+    <!-- General -->
+    <string name="ok"> Ok </string>
+	<string name="error"> Error </string>
+	<string name="noNetwork"> Unable to connect to Internet </string>
+    
 </resources>

@@ -29,6 +29,30 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		
+		Button newDef = (Button) findViewById(R.id.btnNewDef);
+
+		// Listening to register new account link
+		newDef.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				// Switching to Register screen
+				Intent i = new Intent(getApplicationContext(), NewDefinitionActivity.class);
+				startActivity(i);
+			}
+		});
+		
+		Button dictionary = (Button) findViewById(R.id.btnDictionary);
+
+		// Listening to register new account link
+		dictionary.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				// Switching to Register screen
+				Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
+				startActivity(i);
+			}
+		});
 	}
 
 	/**

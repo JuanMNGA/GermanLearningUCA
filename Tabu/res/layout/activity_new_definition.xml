@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"
+    tools:context=".NewDefinitionActivity" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff" >
+
+        <!-- Header  Starts -->
+
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@layout/header_gradient"
+            android:orientation="vertical"
+            android:paddingBottom="5dip"
+            android:paddingTop="5dip" >
+
+            <!-- Logo Start -->
+
+
+            <!-- Logo Ends -->
+        </LinearLayout>
+        <!-- Header Ends -->
+        <!-- Footer Start -->
+        <!-- Footer Ends -->
+
+
+        <!-- New Def Form -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:orientation="vertical"
+            android:padding="10dip" >
+
+            <!-- Write new text edit text -->
+
+            <EditText
+                android:id="@+id/writeNewDef"
+                android:text="@string/writeNewDef"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:layout_marginTop="5dip"
+                android:singleLine="true" />
+            <!-- Email Label -->
+
+            <EditText
+                android:id="@+id/DefinitionBody"
+                android:text="@string/definitionBody"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:maxLines="10"
+                android:minLines="6"
+                android:scrollbars="vertical" />
+
+            <!-- Vertical Scroll Bar -->
+            <!-- Password Label -->
+
+
+            <!-- Send Button -->
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:text="@string/Send" />
+            <!-- Link to Login Screen -->
+
+        </LinearLayout>
+        <!-- Registration Form Ends -->
+    </RelativeLayout>
+
+</ScrollView>
