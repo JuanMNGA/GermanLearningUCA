@@ -34,7 +34,6 @@
     <string name="sending"> Sending...</string>
     <string name="userReg"> You are now registered!</string>
     <string name="userNotReg"> User already exists </string>
-    <string name="regError"> Error occured in registration</string>
 
     <!--  Login Activity -->
     <string name="logging"> Logging...</string>
@@ -45,5 +44,6 @@
     <string name="ok"> Ok </string>
 	<string name="error"> Error </string>
 	<string name="noNetwork"> Unable to connect to Internet </string>
+	<string name="serverIssues"> Unable to connect to server</string>
     
 </resources>

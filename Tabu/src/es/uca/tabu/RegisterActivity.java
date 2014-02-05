@@ -111,7 +111,7 @@ public class RegisterActivity extends Activity {
 			 * Checks for success message.
 			 **/
 			try {
-				if (json.getString(KEY_SUCCESS) != null) {
+				if (!json.isNull(KEY_SUCCESS)) {
 					String res = json.getString(KEY_SUCCESS);
 					String red = json.getString(KEY_ERROR);
 					if(Integer.parseInt(res) == 1){
@@ -143,7 +143,7 @@ public class RegisterActivity extends Activity {
 				}
 				else{
 					dialog.dismiss();
-					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.regError),RegisterActivity.this);
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),RegisterActivity.this);
 				}
 			} catch (JSONException e) {
 				System.out.println("Error en Register postExecute");

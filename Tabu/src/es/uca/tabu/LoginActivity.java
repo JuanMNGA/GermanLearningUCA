@@ -1,7 +1,5 @@
 package es.uca.tabu;
 
-import java.util.Locale;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,9 +9,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +47,6 @@ public class LoginActivity extends Activity {
             saveLoginCheckBox.setChecked(true);
         }
 		
-
 		TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
 
 		// Listening to register new account link
@@ -137,7 +131,7 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
-				if (json.getString(KEY_SUCCESS) != null) {
+				if (!json.isNull(KEY_SUCCESS)) {
 					String res = json.getString(KEY_SUCCESS);
 					if(Integer.parseInt(res) == 1){
 						dialog.dismiss();
@@ -155,6 +149,10 @@ public class LoginActivity extends Activity {
 						dialog.dismiss();
 						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.userNotExists),LoginActivity.this);
 					}
+				}
+				else {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),LoginActivity.this);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

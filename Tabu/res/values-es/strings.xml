@@ -33,7 +33,6 @@
     <string name="sending"> Enviando...</string>
     <string name="userReg"> ¡Registro completado!</string>
     <string name="userNotReg"> Usuario ya existente </string>
-    <string name="regError"> Error en el registro</string>
     
     <!--  Login Activity -->
     <string name="logging"> Autenticando usuario...</string>
@@ -44,5 +43,6 @@
     <string name="ok"> Ok </string>
 	<string name="error"> Error </string>
 	<string name="noNetwork"> Es imposible conectar a Internet </string>
+	<string name="serverIssues"> Imposible conectar con el servidor</string>
     
 </resources>
