@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:fillViewport="true" >
+    android:fillViewport="false" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -14,17 +14,14 @@
         <LinearLayout
             android:id="@+id/header"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@layout/header_gradient"
-            android:paddingBottom="5dip"
-            android:paddingTop="5dip" >
+            android:layout_height="wrap_content" >
 
             <!-- Logo Start -->
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
+                android:adjustViewBounds="true"
                 android:src="@drawable/logo" />
             <!-- Logo Ends -->
         </LinearLayout>
@@ -34,7 +31,7 @@
         <LinearLayout
             android:id="@+id/footer"
             android:layout_width="fill_parent"
-            android:layout_height="90dip"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@layout/footer_repeat"
             android:orientation="vertical" >
@@ -65,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
                 android:layout_marginTop="5dip"
+                android:inputType="text"
                 android:singleLine="true" />
             <!-- Email Label -->
 
@@ -80,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
                 android:layout_marginTop="5dip"
+                android:inputType="textEmailAddress"
                 android:singleLine="true" />
             <!-- Password Label -->
 
@@ -94,7 +93,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:password="true"
+                android:inputType="textPassword"
                 android:singleLine="true" />
             <!-- Register Button -->
 
@@ -115,7 +114,7 @@
                 android:gravity="center"
                 android:text="@string/existingAccount"
                 android:textColor="#025f7c"
-                android:textSize="20dip" />
+                android:textSize="20sp" />
         </LinearLayout>
         <!-- Registration Form Ends -->
     </RelativeLayout>

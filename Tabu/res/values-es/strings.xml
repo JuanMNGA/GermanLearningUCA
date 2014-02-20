@@ -25,24 +25,47 @@
     <string name="title_activity_new_definition">Nueva Definición</string>
     <string name="title_activity_play_menu">Menú Jugar</string>
 
+    <!-- Result Activity -->
+    <string name="pistas"> pistas usadas</string>
+    <string name="backToMenu"> Volver al menú </string>
+    <string name="back"> Volver </string>
     
-    <!--  Register Activity -->
+    <!-- Game Activity -->
+    <string name="wordHint"> Introduzca aquí su respuesta</string>
+    <string name="errorQuestions"> Error en la petición de preguntas al servidor</string>
+    <string name="noQuestions"> No hay preguntas que mostrar</string>
+    <string name="pista"> Pista</string>
+    <string name="articleword"> Articulo: </string>
+    <string name="wrongAnswer1"> Respuesta incorrecta, ¡Inténtalo de nuevo! </string>
+    <string name="wrongAnswer2"> Respuesta incorrecta </string>
+    <string name="loadingDefinition"> Cargando definición...</string>
+
+    <!-- Play Menu Activity -->
+    <string name="PlayerVsComputer"> Jugador Vs Máquina</string>
+    <string name="PlayerVsPlayer"> Jugador Vs Jugador</string>
+    <string name="joingGroupQueue"> Unirse a la cola de grupo</string>
+    <string name="numQuestions"> Número de preguntas: </string>
+    <string name="startGame"> Empezar </string>
+    <string name="selectAll"> Todas </string>
+    <string name="atLeastOneCategory"> Selecciona al menos una categoría </string>
+
+    <!-- Register Activity -->
     <string name="invalidName"> Nombre inválido</string>
     <string name="invalidEmail"> Email inválido</string>
     <string name="invalidPass"> Password inválido</string>
     <string name="sending"> Enviando...</string>
     <string name="userReg"> ¡Registro completado!</string>
     <string name="userNotReg"> Usuario ya existente </string>
-    
-    <!--  Login Activity -->
+
+    <!-- Login Activity -->
     <string name="logging"> Autenticando usuario...</string>
     <string name="userNotExists"> Usuario o contraseña incorrectos</string>
     <string name="rememberMe"> Recuerdame</string>
-    
+
     <!-- General -->
     <string name="ok"> Ok </string>
-	<string name="error"> Error </string>
-	<string name="noNetwork"> Es imposible conectar a Internet </string>
-	<string name="serverIssues"> Imposible conectar con el servidor</string>
-    
+    <string name="error"> Error </string>
+    <string name="noNetwork"> Es imposible conectar a Internet </string>
+    <string name="serverIssues"> Imposible conectar con el servidor</string>
+
 </resources>

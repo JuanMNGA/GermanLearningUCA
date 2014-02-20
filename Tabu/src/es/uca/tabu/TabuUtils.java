@@ -1,15 +1,22 @@
 package es.uca.tabu;
 
+import java.text.Normalizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import junit.framework.Assert;
 
 import com.google.common.base.Function;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.view.LayoutInflater;
 
 public class TabuUtils {
+
+	public static String KEY_SUCCESS = "success";
 
 	// Validate name
 	// - Length: min 3, max 99
@@ -78,6 +85,19 @@ public class TabuUtils {
 			.show();
 	}
 
+	public static void showImageDialog(String title, String message, final Function<DialogInterface, Void> func, Context c,  int image) {
+		AlertDialog dialog = new AlertDialog.Builder(c)
+		.setTitle(title)
+		.setMessage(message)
+		.setIcon(c.getResources().getDrawable(image))
+		.setPositiveButton(c.getResources().getString(R.string.ok),
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				func.apply(dialog);
+			}})
+			.show();
+	}
+
 	/* Call argument function when button clicked */
 	public static void showDialog(String title, String message, final Function<DialogInterface, Void> func, Context c) {
 		AlertDialog dialog = new AlertDialog.Builder(c)
@@ -89,5 +109,36 @@ public class TabuUtils {
 				func.apply(dialog);
 			}})
 			.show();
+	}
+
+	public static int getDrawable(Context context, String name)
+	{
+		try {
+			Assert.assertNotNull(context);
+			Assert.assertNotNull(name);
+
+			return context.getResources().getIdentifier(deAccent(name),
+					"drawable", context.getPackageName());
+		} catch (AssertionError e) {
+			return -1;
+		}
+	}
+	
+	public static Drawable getDrawable(Context context, String name, String dummy)
+	{
+		try {
+			Assert.assertNotNull(context);
+			Assert.assertNotNull(name);
+
+			return context.getResources().getDrawable(getDrawable(context, name));
+		} catch (AssertionError e) {
+			return null;
+		}
+	}
+
+	private static String deAccent(String str) {
+		String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD); 
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		return pattern.matcher(nfdNormalizedString).replaceAll("");
 	}
 }

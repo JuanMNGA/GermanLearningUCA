@@ -10,9 +10,11 @@ import java.util.concurrent.ExecutionException;
 
 
 
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +35,11 @@ public class ConnectionManager {
 	private static String register_tag = "register";
 	private static String forpass_tag = "forpass";
 	private static String chgpass_tag = "chgpass";
+	
+	private static String numQuestions_tag = "questions";
+	private static String questions_tag = "getquestions";
+	private static String categories_tag = "categories";
+	private static String checkWord_tag = "checkWord";
 	
 	private static Context c = null;
 
@@ -72,7 +79,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("rol", rol));
 
-		JSONObject json = jsonParser.getJSONFromUrl(server+"addNewUser.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register.php", params);
 
 		return json;
 	}
@@ -84,14 +91,67 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("email", email));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"loginUser.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register.php", params);
 
 		return json;
 	}
 
+	public JSONObject getQuestions(Integer numQuestions, ArrayList<Integer> categories) {
+		
+		JSONArray jsArray = new JSONArray(categories);
+		JSONObject jsCategories = new JSONObject();
+		try {
+			jsCategories.put("numOfQuestions", numQuestions);
+			jsCategories.put("categories", jsArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERROR EN QETQUESTIONS:");
+			e.printStackTrace();
+		}
+		
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", questions_tag));
+		params.add(new BasicNameValuePair("categories", jsCategories.toString()));
+		params.add(new BasicNameValuePair("numOfQuestions", Integer.toString(numQuestions)));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		
+		return json;
+	}
+	
+	public JSONObject getMaxQuestions() {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", numQuestions_tag));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
+	public JSONObject checkWord(Integer id, String word) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", checkWord_tag));
+		params.add(new BasicNameValuePair("id", Integer.toString(id)));
+		params.add(new BasicNameValuePair("palabra", word));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
+	public JSONObject getAllCategories() {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", categories_tag));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
+	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		server = new String("http://192.168.1.34/tabu/");
+		server = new String("http://192.168.1.35/tabu/");
 		jsonParser = new JSONParser();
 	}
 	

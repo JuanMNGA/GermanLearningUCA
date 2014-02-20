@@ -26,8 +26,32 @@
     <string name="writeNewDef"> New Definition... </string>
     <string name="definitionBody"> Body Definition </string>
     <string name="title_activity_dictionary">Dictionary</string>
-    
-    <!--  Register Activity -->
+
+    <!-- Result Activity -->
+    <string name="pistas"> used clues</string>
+    <string name="backToMenu"> Back to Menu </string>
+    <string name="back"> Back </string>
+
+    <!-- Game Activity -->
+    <string name="wordHint"> Enter answer here </string>
+    <string name="errorQuestions"> Error in questions petition</string>
+    <string name="noQuestions"> No questions to show</string>
+    <string name="pista"> Clue</string>
+    <string name="articleword"> Article: </string>
+    <string name="wrongAnswer1"> Wrong answer, Try again! </string>
+    <string name="wrongAnswer2"> Wrong answer </string>
+    <string name="loadingDefinition"> Loading definition...</string>
+
+    <!-- Play Menu Activity -->
+    <string name="PlayerVsComputer"> Player Vs Computer</string>
+    <string name="PlayerVsPlayer"> Player Vs Player</string>
+    <string name="joingGroupQueue"> Join group queue</string>
+    <string name="numQuestions"> Number of questions: </string>
+    <string name="startGame"> Start </string>
+    <string name="selectAll"> All </string>
+    <string name="atLeastOneCategory"> You must select at least one category </string>
+
+    <!-- Register Activity -->
     <string name="invalidName"> Invalid Name</string>
     <string name="invalidEmail"> Invalid Email</string>
     <string name="invalidPass"> Invalid Password</string>
@@ -35,15 +59,18 @@
     <string name="userReg"> You are now registered!</string>
     <string name="userNotReg"> User already exists </string>
 
-    <!--  Login Activity -->
+    <!-- Login Activity -->
     <string name="logging"> Logging...</string>
     <string name="userNotExists"> Incorrect email or password!</string>
     <string name="rememberMe"> Remember Me</string>
-    
+
     <!-- General -->
     <string name="ok"> Ok </string>
-	<string name="error"> Error </string>
-	<string name="noNetwork"> Unable to connect to Internet </string>
-	<string name="serverIssues"> Unable to connect to server</string>
-    
+    <string name="error"> Error </string>
+    <string name="noNetwork"> Unable to connect to Internet </string>
+    <string name="serverIssues"> Unable to connect to server</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_review_question">ReviewQuestionActivity</string>
+
 </resources>

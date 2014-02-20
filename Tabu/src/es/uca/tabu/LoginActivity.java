@@ -45,6 +45,7 @@ public class LoginActivity extends Activity {
         	((EditText) findViewById(R.id.reg_email)).setText(loginPreferences.getString("email", ""));
         	((EditText) findViewById(R.id.reg_password)).setText(loginPreferences.getString("password", ""));
             saveLoginCheckBox.setChecked(true);
+            ((View) findViewById(R.id.dummyLayout)).requestFocus();
         }
 		
 		TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
