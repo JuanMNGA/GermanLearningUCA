@@ -44,10 +44,13 @@
     <string name="PlayerVsComputer"> Jugador Vs Máquina</string>
     <string name="PlayerVsPlayer"> Jugador Vs Jugador</string>
     <string name="joingGroupQueue"> Unirse a la cola de grupo</string>
-    <string name="numQuestions"> Número de preguntas: </string>
+    <string name="numQuestions"> Preguntas: </string>
+    <string name="levelTxt"> Nivel: </string>
     <string name="startGame"> Empezar </string>
+    <string name="allLevels">Todos</string>
     <string name="selectAll"> Todas </string>
     <string name="atLeastOneCategory"> Selecciona al menos una categoría </string>
+    <string name="atLeastOneQuestion"> Selecciona al menos una pregunta </string>
 
     <!-- Register Activity -->
     <string name="invalidName"> Nombre inválido</string>

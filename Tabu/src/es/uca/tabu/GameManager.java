@@ -24,6 +24,7 @@ public class GameManager {
 	
 	private int numberOfQuestions;
 	private ArrayList<Integer> categories;
+	private int level;
 	
 	private ArrayList<Question> questions;
 	private Question currentQuestion = null;
@@ -58,6 +59,11 @@ public class GameManager {
 	public void setNumOfQuestions(int nq) {
 		numberOfQuestions = nq;
 	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
 	public int getNumOfQuestions() {
 		return numberOfQuestions;
 	}
@@ -99,7 +105,7 @@ public class GameManager {
 		questions = new ArrayList<Question>(numberOfQuestions);
 		//If there is access to Internet
 		if(ConnectionManager.getInstance(c).networkWorks()) {
-			new getCategorizedQuestions().execute(numberOfQuestions, categories);
+			new getCategorizedQuestions().execute(numberOfQuestions, level, categories);
 		}
 		else {
 			TabuUtils.showDialog(c.getResources().getString(R.string.error), c.getResources().getString(R.string.noNetwork),c);
@@ -125,14 +131,10 @@ public class GameManager {
 	}
 	
 	public Boolean validWord(Integer id, String word) {
-		return questions.contains(new Question(id, word.toLowerCase(), "", "", false));
+		return questions.contains(new Question(id, word, "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", false));
 	}
 	
 	private GameManager() {}
-	
-	
-	
-	
 	
 	
 	private class getCategorizedQuestions extends AsyncTask<Object, Boolean, JSONObject> {
@@ -142,7 +144,8 @@ public class GameManager {
 		protected JSONObject doInBackground(Object... questioninfo) {
 			return ConnectionManager.getInstance().getQuestions(
 					(Integer)questioninfo[0],
-					(ArrayList<Integer>) questioninfo[1]);
+					(Integer)questioninfo[1],
+					(ArrayList<Integer>) questioninfo[2]);
 		}
 
 		// Informa al usuario de lo sucedido
@@ -155,18 +158,25 @@ public class GameManager {
 			 **/
 			try {
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-					JSONArray articles = json.getJSONArray(KEY_ARTICLE);
+					JSONArray articles = null;
+					if(!json.isNull(KEY_ARTICLE))
+						articles = json.getJSONArray(KEY_ARTICLE);
 					JSONArray ids = json.getJSONArray(KEY_ID);
 					JSONArray definitions = json.getJSONArray(KEY_DEFINITION);
 					JSONArray names = json.getJSONArray(KEY_NAMES);
 					
+					String article = null;
 					for(int i=0; i<ids.length(); i++) {
+						
+						// Article might be null
+						if(!json.isNull(KEY_ARTICLE))
+							article = articles.getString(i);
+						
 						questions.add(new Question(
 								ids.getInt(i),
 								names.getString(i),
-								articles.getString(i),
+								article,
 								definitions.getString(i),
-								
 								false));
 					}
 					for(int i=0; i<questions.size(); i++) {

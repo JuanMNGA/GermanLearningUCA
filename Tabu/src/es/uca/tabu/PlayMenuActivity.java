@@ -31,15 +31,17 @@ import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 
-public class PlayMenuActivity extends FragmentActivity {
+public class PlayMenuActivity extends FragmentActivity implements NumberPicker.OnValueChangeListener {
 
 	private static String KEY_QUESTIONS = "questions";
 	private static String KEY_CATEGORIES = "categories";
 	private static String KEY_IDS = "ids";
 	NumberPicker np;
+	NumberPicker lp;
 	GridView gridview;
 	View settings;
 	View selectAll;
+	View questionsLayout;
 	Button selectAllBtn;
 	Button startGameBtn;
 	
@@ -64,7 +66,10 @@ public class PlayMenuActivity extends FragmentActivity {
 		
 		settings = (View) findViewById(R.id.settings);
 		np = (NumberPicker) findViewById(R.id.numberPicker);
+		lp = (NumberPicker) findViewById(R.id.levelPicker);
+		lp.setOnValueChangedListener(this);
 		selectAll = (View) findViewById(R.id.selectAll);
+		questionsLayout = (View) findViewById(R.id.questionsLayout);
 		
 		fadeIn = new AlphaAnimation(0, 1);
 		fadeIn.setInterpolator(new DecelerateInterpolator());
@@ -86,6 +91,7 @@ public class PlayMenuActivity extends FragmentActivity {
 			public void onClick(View v) {
 				applyToAllInGridView(toApply);
 				toApply=!toApply;
+				new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
 			} 
 		});
 		
@@ -120,23 +126,34 @@ public class PlayMenuActivity extends FragmentActivity {
 			        	// Show settings layout
 			        	np.setMinValue(1);
 			        	np.setMaxValue(2);
+			        	//Levels
+						lp.setMinValue(1);
+						lp.setMaxValue(5);
+			        	lp.setDisplayedValues(new String[] { "1", "2", "3", "4", PlayMenuActivity.this.getResources().getString(R.string.allLevels)});
+						lp.setValue(5);
+
 			        	settings.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (height<<2), 2.5f));
 			        	
 			        	//If there is access to Internet
 						if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
-							new QuestionsQuery().execute();
 							new CategoriesQuery().execute();
+							new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
 						
 							startGameBtn.setOnClickListener(new View.OnClickListener() {
 								public void onClick(View v) {
-									
 									if(atLeastOneCategorySelected()) {
-										Intent startGame = new Intent(getApplicationContext(), GameActivity.class);
-										startGame.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-										startGame.putExtra("EXTRA_CHECKED_CATEGORIES", getCheckedCategories());
-										startGame.putExtra("EXTRA_NUM_OF_QUESTIONS", np.getValue());
-										startActivity(startGame);
-										finish();
+										if(np.getValue() > 0) {
+											Intent startGame = new Intent(getApplicationContext(), GameActivity.class);
+											startGame.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+											startGame.putExtra("EXTRA_CHECKED_CATEGORIES", getCheckedCategories());
+											startGame.putExtra("EXTRA_NUM_OF_QUESTIONS", np.getValue());
+											startGame.putExtra("EXTRA_LEVEL", lp.getValue());
+											startActivity(startGame);
+											finish();
+										}
+										else {
+											TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneQuestion),PlayMenuActivity.this);
+										}
 									}
 									else {
 										TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneCategory),PlayMenuActivity.this);
@@ -381,11 +398,11 @@ public class PlayMenuActivity extends FragmentActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private class QuestionsQuery extends AsyncTask<Void, Void, JSONObject> {
+	private class QuestionsQuery extends AsyncTask<Object, Object, JSONObject> {
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
-		protected JSONObject doInBackground(Void... nothing) {
-			return ConnectionManager.getInstance().getMaxQuestions();
+		protected JSONObject doInBackground(Object... level) {
+			return ConnectionManager.getInstance().getMaxQuestions((Integer) level[0], (ArrayList<Integer>) level[1]);
 		}
 
 		// Informa al usuario de lo sucedido
@@ -395,6 +412,9 @@ public class PlayMenuActivity extends FragmentActivity {
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 					String res = json.getString(KEY_QUESTIONS);
 					np.setMaxValue(Integer.parseInt(res));
+					// Default value
+					if(np.getMaxValue() > 0)
+						np.setValue(1);
 				}
 				else {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),PlayMenuActivity.this);
@@ -435,7 +455,8 @@ public class PlayMenuActivity extends FragmentActivity {
 								Integer[] NoOfCat = new Integer[numOfRandomCategories];
 								for(int i=0; i< numOfRandomCategories; i++) {
 									NoOfCat[i] = (int) (1 + (Math.random() * (gridview.getCount()-1)));
-									MarkableImageView imageView = (MarkableImageView) gridview.getChildAt(NoOfCat[i]);
+									MarkableImageView imageView = 
+											(MarkableImageView) ((ImageCategoriesAdapter) gridview.getAdapter()).getView(NoOfCat[i], null, null);
 									imageView.setChecked(true);
 								}
 								
@@ -445,10 +466,12 @@ public class PlayMenuActivity extends FragmentActivity {
 								miv.setChecked(!miv.isChecked());
 								Toast.makeText(PlayMenuActivity.this, "" + position, Toast.LENGTH_SHORT).show();
 							}
+							
+							new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
 						}
 					});
 					
-					selectAll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, np.getHeight()));
+					//selectAll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, np.getHeight()));
 					
 					settings.startAnimation(fadeIn);
 		        	fadeIn.setAnimationListener(new AnimationListener() {
@@ -486,8 +509,9 @@ public class PlayMenuActivity extends FragmentActivity {
 	}
 	
 	private void applyToAllInGridView(Boolean checked) {
+		ImageCategoriesAdapter ica = (ImageCategoriesAdapter) gridview.getAdapter();
 		for(int i=1; i<gridview.getCount(); i++) {
-			MarkableImageView imageView = (MarkableImageView) gridview.getChildAt(i);
+			MarkableImageView imageView = (MarkableImageView) ica.getView(i,null,null);
 			imageView.setChecked(checked);
 		}
 	}
@@ -495,7 +519,7 @@ public class PlayMenuActivity extends FragmentActivity {
 	private ArrayList<Integer> getCheckedCategories() {
 		ArrayList<Integer> checkedCategories = new ArrayList<Integer>();
 		for(int i=1; i<gridview.getCount(); i++) {
-			MarkableImageView imageView = (MarkableImageView) gridview.getChildAt(i);
+			MarkableImageView imageView = (MarkableImageView) gridview.getAdapter().getView(i,null,null);
 			if(imageView.isChecked())
 				checkedCategories.add(imageView.getId());
 		}
@@ -504,10 +528,18 @@ public class PlayMenuActivity extends FragmentActivity {
 	
 	private boolean atLeastOneCategorySelected() {
 		for(int i=1; i<gridview.getCount(); i++) {
-			MarkableImageView imageView = (MarkableImageView) gridview.getChildAt(i);
+			MarkableImageView imageView = (MarkableImageView) gridview.getAdapter().getView(i,null,null);
 			if(imageView.isChecked())
 				return true;
 		}
 		return false;
+	}
+
+
+	@Override
+	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+		// TODO Auto-generated method stub
+		new QuestionsQuery().execute(newVal, getCheckedCategories());
+		
 	}
 }

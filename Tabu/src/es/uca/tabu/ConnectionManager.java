@@ -8,15 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-
-
-
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -40,6 +42,7 @@ public class ConnectionManager {
 	private static String questions_tag = "getquestions";
 	private static String categories_tag = "categories";
 	private static String checkWord_tag = "checkWord";
+	private static String storeStadistics_tag = "store_stadistics";
 	
 	private static Context c = null;
 
@@ -96,11 +99,12 @@ public class ConnectionManager {
 		return json;
 	}
 
-	public JSONObject getQuestions(Integer numQuestions, ArrayList<Integer> categories) {
+	public JSONObject getQuestions(Integer numQuestions, Integer level, ArrayList<Integer> categories) {
 		
 		JSONArray jsArray = new JSONArray(categories);
 		JSONObject jsCategories = new JSONObject();
 		try {
+			jsCategories.put("level", level);
 			jsCategories.put("numOfQuestions", numQuestions);
 			jsCategories.put("categories", jsArray);
 		} catch (JSONException e) {
@@ -119,9 +123,22 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject getMaxQuestions() {
+	public JSONObject getMaxQuestions(Integer level, ArrayList<Integer> categories) {
+		JSONArray jsArray = new JSONArray(categories);
+		JSONObject jsCategories = new JSONObject();
+		
+		try {
+			jsCategories.put("level", level);
+			jsCategories.put("categories", jsArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERROR EN getMaxQuestions:");
+			e.printStackTrace();
+		}
+		
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", numQuestions_tag));
+		params.add(new BasicNameValuePair("object", jsCategories.toString()));
 		
 		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
 
@@ -148,6 +165,34 @@ public class ConnectionManager {
 		return json;
 	}
 	
+	public JSONObject storeStadistics(ArrayList<Question> questionList) {
+		// Gran cuca usando librería GSON de google para parsear el arraylist de questions directamente
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(questionList, new TypeToken<ArrayList<Question>>() {}.getType());
+		if(!element.isJsonArray()) {
+			System.out.println("ERROR parseando en storeStadistics");
+			return null;
+		}
+		
+		JsonArray jsArray = element.getAsJsonArray();
+		JSONObject jsQuestions = new JSONObject();
+		
+		try {
+			jsQuestions.put("questions", jsArray);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.out.println("ERROR EN storeStadistics:");
+			e.printStackTrace();
+		}
+		
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", storeStadistics_tag));
+		params.add(new BasicNameValuePair("object", jsQuestions.toString()));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
 	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();

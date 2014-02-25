@@ -11,24 +11,33 @@ import android.widget.GridView;
 public class ImageCategoriesAdapter extends BaseAdapter {
 	private Context context;
 
-	// (id, drawable)
-	private ArrayList<Pair<Integer, Integer>> gallery;
+	private ArrayList<MarkableImageView> mImageList;
 
 	public ImageCategoriesAdapter(Context c, ArrayList<String> parsedCategories, ArrayList<Integer> parsedIds) {
 		context = c;
 		Integer idImage;
-		gallery = (ArrayList<Pair<Integer, Integer>>) new ArrayList<Pair<Integer, Integer>>();
+		mImageList = (ArrayList<MarkableImageView>) new ArrayList<MarkableImageView>();
+		MarkableImageView imageView;
 		
 		// Random Icon
 		idImage = TabuUtils.getDrawable(c, adaptResource("random"));
 		if(idImage != 0) {
-			gallery.add(new Pair(-1,idImage));
+			imageView = new MarkableImageView(context, -1, false);
+			imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+			imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
+			imageView.setImageResource(idImage);
+			mImageList.add(imageView);
 		}
 
 		for(int i=1; i<parsedCategories.size(); i++) {
 			idImage = TabuUtils.getDrawable(c, adaptResource(parsedCategories.get(i)));
 			if(idImage != 0) {
-				gallery.add(new Pair(parsedIds.get(i), idImage));
+				imageView = new MarkableImageView(context, parsedIds.get(i), false);
+				imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+				imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
+				imageView.setImageResource(idImage);
+				mImageList.add(imageView);
+				
 				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", añadida");
 			} else
 				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", no existe");
@@ -42,34 +51,23 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return gallery.size();
+		return mImageList.size();
 	}
-
+	
 	@Override
 	public Object getItem(int position) {
 		// TODO Auto-generated method stub
-		return null;
+		return mImageList.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
 		// TODO Auto-generated method stub
-		return 0;
+		return mImageList.get(position).getId();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		MarkableImageView imageView;
-		if (convertView == null) {  // if it's not recycled, initialize some attributes
-			imageView = new MarkableImageView(context, gallery.get(position).getFirst(), false);
-			imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
-			imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
-			//imageView.setPadding(8, 8, 8, 8);
-		} else {
-			imageView = (MarkableImageView) convertView;
-		}
-		imageView.setImageResource(gallery.get(position).getSecond());
-		return imageView;
+		return mImageList.get(position);
 	}
 }

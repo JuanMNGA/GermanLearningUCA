@@ -46,10 +46,13 @@
     <string name="PlayerVsComputer"> Player Vs Computer</string>
     <string name="PlayerVsPlayer"> Player Vs Player</string>
     <string name="joingGroupQueue"> Join group queue</string>
-    <string name="numQuestions"> Number of questions: </string>
+    <string name="levelTxt"> Level: </string>
+    <string name="numQuestions"> Questions: </string>
     <string name="startGame"> Start </string>
     <string name="selectAll"> All </string>
+    <string name="allLevels">All</string>
     <string name="atLeastOneCategory"> You must select at least one category </string>
+        <string name="atLeastOneQuestion"> You must select at least one question </string>
 
     <!-- Register Activity -->
     <string name="invalidName"> Invalid Name</string>

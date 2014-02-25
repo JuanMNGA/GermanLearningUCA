@@ -50,7 +50,7 @@ public class NumberImageAdapter extends BaseAdapter {
 		for(Question q : GameManager.getInstance(context).getQuestions()) {
 			System.out.println("PREGUNTA: " + q.getId());
 		}
-		System.out.println("POSITION: " + position);
+
 		if(GameManager.getInstance(context).getQuestions().get(position).isSuccess())
 			imageView.setChecked(true);
 		

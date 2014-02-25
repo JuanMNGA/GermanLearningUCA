@@ -13,7 +13,7 @@ public class Question implements Serializable {
 
 	public Question(int id, String name, String article, String definition, boolean success) {
 		mId = id;
-		mName = name.toLowerCase();
+		mName = name;
 		mArticle = article;
 		mDefinition = definition;
 		mSuccess = success;

@@ -2,6 +2,7 @@ package es.uca.tabu;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,14 +55,17 @@ public class GameActivity extends Activity {
 
 		ArrayList<Integer> categories;
 		int questions;
+		int level;
 
 		Bundle extras = getIntent().getExtras();
 		if(extras != null) {
 			categories = extras.getIntegerArrayList("EXTRA_CHECKED_CATEGORIES");
 			questions = extras.getInt("EXTRA_NUM_OF_QUESTIONS");
+			level = extras.getInt("EXTRA_LEVEL");
 			gameManager = GameManager.getInstance(this);
 			gameManager.setNumOfQuestions(questions);
 			gameManager.setCategories(categories);
+			gameManager.setLevel(level);
 			gameManager.initialize();
 		}
 		else
@@ -179,10 +183,8 @@ public class GameActivity extends Activity {
 			submit.setChecked(false);
 		}
 		else {
-			Intent conclusion = new Intent(getApplicationContext(), ResultActivity.class);
-			conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			startActivity(conclusion);
-			finish();
+			
+			new SendStadistics().execute(gameManager.getQuestions());
 		}
 	}
 
@@ -216,6 +218,45 @@ public class GameActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 
+	}
+	
+	private class SendStadistics extends AsyncTask<Object, Boolean, JSONObject> {
+
+		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected JSONObject doInBackground(Object... questionList) {
+			return ConnectionManager.getInstance().storeStadistics(
+					(ArrayList<Question>)questionList[0]);
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			/**
+			 * Checks for success message.
+			 **/
+			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+				
+				TabuUtils.showDialog(" ", "Estadisticas guardadas",
+						new Function<DialogInterface, Void>() { //Function to switch to ResultActivity when dialog button clicked
+							@Override
+							public Void apply(DialogInterface arg0) {
+								arg0.cancel();
+
+								Intent conclusion = new Intent(getApplicationContext(), ResultActivity.class);
+								conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+								startActivity(conclusion);
+								finish();
+								return null;
+							} 
+						},
+						GameActivity.this);
+				
+			}
+			else {
+				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorQuestions),GameActivity.this);
+			}
+		}
 	}
 	
 }

@@ -14,13 +14,11 @@ import android.widget.ImageView;
 public class MarkableImageView extends ImageView {
     private boolean checked = false;
     private int mId;
-    private Boolean number_view;
-    Bitmap check = BitmapFactory.decodeResource(
-            getResources(), R.drawable.accept);
-    Bitmap uncheck = BitmapFactory.decodeResource(
-            getResources(), R.drawable.reject);   
-    Bitmap number = BitmapFactory.decodeResource(
-            getResources(), R.drawable.numbers);
+    private Boolean number_view = false;
+    static Bitmap check;
+    static Bitmap uncheck;   
+    static Bitmap number;
+    Boolean mInitialized = false;
     Paint p = new Paint();
     
     public MarkableImageView(Context context) {
@@ -31,6 +29,10 @@ public class MarkableImageView extends ImageView {
         super(context);
         mId = id;
         this.number_view = number_view;
+        if(!mInitialized) {
+        	initialize();
+        }
+        Paint p = new Paint();
     }
 
     public MarkableImageView(Context context, AttributeSet attrs) {
@@ -41,6 +43,16 @@ public class MarkableImageView extends ImageView {
         super(context, attrs, defStyle);
     }
 
+    private void initialize() {
+    	mInitialized = true;
+        check = BitmapFactory.decodeResource(
+                getResources(), R.drawable.accept);
+        uncheck = BitmapFactory.decodeResource(
+                getResources(), R.drawable.reject);   
+        number = BitmapFactory.decodeResource(
+                getResources(), R.drawable.numbers);
+    }
+    
     public void setChecked(boolean checked) {
         this.checked = checked;
         invalidate();

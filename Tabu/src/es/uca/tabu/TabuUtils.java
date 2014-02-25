@@ -141,4 +141,17 @@ public class TabuUtils {
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 		return pattern.matcher(nfdNormalizedString).replaceAll("");
 	}
+	
+	public static String accentGerman(String str) {
+		String result;
+		if(Character.isUpperCase(str.charAt(0))) {
+			str.toLowerCase();
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("sz", "ß");
+			Character.toUpperCase(result.charAt(0));
+		}
+		else {
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("sz", "ß");
+		}
+		return result;
+	}
 }
