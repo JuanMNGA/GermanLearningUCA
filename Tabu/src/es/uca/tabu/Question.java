@@ -9,7 +9,9 @@ public class Question implements Serializable {
 	String mDefinition;
 	boolean mSuccess;
 	boolean mClue;
+	int mPuntuacion;
 	short mTries; 
+	String mReport;
 
 	public Question(int id, String name, String article, String definition, boolean success) {
 		mId = id;
@@ -18,6 +20,9 @@ public class Question implements Serializable {
 		mDefinition = definition;
 		mSuccess = success;
 		mTries = 0;
+		mClue = false;
+		mReport = null;
+		mPuntuacion = -1;
 	}
 
 
@@ -105,6 +110,16 @@ public class Question implements Serializable {
 
 	public void increaseTries() {
 		this.mTries +=1;
+	}
+
+
+	public int getPuntuacion() {
+		return mPuntuacion;
+	}
+
+
+	public void setPuntuacion(int i) {
+		this.mPuntuacion = i;
 	}
 	
 }

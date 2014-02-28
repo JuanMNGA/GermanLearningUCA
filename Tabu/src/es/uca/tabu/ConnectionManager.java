@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
@@ -165,7 +166,7 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject storeStadistics(ArrayList<Question> questionList) {
+	public JSONObject storeStadistics(Integer user_id, ArrayList<Question> questionList) {
 		// Gran cuca usando librería GSON de google para parsear el arraylist de questions directamente
 		Gson gson = new Gson();
 		JsonElement element = gson.toJsonTree(questionList, new TypeToken<ArrayList<Question>>() {}.getType());
@@ -178,7 +179,8 @@ public class ConnectionManager {
 		JSONObject jsQuestions = new JSONObject();
 		
 		try {
-			jsQuestions.put("questions", jsArray);
+			jsQuestions.put("questions", jsArray.toString());
+			jsQuestions.put("user", user_id);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			System.out.println("ERROR EN storeStadistics:");

@@ -60,21 +60,36 @@ public class ReviewQuestionActivity extends Activity {
 				public void onClick(View v) {
 					int startSelection = definition.getSelectionStart();
 					int endSelection = definition.getSelectionEnd();
-					
+
 					if(startSelection != endSelection) {
 						String selectedText = definition.getText().toString().substring(startSelection, endSelection);
 						if(!selectedText.contains(" ")) {
-							Toast.makeText(ReviewQuestionActivity.this, selectedText + " added", Toast.LENGTH_SHORT)
+							Toast.makeText(ReviewQuestionActivity.this, selectedText + " " + getString(R.string.added), Toast.LENGTH_SHORT)
 							.show();
 						}
 						else {
-							Toast.makeText(ReviewQuestionActivity.this, "You have selected more than one word", Toast.LENGTH_SHORT)
+							Toast.makeText(ReviewQuestionActivity.this, getString(R.string.oneword), Toast.LENGTH_SHORT)
 							.show();
 						}
 					}
 					else {
-						Toast.makeText(ReviewQuestionActivity.this,"No text selected", Toast.LENGTH_SHORT)
-						.show();
+						startSelection = word.getSelectionStart();
+						endSelection = word.getSelectionEnd();
+						if(startSelection != endSelection) {
+							String selectedText = word.getText().toString().substring(startSelection, endSelection);
+							if(!selectedText.contains(" ")) {
+								Toast.makeText(ReviewQuestionActivity.this, selectedText + " " + getString(R.string.added), Toast.LENGTH_SHORT)
+								.show();
+							}
+							else {
+								Toast.makeText(ReviewQuestionActivity.this, getString(R.string.oneword), Toast.LENGTH_SHORT)
+								.show();
+							}
+						}
+						else { 
+							Toast.makeText(ReviewQuestionActivity.this,getString(R.string.noText), Toast.LENGTH_SHORT)
+							.show();
+						}
 					}
 				} 
 			});

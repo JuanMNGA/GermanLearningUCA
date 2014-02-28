@@ -14,17 +14,19 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements RatingBar.OnRatingBarChangeListener {
 
 	private GameManager gameManager;
 
@@ -34,6 +36,9 @@ public class GameActivity extends Activity {
 	private MarkableButton dictionary;
 	private EditText word;
 	private TextView article;
+	
+	RatingBar rb;
+	boolean rated; // To make rating optional
 
 	ProgressDialog dialog;
 
@@ -41,7 +46,6 @@ public class GameActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
-		
 
 		submit = (MarkableButton)findViewById(R.id.submit);
 		definition = (TextView)findViewById(R.id.definition);
@@ -49,7 +53,11 @@ public class GameActivity extends Activity {
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
 		article = (TextView) findViewById(R.id.article);
-
+		
+		rb = (RatingBar) findViewById(R.id.ratingBar);
+		rated = false;
+		rb.setOnRatingBarChangeListener(this);
+		
 		// Show the Up button in the action bar.
 		setupActionBar();
 
@@ -72,7 +80,7 @@ public class GameActivity extends Activity {
 		{
 			System.out.println("NO CATEGORIES SELECTED");
 		}
-
+		
 		clue.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Question current = gameManager.getCurrentQuestion();
@@ -121,14 +129,14 @@ public class GameActivity extends Activity {
 						current.increaseTries();
 						if(gameManager.validWord(current.getId(), finalWord)) {
 								submit.setChecked(true);
-
-								System.out.println("FUNCIONA");
+								//System.out.println("FUNCIONA");
 								current.setSuccess(true);
+								if(rated)
+									current.setPuntuacion((int) rb.getRating());
 								requestNextQuestion();
-
 						}
 						else {
-								System.out.println("NO FUNCIONA");
+								//System.out.println("NO FUNCIONA");
 
 								String message;
 
@@ -144,7 +152,10 @@ public class GameActivity extends Activity {
 									@Override
 									public Void apply(DialogInterface arg0) {
 										arg0.cancel();
-
+										
+										if(rated)
+											current.setPuntuacion((short) rb.getRating());
+										
 										if(current.getTries() == GameManager.MAX_TRIES) {
 											current.setSuccess(false);
 											requestNextQuestion();
@@ -173,6 +184,8 @@ public class GameActivity extends Activity {
 		Question current = gameManager.next();
 
 		if(current != null) {
+			rb.setRating(0);
+			rated = false;
 			word.setText("");
 			clue.setText("");
 			definition.setText(current.getDefinition());
@@ -220,12 +233,26 @@ public class GameActivity extends Activity {
 
 	}
 	
+	@Override
+	public void onRatingChanged(RatingBar ratingBar, float rating,
+			boolean fromUser) {
+		// TODO Auto-generated method stub
+		rated = true;
+	}
+	
 	private class SendStadistics extends AsyncTask<Object, Boolean, JSONObject> {
 
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
 		protected JSONObject doInBackground(Object... questionList) {
+			
+		    SharedPreferences loginPreferences;
+		    SharedPreferences.Editor loginPrefsEditor;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+	        //loginPrefsEditor = loginPreferences.edit();
+			
 			return ConnectionManager.getInstance().storeStadistics(
+					loginPreferences.getInt("id", -1),
 					(ArrayList<Question>)questionList[0]);
 		}
 
@@ -237,7 +264,7 @@ public class GameActivity extends Activity {
 			 **/
 			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 				
-				TabuUtils.showDialog(" ", "Estadisticas guardadas",
+				TabuUtils.showDialog(" ", getString(R.string.OkStadistics),
 						new Function<DialogInterface, Void>() { //Function to switch to ResultActivity when dialog button clicked
 							@Override
 							public Void apply(DialogInterface arg0) {
@@ -255,6 +282,10 @@ public class GameActivity extends Activity {
 			}
 			else {
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorQuestions),GameActivity.this);
+				submit.setEnabled(true);
+				clue.setEnabled(true);
+				clue.setChecked(false);
+				submit.setChecked(false);
 			}
 		}
 	}

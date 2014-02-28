@@ -25,6 +25,11 @@
     <string name="title_activity_new_definition">Nueva Definición</string>
     <string name="title_activity_play_menu">Menú Jugar</string>
 
+    <!-- Review Question -->
+    <string name="added"> añadida</string>
+    <string name="oneword"> Selecciona sólo una palabra </string>
+    <string name="noText"> No has seleccionado ninguna palabra</string>
+    
     <!-- Result Activity -->
     <string name="pistas"> pistas usadas</string>
     <string name="backToMenu"> Volver al menú </string>
@@ -39,6 +44,7 @@
     <string name="wrongAnswer1"> Respuesta incorrecta, ¡Inténtalo de nuevo! </string>
     <string name="wrongAnswer2"> Respuesta incorrecta </string>
     <string name="loadingDefinition"> Cargando definición...</string>
+    <string name="OkStadistics"> Respuestas enviadas</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Jugador Vs Máquina</string>

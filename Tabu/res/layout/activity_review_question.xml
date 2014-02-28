@@ -31,6 +31,7 @@
                 android:layout_marginBottom="20dp"
                 android:hint="@string/wordHint"
                 android:inputType="none"
+                android:textIsSelectable="true"
                 android:paddingRight="20dp"
                 android:singleLine="true" >
             </EditText>

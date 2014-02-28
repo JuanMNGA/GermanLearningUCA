@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -117,6 +118,13 @@ public class RegisterActivity extends Activity {
 					if(Integer.parseInt(res) == 1){
 						dialog.dismiss();
 
+					    SharedPreferences 		loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+					    SharedPreferences.Editor loginPrefsEditor = loginPreferences.edit();
+					    
+						JSONObject json_user = json.getJSONObject("user");
+						loginPrefsEditor.putInt("id", json_user.getInt("id"));
+						loginPrefsEditor.commit();
+						
 						TabuUtils.showDialog(" ", getResources().getString(R.string.userReg),
 								new Function<DialogInterface, Void>() { //Function to switch to MainMenuActivity when dialog button clicked
 									@Override

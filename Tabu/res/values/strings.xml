@@ -27,6 +27,11 @@
     <string name="definitionBody"> Body Definition </string>
     <string name="title_activity_dictionary">Dictionary</string>
 
+    <!-- Review Question -->
+    <string name="added"> added</string>
+    <string name="oneword"> You have selected more than one word </string>
+    <string name="noText"> No text selected</string>
+    
     <!-- Result Activity -->
     <string name="pistas"> used clues</string>
     <string name="backToMenu"> Back to Menu </string>
@@ -41,6 +46,7 @@
     <string name="wrongAnswer1"> Wrong answer, Try again! </string>
     <string name="wrongAnswer2"> Wrong answer </string>
     <string name="loadingDefinition"> Loading definition...</string>
+    <string name="OkStadistics"> Results sent</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Player Vs Computer</string>

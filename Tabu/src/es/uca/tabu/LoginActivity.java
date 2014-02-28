@@ -138,7 +138,9 @@ public class LoginActivity extends Activity {
 						dialog.dismiss();
 						
 						JSONObject json_user = json.getJSONObject("user");
-						
+						loginPrefsEditor.putInt("id", json_user.getInt("id"));
+						loginPrefsEditor.commit();
+											
 						Intent mainmenu = new Intent(getApplicationContext(), MainMenuActivity.class);
 						mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(mainmenu);
