@@ -121,5 +121,15 @@ public class Question implements Serializable {
 	public void setPuntuacion(int i) {
 		this.mPuntuacion = i;
 	}
+
+
+	public String getReport() {
+		return mReport;
+	}
+
+
+	public void setReport(String mReport) {
+		this.mReport = mReport;
+	}
 	
 }

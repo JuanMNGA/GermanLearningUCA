@@ -11,6 +11,7 @@ import com.google.common.base.Function;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,7 +21,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,9 +39,10 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	private MarkableButton dictionary;
 	private EditText word;
 	private TextView article;
-	
+
 	RatingBar rb;
 	boolean rated; // To make rating optional
+	float lastRating=0;
 
 	ProgressDialog dialog;
 
@@ -53,11 +57,76 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
 		article = (TextView) findViewById(R.id.article);
-		
+
 		rb = (RatingBar) findViewById(R.id.ratingBar);
 		rated = false;
 		rb.setOnRatingBarChangeListener(this);
-		
+		rb.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					float touchPositionX = event.getX();
+					float width = rb.getWidth();
+					float starsf = (touchPositionX / width) * 5.0f;
+					int stars = (int)starsf + 1;
+
+					if(stars == lastRating) {
+						rb.setRating(0.0f);
+						// Report dialog
+						AlertDialog.Builder editalert = new AlertDialog.Builder(GameActivity.this);
+						editalert.setTitle("Report");
+						editalert.setMessage("Enter report reason here:");
+						final EditText input = new EditText(GameActivity.this);
+						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+						        LinearLayout.LayoutParams.MATCH_PARENT,
+						        LinearLayout.LayoutParams.MATCH_PARENT);
+						input.setLayoutParams(lp);
+						editalert.setView(input);
+
+						editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+						    public void onClick(DialogInterface dialog, int whichButton) {
+						    	gameManager.getCurrentQuestion().setReport(input.getText().toString());
+						    }
+						});
+
+
+						editalert.show();
+					}
+					else
+						rb.setRating(stars);
+						
+					lastRating = rb.getRating();
+
+					//Toast.makeText(MainActivity.this, String.valueOf("test"), Toast.LENGTH_SHORT).show();                   
+					v.setPressed(false);
+				}
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					v.setPressed(true);
+				}
+
+				if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+					v.setPressed(false);
+				}
+				return true;
+			}});
+
+
+
+		/*
+		rb.setOnTouchListener(new OnTouchListener() {
+		    @Override
+		    public boolean onTouch(View v, MotionEvent event) {
+		        if (event.getAction() == MotionEvent.ACTION_UP) {
+		            // TODO perform your action here
+					if(rb.getRating() == lastRating)
+						rb.setRating(0.0f);
+
+					lastRating = rb.getRating();
+		        }
+		        return false;
+		    }
+		});*/
+
 		// Show the Up button in the action bar.
 		setupActionBar();
 
@@ -80,7 +149,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		{
 			System.out.println("NO CATEGORIES SELECTED");
 		}
-		
+
 		clue.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Question current = gameManager.getCurrentQuestion();
@@ -98,7 +167,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				int startSelection = definition.getSelectionStart();
 				int endSelection = definition.getSelectionEnd();
 				System.out.println("START: " + String.valueOf(startSelection) + ", " + "END: " + String.valueOf(endSelection));
-				
+
 				if(startSelection != endSelection) {
 					String selectedText = definition.getText().toString().substring(startSelection, endSelection);
 					if(!selectedText.contains(" ")) {
@@ -116,7 +185,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				}
 			} 
 		});
-		
+
 		submit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
@@ -128,48 +197,48 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						final Question current = gameManager.getCurrentQuestion();
 						current.increaseTries();
 						if(gameManager.validWord(current.getId(), finalWord)) {
-								submit.setChecked(true);
-								//System.out.println("FUNCIONA");
-								current.setSuccess(true);
-								if(rated)
-									current.setPuntuacion((int) rb.getRating());
-								requestNextQuestion();
+							submit.setChecked(true);
+							//System.out.println("FUNCIONA");
+							current.setSuccess(true);
+							if(rated)
+								current.setPuntuacion((int) rb.getRating());
+							requestNextQuestion();
 						}
 						else {
-								//System.out.println("NO FUNCIONA");
+							//System.out.println("NO FUNCIONA");
 
-								String message;
+							String message;
 
-								if(current.getTries() != GameManager.MAX_TRIES) {
-									message = getResources().getString(R.string.wrongAnswer1) + " - " + String.valueOf(current.getTries()) + "/" + String.valueOf(GameManager.MAX_TRIES);
-								}
-								else {
-									message = getResources().getString(R.string.wrongAnswer2);
-								}
-								// Avisa del fallo y cuando OK o cambia de pregunta o reintenta
-								TabuUtils.showImageDialog(" ", message,
-										new Function<DialogInterface, Void>() {
-									@Override
-									public Void apply(DialogInterface arg0) {
-										arg0.cancel();
-										
-										if(rated)
-											current.setPuntuacion((short) rb.getRating());
-										
-										if(current.getTries() == GameManager.MAX_TRIES) {
-											current.setSuccess(false);
-											requestNextQuestion();
-										}
-										else {
-											submit.setEnabled(true);
-											word.setText("");
-										}
-										return null;
-									} 
-								},
-								GameActivity.this,
-								R.drawable.reject);
+							if(current.getTries() != GameManager.MAX_TRIES) {
+								message = getResources().getString(R.string.wrongAnswer1) + " - " + String.valueOf(current.getTries()) + "/" + String.valueOf(GameManager.MAX_TRIES);
 							}
+							else {
+								message = getResources().getString(R.string.wrongAnswer2);
+							}
+							// Avisa del fallo y cuando OK o cambia de pregunta o reintenta
+							TabuUtils.showImageDialog(" ", message,
+									new Function<DialogInterface, Void>() {
+								@Override
+								public Void apply(DialogInterface arg0) {
+									arg0.cancel();
+
+									if(rated)
+										current.setPuntuacion((short) rb.getRating());
+
+									if(current.getTries() == GameManager.MAX_TRIES) {
+										current.setSuccess(false);
+										requestNextQuestion();
+									}
+									else {
+										submit.setEnabled(true);
+										word.setText("");
+									}
+									return null;
+								} 
+							},
+							GameActivity.this,
+							R.drawable.reject);
+						}
 					}
 					else {
 						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),GameActivity.this);
@@ -188,6 +257,12 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			rated = false;
 			word.setText("");
 			clue.setText("");
+
+			if((current.getArticle() != null && !current.getArticle().isEmpty())) {
+				//article.setText(getString(R.string.articleword) + current.getArticle());
+				article.setText(current.getArticle());
+			}
+
 			definition.setText(current.getDefinition());
 			definition.setTextIsSelectable(true);
 			submit.setEnabled(true);
@@ -196,7 +271,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			submit.setChecked(false);
 		}
 		else {
-			
+
 			new SendStadistics().execute(gameManager.getQuestions());
 		}
 	}
@@ -232,25 +307,24 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		return super.onOptionsItemSelected(item);
 
 	}
-	
+
 	@Override
-	public void onRatingChanged(RatingBar ratingBar, float rating,
-			boolean fromUser) {
+	public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 		// TODO Auto-generated method stub
 		rated = true;
 	}
-	
+
 	private class SendStadistics extends AsyncTask<Object, Boolean, JSONObject> {
 
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
 		protected JSONObject doInBackground(Object... questionList) {
-			
-		    SharedPreferences loginPreferences;
-		    SharedPreferences.Editor loginPrefsEditor;
+
+			SharedPreferences loginPreferences;
+			SharedPreferences.Editor loginPrefsEditor;
 			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-	        //loginPrefsEditor = loginPreferences.edit();
-			
+			//loginPrefsEditor = loginPreferences.edit();
+
 			return ConnectionManager.getInstance().storeStadistics(
 					loginPreferences.getInt("id", -1),
 					(ArrayList<Question>)questionList[0]);
@@ -263,22 +337,22 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			 * Checks for success message.
 			 **/
 			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-				
+
 				TabuUtils.showDialog(" ", getString(R.string.OkStadistics),
 						new Function<DialogInterface, Void>() { //Function to switch to ResultActivity when dialog button clicked
-							@Override
-							public Void apply(DialogInterface arg0) {
-								arg0.cancel();
+					@Override
+					public Void apply(DialogInterface arg0) {
+						arg0.cancel();
 
-								Intent conclusion = new Intent(getApplicationContext(), ResultActivity.class);
-								conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-								startActivity(conclusion);
-								finish();
-								return null;
-							} 
-						},
-						GameActivity.this);
-				
+						Intent conclusion = new Intent(getApplicationContext(), ResultActivity.class);
+						conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(conclusion);
+						finish();
+						return null;
+					} 
+				},
+				GameActivity.this);
+
 			}
 			else {
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorQuestions),GameActivity.this);
@@ -289,5 +363,5 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			}
 		}
 	}
-	
+
 }
