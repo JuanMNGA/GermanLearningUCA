@@ -7,17 +7,19 @@ public class Question implements Serializable {
 	String mName;
 	String mArticle;
 	String mDefinition;
+	String mClueBody;
 	boolean mSuccess;
 	boolean mClue;
 	int mPuntuacion;
 	short mTries; 
 	String mReport;
 
-	public Question(int id, String name, String article, String definition, boolean success) {
+	public Question(int id, String name, String article, String definition, String body, boolean success) {
 		mId = id;
 		mName = name;
 		mArticle = article;
 		mDefinition = definition;
+		mClueBody = body;
 		mSuccess = success;
 		mTries = 0;
 		mClue = false;
@@ -130,6 +132,15 @@ public class Question implements Serializable {
 
 	public void setReport(String mReport) {
 		this.mReport = mReport;
+	}
+	
+	public String getClue() {
+		return mClueBody;
+	}
+
+
+	public void setClueBody(String body) {
+		this.mClueBody = body;
 	}
 	
 }

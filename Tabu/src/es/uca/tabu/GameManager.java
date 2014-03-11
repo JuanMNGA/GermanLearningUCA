@@ -9,7 +9,9 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 public class GameManager {
 	
@@ -17,6 +19,7 @@ public class GameManager {
 	private static String KEY_ARTICLE = "articulos";
 	private static String KEY_ID = "ids";
 	private static String KEY_NAMES = "nombres";
+	private static String KEY_CLUES = "pistas";
 	
 	public static short MAX_TRIES = 3;
 	
@@ -131,7 +134,11 @@ public class GameManager {
 	}
 	
 	public Boolean validWord(Integer id, String word) {
-		return questions.contains(new Question(id, word, "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", false));
+		return questions.contains(new Question(id, word, "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", "", false));
+	}
+	
+	public void addWordToBloc(Integer id, String word) {
+		new addWord().execute(id,word);
 	}
 	
 	private GameManager() {}
@@ -152,7 +159,6 @@ public class GameManager {
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			
-			System.out.println("ON POST EXECUTE");
 			/**
 			 * Checks for success message.
 			 **/
@@ -164,6 +170,7 @@ public class GameManager {
 					JSONArray ids = json.getJSONArray(KEY_ID);
 					JSONArray definitions = json.getJSONArray(KEY_DEFINITION);
 					JSONArray names = json.getJSONArray(KEY_NAMES);
+					JSONArray clues = json.getJSONArray(KEY_CLUES);
 					
 					String article = null;
 					for(int i=0; i<ids.length(); i++) {
@@ -177,6 +184,7 @@ public class GameManager {
 								names.getString(i),
 								article,
 								definitions.getString(i),
+								clues.getString(i),
 								false));
 					}
 					for(int i=0; i<questions.size(); i++) {
@@ -197,4 +205,35 @@ public class GameManager {
 			}
 		}
 	}
+	
+	private class addWord extends AsyncTask<Object, Boolean, JSONObject> {
+
+		String word;
+		
+		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected JSONObject doInBackground(Object... word) {
+			this.word = (String)word[1];
+
+			return ConnectionManager.getInstance().addWordToBloc(
+					(Integer)word[0],
+					(String)word[1]);
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			/**
+			 * Checks for success message.
+			 **/
+			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+				Toast.makeText(c, this.word + " " + c.getString(R.string.added), Toast.LENGTH_SHORT)
+				.show();
+			}
+			else {
+				TabuUtils.showDialog(c.getResources().getString(R.string.error), c.getResources().getString(R.string.serverIssues),c);
+			}
+		}
+	}
+	
 }

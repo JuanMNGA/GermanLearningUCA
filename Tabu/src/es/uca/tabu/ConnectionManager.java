@@ -44,6 +44,8 @@ public class ConnectionManager {
 	private static String categories_tag = "categories";
 	private static String checkWord_tag = "checkWord";
 	private static String storeStadistics_tag = "store_stadistics";
+	private static String getNotes_tag = "getNotes";
+	private static String addWord_tag = "addWord";
 	
 	private static Context c = null;
 
@@ -196,9 +198,28 @@ public class ConnectionManager {
 		return json;
 	}
 	
+	public JSONObject getNotes(Integer user_id) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", getNotes_tag));
+		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		return json;
+	}
+	
+	public JSONObject addWordToBloc(Integer user_id, String word) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", addWord_tag));
+		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		params.add(new BasicNameValuePair("word", word));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		server = new String("http://192.168.1.37/tabu/");
+		server = new String("http://192.168.1.34/tabu/");
 		jsonParser = new JSONParser();
 	}
 	

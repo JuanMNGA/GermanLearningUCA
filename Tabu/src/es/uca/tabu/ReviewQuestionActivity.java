@@ -3,6 +3,7 @@ package es.uca.tabu;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.Menu;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ReviewQuestionActivity extends Activity {
-
 	
 	Button backBtn, dictionaryBtn;
 	EditText word;
@@ -78,6 +78,11 @@ public class ReviewQuestionActivity extends Activity {
 						if(startSelection != endSelection) {
 							String selectedText = word.getText().toString().substring(startSelection, endSelection);
 							if(!selectedText.contains(" ")) {
+								
+								SharedPreferences loginPreferences;
+								loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+								GameManager.getInstance(ReviewQuestionActivity.this).addWordToBloc(loginPreferences.getInt("id", -1), selectedText);
+								
 								Toast.makeText(ReviewQuestionActivity.this, selectedText + " " + getString(R.string.added), Toast.LENGTH_SHORT)
 								.show();
 							}

@@ -47,6 +47,7 @@
     <string name="wrongAnswer2"> Wrong answer </string>
     <string name="loadingDefinition"> Loading definition...</string>
     <string name="OkStadistics"> Results sent</string>
+    <string name="noReason"> You must introduce a reason to report</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Player Vs Computer</string>

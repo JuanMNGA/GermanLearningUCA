@@ -45,6 +45,7 @@
     <string name="wrongAnswer2"> Respuesta incorrecta </string>
     <string name="loadingDefinition"> Cargando definición...</string>
     <string name="OkStadistics"> Respuestas enviadas</string>
+    <string name="noReason"> Motivo del reporte vacío</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Jugador Vs Máquina</string>

@@ -426,6 +426,9 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 	}
 	
 	private class CategoriesQuery extends AsyncTask<Void, Void, JSONObject> {
+		
+		Toast toast = new Toast(PlayMenuActivity.this);
+		
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
 			return ConnectionManager.getInstance().getAllCategories();
@@ -435,7 +438,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		protected void onPostExecute(JSONObject json) {
 			try {
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-					ArrayList<String> parsedCategories = new ArrayList<String>();
+					final ArrayList<String> parsedCategories = new ArrayList<String>();
 					ArrayList<Integer> parsedIds = new ArrayList<Integer>();
 					JSONArray categories = json.getJSONArray(KEY_CATEGORIES);
 					JSONArray ids = json.getJSONArray(KEY_IDS);
@@ -464,7 +467,9 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 							else {
 								MarkableImageView miv = (MarkableImageView) v;
 								miv.setChecked(!miv.isChecked());
-								Toast.makeText(PlayMenuActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+								toast.cancel();
+								toast = Toast.makeText(PlayMenuActivity.this, parsedCategories.get(position-1), Toast.LENGTH_SHORT);
+								toast.show();
 							}
 							
 							new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());

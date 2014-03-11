@@ -29,7 +29,7 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 			mImageList.add(imageView);
 		}
 
-		for(int i=1; i<parsedCategories.size(); i++) {
+		for(int i=0; i<parsedCategories.size(); i++) {
 			idImage = TabuUtils.getDrawable(c, adaptResource(parsedCategories.get(i)));
 			if(idImage != 0) {
 				imageView = new MarkableImageView(context, parsedIds.get(i), false);

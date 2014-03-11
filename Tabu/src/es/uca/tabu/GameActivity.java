@@ -85,7 +85,17 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 						editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
 						    public void onClick(DialogInterface dialog, int whichButton) {
-						    	gameManager.getCurrentQuestion().setReport(input.getText().toString());
+						    	if(input.getText().toString() != "")
+						    		gameManager.getCurrentQuestion().setReport(input.getText().toString());
+						    	else
+						    		TabuUtils.showDialog(
+						    				getResources().getString(R.string.error), 
+						    				getResources().getString(R.string.noReason),
+						    				GameActivity.this);
+						    }
+						});
+						editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						    public void onClick(DialogInterface dialog, int whichButton) {
 						    }
 						});
 
@@ -153,12 +163,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		clue.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Question current = gameManager.getCurrentQuestion();
-				if((current.getArticle() != null && !current.getArticle().isEmpty()) && !current.isClue()) {
-					clue.setChecked(true);
-					article.setVisibility(View.VISIBLE);
-					article.setText(getString(R.string.articleword) + current.getArticle());
-					current.setClue(true);
-				}
+				clue.setChecked(true);
+				TabuUtils.showDialog("Clue" , current.getClue(),GameActivity.this);				
+				current.setClue(true);
 			} 
 		});
 
@@ -166,21 +173,21 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			public void onClick(View v) {
 				int startSelection = definition.getSelectionStart();
 				int endSelection = definition.getSelectionEnd();
-				System.out.println("START: " + String.valueOf(startSelection) + ", " + "END: " + String.valueOf(endSelection));
 
 				if(startSelection != endSelection) {
 					String selectedText = definition.getText().toString().substring(startSelection, endSelection);
 					if(!selectedText.contains(" ")) {
-						Toast.makeText(GameActivity.this, selectedText + " added", Toast.LENGTH_SHORT)
-						.show();
+						SharedPreferences loginPreferences;
+						loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+						gameManager.addWordToBloc(loginPreferences.getInt("id", -1), selectedText);
 					}
 					else {
-						Toast.makeText(GameActivity.this, "You have selected more than one word", Toast.LENGTH_SHORT)
+						Toast.makeText(GameActivity.this, getString(R.string.oneword), Toast.LENGTH_SHORT)
 						.show();
 					}
 				}
 				else {
-					Toast.makeText(GameActivity.this,"No text selected", Toast.LENGTH_SHORT)
+					Toast.makeText(GameActivity.this,getString(R.string.noText), Toast.LENGTH_SHORT)
 					.show();
 				}
 			} 
@@ -363,5 +370,4 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			}
 		}
 	}
-
 }

@@ -1,8 +1,17 @@
 package es.uca.tabu;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,8 +58,7 @@ public class MainMenuActivity extends Activity {
 
 			public void onClick(View v) {
 				// Switching to Register screen
-				Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
-				startActivity(i);
+				new initializeNotes().execute();
 			}
 		});
 	}
@@ -86,6 +94,55 @@ public class MainMenuActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private class initializeNotes extends AsyncTask<Object, Boolean, JSONObject> {
+
+		private ArrayList<String> mItems;
+		
+		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected JSONObject doInBackground(Object... user) {
+
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+			return ConnectionManager.getInstance().getNotes(
+					loginPreferences.getInt("id", -1));
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			/**
+			 * Checks for success message.
+			 **/
+			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+				JSONArray notes;
+				try {
+					notes = json.getJSONArray("notes");
+					if(notes.length() > 0) {
+						mItems = new ArrayList<String>();
+						for(int i=0; i < notes.length(); i++) {
+							mItems.add(notes.getString(i));
+						}
+						Collections.sort(mItems);
+
+						Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
+						i.putExtra("EXTRA_WORDS", mItems);
+						startActivity(i);
+					}
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			else {
+				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),MainMenuActivity.this);
+			}
+		}
 	}
 
 }
