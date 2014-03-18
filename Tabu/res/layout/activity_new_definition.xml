@@ -1,86 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:fillViewport="true"
     tools:context=".NewDefinitionActivity" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff" >
-
-        <!-- Header  Starts -->
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@layout/header_gradient"
-            android:orientation="vertical"
-            android:paddingBottom="5dip"
-            android:paddingTop="5dip" >
-
-            <!-- Logo Start -->
-
-
-            <!-- Logo Ends -->
-        </LinearLayout>
-        <!-- Header Ends -->
-        <!-- Footer Start -->
-        <!-- Footer Ends -->
-
-
-        <!-- New Def Form -->
-
-        <LinearLayout
+            android:id="@+id/firstRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/header"
-            android:orientation="vertical"
-            android:padding="10dip" >
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:orientation="horizontal"
+            android:weightSum="3" >
 
-            <!-- Write new text edit text -->
+            <EditText
+                android:id="@+id/article"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/writeNewArticle"
+                android:inputType="text"
+                android:singleLine="true" />
 
             <EditText
                 android:id="@+id/writeNewDef"
-                android:text="@string/writeNewDef"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dip"
-                android:layout_marginTop="5dip"
+                android:layout_weight="2"
+                android:hint="@string/writeNewDef"
+                android:inputType="text"
                 android:singleLine="true" />
-            <!-- Email Label -->
-
-            <EditText
-                android:id="@+id/DefinitionBody"
-                android:text="@string/definitionBody"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top|left"
-                android:inputType="textMultiLine"
-                android:lines="8"
-                android:maxLines="10"
-                android:minLines="6"
-                android:scrollbars="vertical" />
-
-            <!-- Vertical Scroll Bar -->
-            <!-- Password Label -->
-
-
-            <!-- Send Button -->
-
-            <Button
-                android:id="@+id/btnSend"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:text="@string/Send" />
-            <!-- Link to Login Screen -->
-
         </LinearLayout>
-        <!-- Registration Form Ends -->
-    </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/bodiesAndLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:layout_marginTop="5dip"
+            android:orientation="horizontal"
+            android:weightSum="4" >
+
+            <LinearLayout
+                android:id="@+id/bodies"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dip"
+                android:layout_weight="3"
+                android:orientation="vertical" >
+
+                <EditText
+                    android:id="@+id/DefinitionBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/definitionBody"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:maxLines="10"
+                    android:minLines="3"
+                    android:scrollbars="vertical" />
+
+                <EditText
+                    android:id="@+id/HintBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hintBody"
+                    android:inputType="textMultiLine"
+                    android:lines="3"
+                    android:maxLines="10"
+                    android:minLines="3"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/levelPickerLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:maxWidth="80dp"
+                    android:singleLine="true"
+                    android:text="@string/levelTxt" />
+
+                <NumberPicker
+                    android:id="@+id/levelPicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/categories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dip"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="80dp"
+                android:singleLine="true"
+                android:text="@string/category" />
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp" />
+        </LinearLayout>
+
+        <!-- Send Button -->
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Send" />
+    </LinearLayout>
 
 </ScrollView>

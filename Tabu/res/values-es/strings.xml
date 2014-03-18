@@ -18,23 +18,29 @@
     <string name="stats">Estadísticas</string>
     <string name="dictionary">Diccionario</string>
     <string name="newdef">Nueva definición</string>
-    <string name="Send"> Enviar </string>
-    <string name="writeNewDef"> Nueva Definición... </string>
-    <string name="definitionBody"> Cuerpo de la definición</string>
     <string name="title_activity_dictionary">Diccionario</string>
     <string name="title_activity_new_definition">Nueva Definición</string>
     <string name="title_activity_play_menu">Menú Jugar</string>
+
+    <!-- New Definition Activity -->
+    <string name="writeNewArticle"> Articulo... </string>
+    <string name="writeNewDef"> Nueva Palabra... </string>
+    <string name="definitionBody"> Cuerpo de la definición...</string>
+    <string name="category"> Categoría: </string>
+    <string name="hintBody"> Pista...</string>
+    <string name="errorNewDef"> Error al enviar la nueva definición</string>
+    <string name="exists"> ya existe </string>
 
     <!-- Review Question -->
     <string name="added"> añadida</string>
     <string name="oneword"> Selecciona sólo una palabra </string>
     <string name="noText"> No has seleccionado ninguna palabra</string>
-    
+
     <!-- Result Activity -->
     <string name="pistas"> pistas usadas</string>
     <string name="backToMenu"> Volver al menú </string>
     <string name="back"> Volver </string>
-    
+
     <!-- Game Activity -->
     <string name="wordHint"> Introduzca aquí su respuesta</string>
     <string name="errorQuestions"> Error en la petición de preguntas al servidor</string>
@@ -73,7 +79,9 @@
     <string name="rememberMe"> Recuerdame</string>
 
     <!-- General -->
+    <string name="Send"> Enviar </string>
     <string name="ok"> Ok </string>
+    <string name="cancel"> Volver </string>
     <string name="error"> Error </string>
     <string name="noNetwork"> Es imposible conectar a Internet </string>
     <string name="serverIssues"> Imposible conectar con el servidor</string>

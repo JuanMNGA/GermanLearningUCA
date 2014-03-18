@@ -34,8 +34,7 @@ import android.support.v4.app.NavUtils;
 public class PlayMenuActivity extends FragmentActivity implements NumberPicker.OnValueChangeListener {
 
 	private static String KEY_QUESTIONS = "questions";
-	private static String KEY_CATEGORIES = "categories";
-	private static String KEY_IDS = "ids";
+	
 	NumberPicker np;
 	NumberPicker lp;
 	GridView gridview;
@@ -440,8 +439,8 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 					final ArrayList<String> parsedCategories = new ArrayList<String>();
 					ArrayList<Integer> parsedIds = new ArrayList<Integer>();
-					JSONArray categories = json.getJSONArray(KEY_CATEGORIES);
-					JSONArray ids = json.getJSONArray(KEY_IDS);
+					JSONArray categories = json.getJSONArray(TabuUtils.KEY_CATEGORIES);
+					JSONArray ids = json.getJSONArray(TabuUtils.KEY_IDS);
 					for(int i=0; i<categories.length(); i++) {
 						parsedCategories.add((String) categories.get(i));
 						parsedIds.add(ids.getInt(i));

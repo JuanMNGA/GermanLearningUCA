@@ -41,6 +41,7 @@ public class ConnectionManager {
 	
 	private static String numQuestions_tag = "questions";
 	private static String questions_tag = "getquestions";
+	private static String sendDefinition_tag = "addDefinition";
 	private static String categories_tag = "categories";
 	private static String checkWord_tag = "checkWord";
 	private static String storeStadistics_tag = "store_stadistics";
@@ -217,9 +218,27 @@ public class ConnectionManager {
 		return json;
 	}
 	
+	public JSONObject sendDefinition(Integer user_id, String article, String word, String definition, String hint, Integer level, Integer category_id) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", sendDefinition_tag));
+		params.add(new BasicNameValuePair("id_user", user_id.toString()));
+		params.add(new BasicNameValuePair("word", word));
+		params.add(new BasicNameValuePair("article", article));
+		params.add(new BasicNameValuePair("definition", definition));
+		params.add(new BasicNameValuePair("clue", hint));
+		params.add(new BasicNameValuePair("level", level.toString()));
+		params.add(new BasicNameValuePair("id_category", category_id.toString()));
+		
+		System.out.println(params.toString());
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		server = new String("http://192.168.1.34/tabu/");
+		server = new String("http://192.168.1.35/tabu/");
 		jsonParser = new JSONParser();
 	}
 	
@@ -258,6 +277,7 @@ public class ConnectionManager {
 		protected void onPostExecute(Boolean internetOK){
 			if(!internetOK){
 				// INFORMA
+				//TabuUtils.showDialog(c.getString(R.string.error), c.getString(R.string.noNetwork) , c);
 			}
 
 		}

@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 public class TabuUtils {
 
 	public static String KEY_SUCCESS = "success";
+	public static String KEY_CATEGORIES = "categories";
+	public static String KEY_IDS = "ids";
 
 	// Validate name
 	// - Length: min 3, max 99
@@ -111,6 +113,20 @@ public class TabuUtils {
 			.show();
 	}
 
+	/* Call argument function when button clicked */
+	public static void showConfirmDialog(String title, String message, final Function<DialogInterface, Void> func, Context c) {
+		AlertDialog dialog = new AlertDialog.Builder(c)
+		.setTitle(title)
+		.setMessage(message)
+		.setPositiveButton(c.getResources().getString(R.string.ok),
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				func.apply(dialog);
+			}})
+		.setNegativeButton(c.getResources().getString(R.string.cancel), null)
+			.show();
+	}
+	
 	public static int getDrawable(Context context, String name)
 	{
 		try {
