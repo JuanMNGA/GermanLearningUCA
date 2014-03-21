@@ -21,11 +21,12 @@ public class DictionaryActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
-
+        
 		Bundle extras = getIntent().getExtras();
 		if(extras != null) {
 			mItems = extras.getStringArrayList("EXTRA_WORDS");
-	        Collections.sort(mItems);
+			
+			Collections.sort(mItems);
 
 	        ContentAdapter adapter = new ContentAdapter(this,
 	                android.R.layout.simple_list_item_1, mItems);

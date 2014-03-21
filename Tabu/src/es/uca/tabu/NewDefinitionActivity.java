@@ -1,6 +1,8 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +31,7 @@ public class NewDefinitionActivity extends Activity {
 	Spinner category=null;
 	NumberPicker np;
 	Button send;
-	TextView article;
+	Spinner article;
 	TextView word;
 	TextView definition;
 	TextView hint;
@@ -44,7 +46,7 @@ public class NewDefinitionActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		article = (TextView) findViewById(R.id.article);
+		article = (Spinner) findViewById(R.id.article);
 		word = (TextView) findViewById(R.id.writeNewDef);
 		definition = (TextView) findViewById(R.id.DefinitionBody);
 		hint = (TextView) findViewById(R.id.HintBody);
@@ -56,21 +58,50 @@ public class NewDefinitionActivity extends Activity {
 		np.setMaxValue(4);
 		np.setValue(1);
 		
+		//Add articles to spinner depending on the language
+		ArrayList<String> articles = new ArrayList<String> ();
+		articles.add("");
+		fillArticles(articles);
+		Collections.sort(articles);
+		
+		
+		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(NewDefinitionActivity.this,
+				android.R.layout.simple_spinner_item, articles);
+		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		article.setAdapter(dataAdapter);
+		
 		//Initialize categories
 		new CategoriesQuery().execute();
 		
 		//If click send
 		send.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				//Comprobar artículos según idioma actual
-				
-				if(!(word.getText().toString().isEmpty() &&
-					definition.getText().toString().isEmpty() &&
-					hint.getText().toString().isEmpty() &&
-					category!=null)) {
+			public void onClick(View v) {				
 					
-					new sendNewDefinition().execute();
-					
+				//Validate data before sending it
+				if(word.getText().toString().isEmpty()) {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.emptyWord),NewDefinitionActivity.this);
+				}
+				else if(definition.getText().toString().isEmpty()) {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.emptyDefinition),NewDefinitionActivity.this);
+				}
+				else if(hint.getText().toString().isEmpty()) {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.emptyHint),NewDefinitionActivity.this);
+				}
+				else if(category==null) {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidCategory),NewDefinitionActivity.this);
+				}
+				else {
+					TabuUtils.showConfirmDialog(" ", getResources().getString(R.string.sure),
+							new Function<DialogInterface, Void>() {
+						@Override
+						public Void apply(DialogInterface arg0) {
+							send.setEnabled(false);
+							arg0.cancel();
+							new sendNewDefinition().execute();
+							return null;
+						} 
+					},
+					NewDefinitionActivity.this);
 				}
 			} 
 		});
@@ -109,6 +140,16 @@ public class NewDefinitionActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	private void fillArticles(ArrayList<String> art) {
+		Locale current = getResources().getConfiguration().locale;
+		if(current == Locale.GERMAN) {
+			art.add("die");
+			art.add("der");
+			art.add("die PL.");
+			art.add("das");
+		}
+	}
+	
 	private class CategoriesQuery extends AsyncTask<Void, Void, JSONObject> {
 		
 		@Override
@@ -157,7 +198,7 @@ public class NewDefinitionActivity extends Activity {
 			
 			return ConnectionManager.getInstance().sendDefinition(
 					loginPreferences.getInt("id", -1),
-					article.getText().toString(),
+					article.getSelectedItem().toString(),
 					word.getText().toString(),
 					definition.getText().toString(),
 					hint.getText().toString(),

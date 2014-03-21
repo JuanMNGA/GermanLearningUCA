@@ -16,20 +16,24 @@
     <string name="title_activity_main_menu">Menú principal</string>
     <string name="play">Jugar</string>
     <string name="stats">Estadísticas</string>
-    <string name="dictionary">Diccionario</string>
+    <string name="dictionary">Bloc de notas</string>
     <string name="newdef">Nueva definición</string>
-    <string name="title_activity_dictionary">Diccionario</string>
+    <string name="title_activity_dictionary">Bloc de notas</string>
     <string name="title_activity_new_definition">Nueva Definición</string>
     <string name="title_activity_play_menu">Menú Jugar</string>
 
     <!-- New Definition Activity -->
-    <string name="writeNewArticle"> Articulo... </string>
-    <string name="writeNewDef"> Nueva Palabra... </string>
-    <string name="definitionBody"> Cuerpo de la definición...</string>
+    <string name="writeNewArticle"> Articulo&#8230; </string>
+    <string name="writeNewDef"> Nueva Palabra&#8230; </string>
+    <string name="definitionBody"> Cuerpo de la definición&#8230;</string>
     <string name="category"> Categoría: </string>
-    <string name="hintBody"> Pista...</string>
+    <string name="hintBody"> Pista&#8230;</string>
     <string name="errorNewDef"> Error al enviar la nueva definición</string>
     <string name="exists"> ya existe </string>
+    <string name="emptyDefinition"> Debes rellenar el campo "Definición"</string>
+    <string name="emptyHint"> Debes rellenar el campo "Pista"</string>
+    <string name="emptyWord"> Debes rellenar el campo "Palabra"</string>
+    <string name="invalidCategory"> Categoría inválida </string>
 
     <!-- Review Question -->
     <string name="added"> añadida</string>
@@ -82,6 +86,7 @@
     <string name="Send"> Enviar </string>
     <string name="ok"> Ok </string>
     <string name="cancel"> Volver </string>
+    <string name="sure"> ¿Estás seguro que quieres ENVIAR esta nueva definición?</string>
     <string name="error"> Error </string>
     <string name="noNetwork"> Es imposible conectar a Internet </string>
     <string name="serverIssues"> Imposible conectar con el servidor</string>

@@ -121,17 +121,16 @@ public class MainMenuActivity extends Activity {
 				JSONArray notes;
 				try {
 					notes = json.getJSONArray("notes");
+					mItems = new ArrayList<String>();
 					if(notes.length() > 0) {
-						mItems = new ArrayList<String>();
 						for(int i=0; i < notes.length(); i++) {
 							mItems.add(notes.getString(i));
 						}
 						Collections.sort(mItems);
-
-						Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
-						i.putExtra("EXTRA_WORDS", mItems);
-						startActivity(i);
 					}
+					Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
+					i.putExtra("EXTRA_WORDS", mItems);
+					startActivity(i);
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block

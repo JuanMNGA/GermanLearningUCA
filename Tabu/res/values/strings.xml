@@ -16,13 +16,13 @@
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="play">Play</string>
     <string name="stats">Stadistics</string>
-    <string name="dictionary">Dictionary</string>
+    <string name="dictionary">Notebook</string>
     <string name="newdef">New Definition</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_play_menu">Play Menu</string>
     <string name="title_activity_new_definition">New Definition</string>
-    <string name="title_activity_dictionary">Dictionary</string>
+    <string name="title_activity_dictionary">Notebook</string>
 
     <!-- New Definition Activity -->
     <string name="writeNewArticle"> Article... </string>
@@ -32,6 +32,10 @@
     <string name="hintBody"> Hint...</string>
     <string name="errorNewDef"> Error at sending the new definition</string>
     <string name="exists"> already exists</string>
+    <string name="emptyDefinition"> Definition field must be filled out</string>
+    <string name="emptyHint"> Hint field must be filled out</string>
+    <string name="emptyWord"> Word field must be filled out</string>
+    <string name="invalidCategory"> Category is not valid </string>
 
     <!-- Review Question -->
     <string name="added"> added</string>
@@ -84,6 +88,7 @@
     <string name="Send"> Send </string>
     <string name="ok"> Ok </string>
     <string name="cancel"> Cancel </string>
+    <string name="sure"> Are you sure that you want to SEND this new definition?</string>
     <string name="error"> Error </string>
     <string name="noNetwork"> Unable to connect to Internet </string>
     <string name="serverIssues"> Unable to connect to server</string>
