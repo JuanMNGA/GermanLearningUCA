@@ -7,93 +7,163 @@
     <!-- Divide horizontal -->
 
     <LinearLayout
-        android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="10" >
-
-        <!-- Palabra y definición -->
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/layout1"
-            android:layout_width="0dp"
+            android:id="@+id/layout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:orientation="vertical" >
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="10" >
 
-            <EditText
-                android:id="@+id/word"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:hint="@string/wordHint"
-                android:paddingRight="20dp"
-                android:singleLine="true" >
-            </EditText>
+            <!-- Palabra y definición -->
 
-            <TextView
-                android:id="@+id/article"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="20dp"
-                android:textIsSelectable="true"
-                android:textStyle="italic"
-                android:textSize="12sp" />
+                android:layout_weight="7"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/definition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/loadingDefinition"
-                android:textSize="20sp" />
+                <EditText
+                    android:id="@+id/word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/wordHint"
+                    android:paddingRight="20dp"
+                    android:singleLine="true"
+                    android:visibility="gone" >
+                </EditText>
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/article"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/definition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/loadingDefinition"
+                    android:visibility="gone"
+                    android:textSize="20sp" />
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/prepalabra"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/loadingDefinition"
+                        android:layout_marginLeft="20dp"
+                    android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/palabra"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/wordHint"
+                        android:textSize="16sp"
+                        android:singleLine="true" >
+                    </EditText>
+
+                    <TextView
+                        android:id="@+id/postpalabra"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="final de postpalabra"
+                    android:textSize="20sp" />
+                </FrameLayout>
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="1.0" />
+            </LinearLayout>
+
+            <!-- Contiene botones -->
+
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="1.0" />
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:orientation="vertical" >
+
+                <es.uca.tabu.MarkableButton
+                    android:id="@+id/submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/select_all"
+                    android:text="@string/Send"
+                    android:textColor="#000000" />
+
+                <es.uca.tabu.MarkableButton
+                    android:id="@+id/pista"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/clue" />
+
+                <es.uca.tabu.MarkableButton
+                    android:id="@+id/dictionary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/dictionary" />
+            </LinearLayout>
         </LinearLayout>
 
-        <!-- Contiene botones -->
-
         <LinearLayout
-            android:id="@+id/layout3"
-            android:layout_width="0dp"
+            android:id="@+id/rememberBox"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="3"
-            android:orientation="vertical" >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/remember"
+            android:baselineAligned="false"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-            <es.uca.tabu.MarkableButton
-                android:id="@+id/submit"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/remember"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/select_all"
-                android:text="@string/Send"
-                android:textColor="#000000" />
+                android:layout_marginRight="5dp"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="@string/remember"
+                android:textStyle="bold" />
 
-            <es.uca.tabu.MarkableButton
-                android:id="@+id/pista"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/rememberInside"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/clue" />
-
-            <es.uca.tabu.MarkableButton
-                android:id="@+id/dictionary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/dictionary" />
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="" />
         </LinearLayout>
     </LinearLayout>
 

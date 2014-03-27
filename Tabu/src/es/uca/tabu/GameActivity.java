@@ -2,8 +2,6 @@ package es.uca.tabu;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
@@ -16,15 +14,24 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.text.Editable;
+import android.text.Html;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -39,6 +46,13 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	private MarkableButton dictionary;
 	private EditText word;
 	private TextView article;
+	private TextView remember;
+	private LinearLayout rememberBox;
+	private TextView rememberInside; 
+
+	private TextView prepalabra;
+	private TextView postpalabra;
+	private EditText palabra;
 
 	RatingBar rb;
 	boolean rated; // To make rating optional
@@ -49,6 +63,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Hide Action bar
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		getActionBar().hide();
 		setContentView(R.layout.activity_game);
 
 		submit = (MarkableButton)findViewById(R.id.submit);
@@ -57,7 +74,13 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
 		article = (TextView) findViewById(R.id.article);
+		rememberBox = (LinearLayout) findViewById(R.id.rememberBox);
 
+		prepalabra = (TextView) findViewById(R.id.prepalabra);
+		palabra = (EditText) findViewById(R.id.palabra);
+		postpalabra = (TextView) findViewById(R.id.postpalabra);
+
+		// Rating bar
 		rb = (RatingBar) findViewById(R.id.ratingBar);
 		rated = false;
 		rb.setOnRatingBarChangeListener(this);
@@ -78,25 +101,25 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						editalert.setMessage("Enter report reason here:");
 						final EditText input = new EditText(GameActivity.this);
 						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-						        LinearLayout.LayoutParams.MATCH_PARENT,
-						        LinearLayout.LayoutParams.MATCH_PARENT);
+								LinearLayout.LayoutParams.MATCH_PARENT,
+								LinearLayout.LayoutParams.MATCH_PARENT);
 						input.setLayoutParams(lp);
 						editalert.setView(input);
 
 						editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
-						    public void onClick(DialogInterface dialog, int whichButton) {
-						    	if(input.getText().toString() != "")
-						    		gameManager.getCurrentQuestion().setReport(input.getText().toString());
-						    	else
-						    		TabuUtils.showDialog(
-						    				getResources().getString(R.string.error), 
-						    				getResources().getString(R.string.noReason),
-						    				GameActivity.this);
-						    }
+							public void onClick(DialogInterface dialog, int whichButton) {
+								if(input.getText().toString() != "")
+									gameManager.getCurrentQuestion().setReport(input.getText().toString());
+								else
+									TabuUtils.showDialog(
+											getResources().getString(R.string.error), 
+											getResources().getString(R.string.noReason),
+											GameActivity.this);
+							}
 						});
 						editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-						    public void onClick(DialogInterface dialog, int whichButton) {
-						    }
+							public void onClick(DialogInterface dialog, int whichButton) {
+							}
 						});
 
 
@@ -104,7 +127,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					}
 					else
 						rb.setRating(stars);
-						
+
 					lastRating = rb.getRating();
 
 					//Toast.makeText(MainActivity.this, String.valueOf("test"), Toast.LENGTH_SHORT).show();                   
@@ -138,7 +161,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		});*/
 
 		// Show the Up button in the action bar.
-		setupActionBar();
+		//setupActionBar();
 
 		ArrayList<Integer> categories;
 		int questions;
@@ -196,7 +219,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		submit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				String finalWord = word.getText().toString();
+				String finalWord = palabra.getText().toString();
 				if(finalWord.length() != 0) {
 					submit.setEnabled(false);
 					if(ConnectionManager.getInstance(GameActivity.this).networkWorks()) {
@@ -238,7 +261,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 									}
 									else {
 										submit.setEnabled(true);
-										word.setText("");
+										palabra.setText("");
 									}
 									return null;
 								} 
@@ -257,17 +280,123 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	}
 
 	public void requestNextQuestion(){
-		Question current = gameManager.next();
+		final Question current = gameManager.next();
 
 		if(current != null) {
 			rb.setRating(0);
 			rated = false;
-			word.setText("");
+			palabra.setText("");
 			clue.setText("");
+			rememberBox.setVisibility(View.GONE);
 
+			// PREPALABRA - PALABRA - POSTPALABRA STUFF
+			prepalabra.setText(current.getDefinition());
+
+			// Get left margin in dp
+			int margins = TabuUtils.pxToDp(this, 20);
+			
+			//lastLine + word to guess... fits in textView?
+			int start = prepalabra.getLayout().getLineStart(prepalabra.getLineCount()-1);
+			int end = prepalabra.getLayout().getLineEnd(prepalabra.getLineCount()-1);
+			String lastLine = prepalabra.getText().toString().substring(start,end);
+			String lastLineFilled = lastLine + "    " + current.getName(); // 4 extra characters because of the editText interface
+			float lineHeight = prepalabra.getLineHeight() * prepalabra.getLineSpacingMultiplier() + prepalabra.getLineSpacingExtra();
+			if(TabuUtils.isTooLarge(prepalabra, lastLineFilled)){
+				//New line
+				System.out.println("NUEVA LINEA");
+				FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				params.setMargins(margins, (int) ((int) (lineHeight * (prepalabra.getLineCount())) - (palabra.getHeight()/4) + (lineHeight/4)), 0, 0);
+				palabra.setLayoutParams(params);
+
+				// Place postlabra at the bottom
+				FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(postpalabra.getMeasuredWidth(), LayoutParams.WRAP_CONTENT);
+				params2.setMargins(margins, (int) ((int) (lineHeight * (prepalabra.getLineCount()+1)) + (lineHeight/4)), 0, 0);
+				postpalabra.setLayoutParams(params2);
+				
+			}
+			else {
+				// Same Line
+				float lastLineWidth = prepalabra.getPaint().measureText(lastLine);
+				int spaceLeft = (int) (prepalabra.getMeasuredWidth() - lastLineWidth);
+				FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(spaceLeft, LayoutParams.WRAP_CONTENT);
+				/*int factor;
+				if(prepalabra.getLineCount() == 1) {
+					factor = 0;
+				}
+				else {
+					factor = (int) (lineHeight * (prepalabra.getLineCount()-1));
+				}
+				 */
+				params.setMargins((int) lastLineWidth + margins, (int) ((int) (lineHeight * (prepalabra.getLineCount()-1)) - (palabra.getHeight()/4) + (lineHeight/4)), 0, 0);
+				palabra.setLayoutParams(params);
+
+				// Place postlabra at the bottom
+				FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(postpalabra.getMeasuredWidth(), LayoutParams.WRAP_CONTENT);
+				params2.setMargins(margins, (int) (lineHeight * (prepalabra.getLineCount()) + (lineHeight/4)), 0, 0);
+				postpalabra.setLayoutParams(params2);
+			}
+			
+			// Check if there is an article
 			if((current.getArticle() != null && !current.getArticle().isEmpty())) {
+				rememberBox.setVisibility(View.VISIBLE);
+				System.out.println("Tiene artículo");
 				//article.setText(getString(R.string.articleword) + current.getArticle());
-				article.setText(current.getArticle());
+				//article.setText(current.getArticle());
+
+				// Creates a remember textview and place it at the right-top corner of rememberbox
+				//rememberBox.setGravity(Gravity.RIGHT);
+
+				remember = (TextView) findViewById(R.id.remember);
+				rememberInside = (TextView) findViewById(R.id.rememberInside);
+
+				// Display remember! message on top-right corner of rememberBox
+				// width and height of remember box
+				BitmapDrawable bd = (BitmapDrawable) this.getResources().getDrawable(R.drawable.remember);
+				int width = bd.getBitmap().getWidth();
+				int height = bd.getBitmap().getHeight();
+				//remember dimensions
+				int max_height1 = (int) (height*0.23);
+				int max_width1 = (int) (width*0.076);
+				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
+
+				//Display remember contain
+				final int max_height2 = 40;
+				final int max_width2 = (int) (width*0.5 - margins);
+				rememberInside.setText(current.getArticle());
+				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
+				rememberInside.setEllipsize(null);
+				rememberInside.setTextColor(Color.parseColor(getArticleColor(current.getArticle())));
+
+				//Listener to add the input of the user: "DER WORD"
+				palabra.addTextChangedListener(new TextWatcher() {
+
+					@Override
+					public void beforeTextChanged(CharSequence s, int start,
+							int count, int after) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onTextChanged(CharSequence s, int start,
+							int before, int count) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						// TODO Auto-generated method stub
+						String text;
+						text = current.getArticle() + " " + s.toString();
+						String formattedText = "<font color=" + getArticleColor(current.getArticle()) + ">" + current.getArticle() + " </font> <font color=#000000>" + s.toString() + "</font>";
+						rememberInside.setText(Html.fromHtml(formattedText));
+						rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
+
+					}
+
+				});
+
 			}
 
 			definition.setText(current.getDefinition());
@@ -319,6 +448,19 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 		// TODO Auto-generated method stub
 		rated = true;
+	}
+
+	private String getArticleColor(String article) {
+		switch(article) {
+		case "der" :
+			return "#FF0000"; //RED
+		case "das" :
+			return "#0000FF"; //BLUE
+		case "die" :
+		case "die PL." :
+			return "#31B404"; //GREEN
+		}
+		return "#000000";
 	}
 
 	private class SendStadistics extends AsyncTask<Object, Boolean, JSONObject> {

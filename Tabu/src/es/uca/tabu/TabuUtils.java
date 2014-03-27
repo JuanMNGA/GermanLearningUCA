@@ -11,8 +11,12 @@ import com.google.common.base.Function;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.widget.TextView;
 
 public class TabuUtils {
 
@@ -171,5 +175,40 @@ public class TabuUtils {
 		return result;
 	}
 	
+	public static boolean isTooLarge (TextView text, String newText) {
+	    float textWidth = text.getPaint().measureText(newText);
+	    return (textWidth >= text.getMeasuredWidth ());
+	}
 	
+	public static int getFontSizeFromBounds(String text, int maxWidth, int maxHeight) {
+		Paint paint = new Paint();
+		Rect bounds = new Rect();
+
+		int current_w = 0;
+		int current_h = 0;
+
+		int incr_text_size = 1;
+		boolean found_desired_size = true;
+
+		while (found_desired_size){
+			paint.setTextSize(incr_text_size); // Test current text size
+
+			paint.getTextBounds(text, 0, text.length(), bounds); // get min rect from the text
+
+			current_h =  bounds.height();
+			current_w =  bounds.width();
+
+			if (maxHeight <= current_h || maxWidth <= current_w){
+				found_desired_size = false;
+			}
+			else
+				incr_text_size++;
+		}
+		return incr_text_size;
+	}
+	
+	public static int pxToDp(Context c, int px) {
+		DisplayMetrics displaymetrics = c.getResources().getDisplayMetrics();
+		return (int)((px * displaymetrics.density) + 0.5);
+	}
 }
