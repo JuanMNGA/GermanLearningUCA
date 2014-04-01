@@ -85,7 +85,6 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:text="final de postpalabra"
                     android:textSize="20sp" />
                 </FrameLayout>
 

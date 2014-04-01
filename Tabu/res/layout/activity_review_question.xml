@@ -10,77 +10,102 @@
         android:id="@+id/layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:weightSum="10" >
+        android:orientation="vertical" >
 
         <!-- Palabra y definición -->
 
         <LinearLayout
-            android:id="@+id/layout1"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:orientation="vertical" >
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="10" >
 
-            <EditText
-                android:id="@+id/word"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:hint="@string/wordHint"
-                android:inputType="none"
-                android:textIsSelectable="true"
-                android:paddingRight="20dp"
-                android:singleLine="true" >
-            </EditText>
+                android:layout_weight="7"
+                android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/definition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:textIsSelectable="true"
-                android:text="@string/loadingDefinition"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/definition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/loadingDefinition"
+                    android:textIsSelectable="true"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/article"
-                android:layout_width="wrap_content"
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="1.0" />
+            </LinearLayout>
+
+            <!-- Contiene botones -->
+
+            <LinearLayout
+                android:id="@+id/layout3"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:textIsSelectable="true"
-                android:textSize="20sp"
-                android:visibility="visible" />
+                android:layout_marginRight="5dp"
+                android:layout_weight="3"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/backToMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/select_all"
+                    android:text="@string/back"
+                    android:textColor="#000000" />
+
+                <Button
+                    android:id="@+id/dictionary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/dictionary" />
+            </LinearLayout>
         </LinearLayout>
-
-        <!-- Contiene botones -->
-
+        
+        
         <LinearLayout
-            android:id="@+id/layout3"
-            android:layout_width="0dp"
+            android:id="@+id/rememberBox"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="3"
-            android:orientation="vertical" >
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/remember"
+            android:baselineAligned="false"
+            android:gravity="right"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-            <Button
-                android:id="@+id/backToMenu"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/remember"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/select_all"
-                android:text="@string/back"
-                android:textColor="#000000" />
+                android:layout_marginRight="5dp"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="@string/remember"
+                android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/dictionary"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/rememberInside"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/dictionary" />
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="" />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,60 +1,199 @@
 package es.uca.tabu;
 
+import java.util.ArrayList;
+
+import org.json.JSONObject;
+
+import com.google.common.base.Function;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.text.Html;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReviewQuestionActivity extends Activity {
-	
+public class ReviewQuestionActivity extends Activity implements RatingBar.OnRatingBarChangeListener {
+
 	Button backBtn, dictionaryBtn;
-	EditText word;
 	TextView definition;
-	TextView article;
-	
+
+	private TextView remember;
+	private LinearLayout rememberBox;
+	private TextView rememberInside; 
+
+	RatingBar rb;
+	boolean rated; // To make rating optional
+	float lastRating=0;
+
+	Question q;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Hide Action bar
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		getActionBar().hide();
 		setContentView(R.layout.activity_review_question);
-		
+
+		rated = false;
 
 		Bundle extras = getIntent().getExtras();
-		Question q = null;
+		q = null;
 		if(extras != null) {
 			q = (Question) extras.getSerializable("EXTRA_QUESTION");
 			
 			backBtn = (Button) findViewById(R.id.backToMenu);
 			backBtn.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					Intent result = new Intent(getApplicationContext(), ResultActivity.class);
-					result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(result);
-					finish();
+				public void onClick(View v) {			
+					if(rated) {
+						new SendReport().execute(q.getId(), rb.getRating(), q.getReport());
+					}
+					else {
+						backToResults();
+					}
 				} 
 			});
-			
-			word = (EditText) findViewById(R.id.word);
-			word.setKeyListener(null);
+
 			definition = (TextView) findViewById(R.id.definition);
-			article = (TextView) findViewById(R.id.article);
-			
-			word.setText(q.getName());
+			rememberBox = (LinearLayout) findViewById(R.id.rememberBox);
+
+			String color;
 			if(q.isSuccess()) {
-				word.setTextColor(Color.parseColor("#006400"));
+				color = "#006400";
 			}
 			else {
-				word.setTextColor(Color.RED);
+				color = "#FF0000";
 			}
-			definition.setText(q.getDefinition());
-			article.setText(q.getArticle());
+			String coloredWord = "<font color=#000000>" + q.getPrepalabra() + " </font> ";
+			coloredWord += "<font color=" + color + ">" + q.getName() + " </font> ";
+			coloredWord += "<font color=#000000>" + q.getPostpalabra() + " </font> ";
+			definition.setText(Html.fromHtml(coloredWord));
+
+
+			// Rating bar
+			rb = (RatingBar) findViewById(R.id.ratingBar);
+			rated = false;
 			
+			if(q.getPuntuacion() != null)
+				rb.setRating(q.getPuntuacion());
+			
+			rb.setOnRatingBarChangeListener(this);
+			rb.setOnTouchListener(new OnTouchListener() {
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					if (event.getAction() == MotionEvent.ACTION_UP) {
+						float touchPositionX = event.getX();
+						float width = rb.getWidth();
+						float starsf = (touchPositionX / width) * 5.0f;
+						int stars = (int)starsf + 1;
+						
+						if(stars == lastRating) {
+							rb.setRating(0.0f);
+							
+							// Report dialog
+							AlertDialog.Builder editalert = new AlertDialog.Builder(ReviewQuestionActivity.this);
+							editalert.setTitle(getResources().getString(R.string.report));
+							editalert.setMessage(getResources().getString(R.string.reportReason));
+							final EditText input = new EditText(ReviewQuestionActivity.this);
+							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.MATCH_PARENT,
+									LinearLayout.LayoutParams.MATCH_PARENT);
+							input.setLayoutParams(lp);
+							editalert.setView(input);
+
+							editalert.setPositiveButton(getResources().getString(R.string.report), new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int whichButton) {
+									if(input.getText().toString() != "")
+										q.setReport(input.getText().toString());
+									else
+										TabuUtils.showDialog(
+												getResources().getString(R.string.error), 
+												getResources().getString(R.string.noReason),
+												ReviewQuestionActivity.this);
+								}
+							});
+							editalert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int whichButton) {
+								}
+							});
+
+
+							editalert.show();
+						}
+						else
+							rb.setRating(stars);
+
+						lastRating = rb.getRating();
+
+						//Toast.makeText(MainActivity.this, String.valueOf("test"), Toast.LENGTH_SHORT).show();                   
+						v.setPressed(false);
+					}
+					if (event.getAction() == MotionEvent.ACTION_DOWN) {
+						v.setPressed(true);
+					}
+
+					if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+						v.setPressed(false);
+					}
+					return true;
+				}});
+
+			// Check if there is an article
+			if((q.getArticle() != null && !q.getArticle().isEmpty())) {
+				// Get left margin in dp
+				int margins = TabuUtils.pxToDp(this, 20);
+				rememberBox.setVisibility(View.VISIBLE);
+				System.out.println("Tiene artículo");
+				//article.setText(getString(R.string.articleword) + current.getArticle());
+				//article.setText(current.getArticle());
+
+				// Creates a remember textview and place it at the right-top corner of rememberbox
+				//rememberBox.setGravity(Gravity.RIGHT);
+
+				remember = (TextView) findViewById(R.id.remember);
+				rememberInside = (TextView) findViewById(R.id.rememberInside);
+
+				// Display remember! message on top-right corner of rememberBox
+				// width and height of remember box
+				BitmapDrawable bd = (BitmapDrawable) this.getResources().getDrawable(R.drawable.remember);
+				int width = bd.getBitmap().getWidth();
+				int height = bd.getBitmap().getHeight();
+				//remember dimensions
+				int max_height1 = (int) (height*0.23);
+				int max_width1 = (int) (width*0.076);
+				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
+
+				//Display remember contain
+				final int max_height2 = 40;
+				final int max_width2 = (int) (width*0.5 - margins);
+				rememberInside.setText(q.getArticle());
+				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
+				rememberInside.setEllipsize(null);
+				rememberInside.setTextColor(Color.parseColor(TabuUtils.getArticleColor(q.getArticle())));
+				
+				//Apply color and size
+				String text;
+				text = q.getArticle() + " " + q.getName();
+				String formattedText = "<font color=" + TabuUtils.getArticleColor(q.getArticle()) + ">" + q.getArticle() + " </font> <font color=#000000>" + q.getName() + "</font>";
+				rememberInside.setText(Html.fromHtml(formattedText));
+				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
+			}
+			//Notepad button
 			dictionaryBtn = (Button) findViewById(R.id.dictionary);
 			dictionaryBtn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -73,28 +212,8 @@ public class ReviewQuestionActivity extends Activity {
 						}
 					}
 					else {
-						startSelection = word.getSelectionStart();
-						endSelection = word.getSelectionEnd();
-						if(startSelection != endSelection) {
-							String selectedText = word.getText().toString().substring(startSelection, endSelection);
-							if(!selectedText.contains(" ")) {
-								
-								SharedPreferences loginPreferences;
-								loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-								GameManager.getInstance(ReviewQuestionActivity.this).addWordToBloc(loginPreferences.getInt("id", -1), selectedText);
-								
-								Toast.makeText(ReviewQuestionActivity.this, selectedText + " " + getString(R.string.added), Toast.LENGTH_SHORT)
-								.show();
-							}
-							else {
-								Toast.makeText(ReviewQuestionActivity.this, getString(R.string.oneword), Toast.LENGTH_SHORT)
-								.show();
-							}
-						}
-						else { 
-							Toast.makeText(ReviewQuestionActivity.this,getString(R.string.noText), Toast.LENGTH_SHORT)
-							.show();
-						}
+						Toast.makeText(ReviewQuestionActivity.this,getString(R.string.noText), Toast.LENGTH_SHORT)
+						.show();
 					}
 				} 
 			});
@@ -103,7 +222,7 @@ public class ReviewQuestionActivity extends Activity {
 		{
 			System.out.println("NO EXTRAS AT REVIEW");
 		}
-		
+
 	}
 
 	@Override
@@ -111,6 +230,51 @@ public class ReviewQuestionActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.review_question, menu);
 		return true;
+	}
+
+	@Override
+	public void onRatingChanged(RatingBar ratingBar, float rating,
+			boolean fromUser) {
+		// TODO Auto-generated method stub
+		rated = true;
+	}
+	
+	private void backToResults() {
+		Intent result = new Intent(getApplicationContext(), ResultActivity.class);
+		result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(result);
+		finish();
+	}
+	
+	private class SendReport extends AsyncTask<Object, Boolean, JSONObject> {
+
+		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected JSONObject doInBackground(Object... info) {
+
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+			return ConnectionManager.getInstance().sendReport(
+					loginPreferences.getInt("id", -1),
+					((int) info[0]),
+					((int) info[1]),
+					((String)info[2]));
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			/**
+			 * Checks for success message.
+			 **/
+			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+				backToResults();
+			}
+			else {
+				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorReason),ReviewQuestionActivity.this);
+			}
+		}
 	}
 
 }

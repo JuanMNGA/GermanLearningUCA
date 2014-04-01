@@ -34,11 +34,13 @@
     <string name="emptyHint"> Debes rellenar el campo "Pista"</string>
     <string name="emptyWord"> Debes rellenar el campo "Palabra"</string>
     <string name="invalidCategory"> Categoría inválida </string>
+    <string name="wordEqDef"> La palabra no puede ser igual que la definición</string>
 
     <!-- Review Question -->
     <string name="added"> añadida</string>
     <string name="oneword"> Selecciona sólo una palabra </string>
     <string name="noText"> No has seleccionado ninguna palabra</string>
+    <string name="errorReason"> No se ha podido enviar la petición de reporte </string>
 
     <!-- Result Activity -->
     <string name="pistas"> pistas usadas</string>
@@ -57,6 +59,8 @@
     <string name="OkStadistics"> Respuestas enviadas</string>
     <string name="noReason"> Motivo del reporte vacío</string>
     <string name="remember"> ¡Recuerda!</string>
+    <string name="report"> Reportar</string>
+    <string name="reportReason"> Introduzca el motivo:</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Jugador Vs Máquina</string>

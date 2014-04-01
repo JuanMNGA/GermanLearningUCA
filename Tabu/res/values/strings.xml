@@ -36,11 +36,13 @@
     <string name="emptyHint"> Hint field must be filled out</string>
     <string name="emptyWord"> Word field must be filled out</string>
     <string name="invalidCategory"> Category is not valid </string>
+    <string name="wordEqDef"> Word cannot be equal to Definition</string>
 
     <!-- Review Question -->
     <string name="added"> added</string>
     <string name="oneword"> You have selected more than one word </string>
     <string name="noText"> No text selected</string>
+    <string name="errorReason"> Couldn\'t send report reason </string>
 
     <!-- Result Activity -->
     <string name="pistas"> used clues</string>
@@ -55,10 +57,12 @@
     <string name="articleword"> Article: </string>
     <string name="wrongAnswer1"> Wrong answer, Try again! </string>
     <string name="wrongAnswer2"> Wrong answer </string>
-    <string name="loadingDefinition"> Loading definition...</string>
+    <string name="loadingDefinition"> Loading definition&#8230;</string>
     <string name="OkStadistics"> Results sent</string>
     <string name="noReason"> You must introduce a reason to report</string>
 	<string name="remember"> Remember!</string>
+	<string name="report"> Report</string>
+    <string name="reportReason"> Reason to report:</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Player Vs Computer</string>

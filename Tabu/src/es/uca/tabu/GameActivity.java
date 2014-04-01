@@ -19,7 +19,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,7 +30,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -40,12 +38,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 	private GameManager gameManager;
 
-	private TextView definition;
 	private MarkableButton submit;
 	private MarkableButton clue;
 	private MarkableButton dictionary;
-	private EditText word;
-	private TextView article;
 	private TextView remember;
 	private LinearLayout rememberBox;
 	private TextView rememberInside; 
@@ -69,11 +64,8 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		setContentView(R.layout.activity_game);
 
 		submit = (MarkableButton)findViewById(R.id.submit);
-		definition = (TextView)findViewById(R.id.definition);
-		word = (EditText) findViewById(R.id.word);
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
-		article = (TextView) findViewById(R.id.article);
 		rememberBox = (LinearLayout) findViewById(R.id.rememberBox);
 
 		prepalabra = (TextView) findViewById(R.id.prepalabra);
@@ -194,14 +186,15 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 		dictionary.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				int startSelection = definition.getSelectionStart();
-				int endSelection = definition.getSelectionEnd();
+				int startSelection = prepalabra.getSelectionStart();
+				int endSelection = prepalabra.getSelectionEnd();
 
+				SharedPreferences loginPreferences;
+				loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+				
 				if(startSelection != endSelection) {
-					String selectedText = definition.getText().toString().substring(startSelection, endSelection);
+					String selectedText = prepalabra.getText().toString().substring(startSelection, endSelection);
 					if(!selectedText.contains(" ")) {
-						SharedPreferences loginPreferences;
-						loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 						gameManager.addWordToBloc(loginPreferences.getInt("id", -1), selectedText);
 					}
 					else {
@@ -210,8 +203,23 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					}
 				}
 				else {
-					Toast.makeText(GameActivity.this,getString(R.string.noText), Toast.LENGTH_SHORT)
-					.show();
+					startSelection = postpalabra.getSelectionStart();
+					endSelection = postpalabra.getSelectionEnd();
+
+					if(startSelection != endSelection) {
+						String selectedText = postpalabra.getText().toString().substring(startSelection, endSelection);
+						if(!selectedText.contains(" ")) {
+							gameManager.addWordToBloc(loginPreferences.getInt("id", -1), selectedText);
+						}
+						else {
+							Toast.makeText(GameActivity.this, getString(R.string.oneword), Toast.LENGTH_SHORT)
+							.show();
+						}
+					} 
+					else {
+						Toast.makeText(GameActivity.this,getString(R.string.noText), Toast.LENGTH_SHORT)
+						.show();
+					}
 				}
 			} 
 		});
@@ -290,8 +298,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			rememberBox.setVisibility(View.GONE);
 
 			// PREPALABRA - PALABRA - POSTPALABRA STUFF
-			prepalabra.setText(current.getDefinition());
-
+			prepalabra.setText(current.getPrepalabra());
+			postpalabra.setText(current.getPostpalabra());
+			
 			// Get left margin in dp
 			int margins = TabuUtils.pxToDp(this, 20);
 			
@@ -365,7 +374,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				rememberInside.setText(current.getArticle());
 				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
 				rememberInside.setEllipsize(null);
-				rememberInside.setTextColor(Color.parseColor(getArticleColor(current.getArticle())));
+				rememberInside.setTextColor(Color.parseColor(TabuUtils.getArticleColor(current.getArticle())));
 
 				//Listener to add the input of the user: "DER WORD"
 				palabra.addTextChangedListener(new TextWatcher() {
@@ -389,7 +398,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						// TODO Auto-generated method stub
 						String text;
 						text = current.getArticle() + " " + s.toString();
-						String formattedText = "<font color=" + getArticleColor(current.getArticle()) + ">" + current.getArticle() + " </font> <font color=#000000>" + s.toString() + "</font>";
+						String formattedText = "<font color=" + TabuUtils.getArticleColor(current.getArticle()) + ">" + current.getArticle() + " </font> <font color=#000000>" + s.toString() + "</font>";
 						rememberInside.setText(Html.fromHtml(formattedText));
 						rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
 
@@ -399,8 +408,8 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 			}
 
-			definition.setText(current.getDefinition());
-			definition.setTextIsSelectable(true);
+			prepalabra.setTextIsSelectable(true);
+			postpalabra.setTextIsSelectable(true);
 			submit.setEnabled(true);
 			clue.setEnabled(true);
 			clue.setChecked(false);
@@ -448,19 +457,6 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
 		// TODO Auto-generated method stub
 		rated = true;
-	}
-
-	private String getArticleColor(String article) {
-		switch(article) {
-		case "der" :
-			return "#FF0000"; //RED
-		case "das" :
-			return "#0000FF"; //BLUE
-		case "die" :
-		case "die PL." :
-			return "#31B404"; //GREEN
-		}
-		return "#000000";
 	}
 
 	private class SendStadistics extends AsyncTask<Object, Boolean, JSONObject> {

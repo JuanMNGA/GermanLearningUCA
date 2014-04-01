@@ -39,6 +39,7 @@ public class ConnectionManager {
 	private static String forpass_tag = "forpass";
 	private static String chgpass_tag = "chgpass";
 	
+	
 	private static String numQuestions_tag = "questions";
 	private static String questions_tag = "getquestions";
 	private static String sendDefinition_tag = "addDefinition";
@@ -47,6 +48,7 @@ public class ConnectionManager {
 	private static String storeStadistics_tag = "store_stadistics";
 	private static String getNotes_tag = "getNotes";
 	private static String addWord_tag = "addWord";
+	private static String sendReport_tag = "sendReport";
 	
 	private static Context c = null;
 
@@ -199,6 +201,17 @@ public class ConnectionManager {
 		return json;
 	}
 	
+	public JSONObject sendReport(Integer user_id, Integer question_id, Integer rate, String reason) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", sendReport_tag));
+		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		params.add(new BasicNameValuePair("question_id", question_id.toString()));
+		params.add(new BasicNameValuePair("rate", rate.toString()));
+		params.add(new BasicNameValuePair("reason", reason));
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		return json;
+	}
+	
 	public JSONObject getNotes(Integer user_id) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", getNotes_tag));
@@ -218,13 +231,14 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject sendDefinition(Integer user_id, String article, String word, String definition, String hint, Integer level, Integer category_id) {
+	public JSONObject sendDefinition(Integer user_id, String article, String word, String prepalabra, String postpalabra, String hint, Integer level, Integer category_id) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", sendDefinition_tag));
 		params.add(new BasicNameValuePair("id_user", user_id.toString()));
 		params.add(new BasicNameValuePair("word", word));
 		params.add(new BasicNameValuePair("article", article));
-		params.add(new BasicNameValuePair("definition", definition));
+		params.add(new BasicNameValuePair("prepalabra", prepalabra));
+		params.add(new BasicNameValuePair("postpalabra", postpalabra));
 		params.add(new BasicNameValuePair("clue", hint));
 		params.add(new BasicNameValuePair("level", level.toString()));
 		params.add(new BasicNameValuePair("id_category", category_id.toString()));
@@ -238,8 +252,8 @@ public class ConnectionManager {
 	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		//server = new String("http://192.168.1.38/tabu/");
-		server = new String("http://94.247.31.212/tabu/");
+		server = new String("http://192.168.1.33/tabu/");
+		//server = new String("http://94.247.31.212/tabu/");
 		jsonParser = new JSONParser();
 	}
 	

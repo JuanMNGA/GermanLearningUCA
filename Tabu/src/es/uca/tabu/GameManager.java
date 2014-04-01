@@ -15,7 +15,8 @@ import android.widget.Toast;
 
 public class GameManager {
 	
-	private static String KEY_DEFINITION = "definiciones";
+	private static String KEY_PREPALABRA = "prepalabras";
+	private static String KEY_POSTPALABRA = "postpalabras";
 	private static String KEY_ARTICLE = "articulos";
 	private static String KEY_ID = "ids";
 	private static String KEY_NAMES = "nombres";
@@ -134,7 +135,7 @@ public class GameManager {
 	}
 	
 	public Boolean validWord(Integer id, String word) {
-		return questions.contains(new Question(id, word, "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", "", false));
+		return questions.contains(new Question(id, word, "", "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", "", "", false));
 	}
 	
 	public void addWordToBloc(Integer id, String word) {
@@ -168,7 +169,8 @@ public class GameManager {
 					if(!json.isNull(KEY_ARTICLE))
 						articles = json.getJSONArray(KEY_ARTICLE);
 					JSONArray ids = json.getJSONArray(KEY_ID);
-					JSONArray definitions = json.getJSONArray(KEY_DEFINITION);
+					JSONArray prepalabras = json.getJSONArray(KEY_PREPALABRA);
+					JSONArray postpalabras = json.getJSONArray(KEY_POSTPALABRA);
 					JSONArray names = json.getJSONArray(KEY_NAMES);
 					JSONArray clues = json.getJSONArray(KEY_CLUES);
 					
@@ -183,14 +185,15 @@ public class GameManager {
 								ids.getInt(i),
 								names.getString(i),
 								article,
-								definitions.getString(i),
+								prepalabras.getString(i),
+								postpalabras.getString(i),
 								clues.getString(i),
 								false));
 					}
-					for(int i=0; i<questions.size(); i++) {
+					/*for(int i=0; i<questions.size(); i++) {
 						System.out.println("IDS: " + questions.get(i).getId());
 						System.out.println("DEF: " + questions.get(i).getDefinition());
-					}
+					}*/
 					
 					GameActivity ga = (GameActivity) c;
 					ga.requestNextQuestion();

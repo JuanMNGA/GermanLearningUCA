@@ -6,19 +6,21 @@ public class Question implements Serializable {
 	int mId;
 	String mName;
 	String mArticle;
-	String mDefinition;
+	String mPrepalabra;
+	String mPostpalabra;
 	String mClueBody;
 	boolean mSuccess;
 	boolean mClue;
-	int mPuntuacion;
+	Integer mPuntuacion;
 	short mTries; 
 	String mReport;
 
-	public Question(int id, String name, String article, String definition, String body, boolean success) {
+	public Question(int id, String name, String article, String prepalabra, String postpalabra, String body, boolean success) {
 		mId = id;
 		mName = name;
 		mArticle = article;
-		mDefinition = definition;
+		mPrepalabra = prepalabra;
+		mPostpalabra = postpalabra;
 		mClueBody = body;
 		mSuccess = success;
 		mTries = 0;
@@ -82,14 +84,22 @@ public class Question implements Serializable {
 		this.mArticle = mArticle;
 	}
 
-	public String getDefinition() {
-		return mDefinition;
+	public String getPrepalabra() {
+		return mPrepalabra;
 	}
 
-	public void setDefinition(String mDefinition) {
-		this.mDefinition = mDefinition;
+	public void setPrepalabra(String mPrepalabra) {
+		this.mPrepalabra = mPrepalabra;
 	}
 
+	public String getPostpalabra() {
+		return mPostpalabra;
+	}
+
+	public void setPostpalabra(String mPostpalabra) {
+		this.mPostpalabra = mPostpalabra;
+	}
+	
 	public boolean isSuccess() {
 		return mSuccess;
 	}
@@ -115,7 +125,7 @@ public class Question implements Serializable {
 	}
 
 
-	public int getPuntuacion() {
+	public Integer getPuntuacion() {
 		return mPuntuacion;
 	}
 

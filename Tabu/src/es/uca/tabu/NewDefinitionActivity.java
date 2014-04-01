@@ -1,6 +1,7 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -35,48 +36,48 @@ public class NewDefinitionActivity extends Activity {
 	TextView word;
 	TextView definition;
 	TextView hint;
-	
+
 	ArrayList<String> parsedCategories;
 	ArrayList<Integer> parsedIds;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_definition);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+
 		article = (Spinner) findViewById(R.id.article);
 		word = (TextView) findViewById(R.id.writeNewDef);
 		definition = (TextView) findViewById(R.id.DefinitionBody);
 		hint = (TextView) findViewById(R.id.HintBody);
-		
+
 		send = (Button) findViewById(R.id.btnSend);
-		
+
 		np = (NumberPicker) findViewById(R.id.levelPicker);
 		np.setMinValue(1);
 		np.setMaxValue(4);
 		np.setValue(1);
-		
+
 		//Add articles to spinner depending on the language
 		ArrayList<String> articles = new ArrayList<String> ();
 		articles.add("");
 		fillArticles(articles);
 		Collections.sort(articles);
-		
-		
+
+
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(NewDefinitionActivity.this,
 				android.R.layout.simple_spinner_item, articles);
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		article.setAdapter(dataAdapter);
-		
+
 		//Initialize categories
 		new CategoriesQuery().execute();
-		
+
 		//If click send
 		send.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {				
-					
+
 				//Validate data before sending it
 				if(word.getText().toString().isEmpty()) {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.emptyWord),NewDefinitionActivity.this);
@@ -89,6 +90,9 @@ public class NewDefinitionActivity extends Activity {
 				}
 				else if(category==null) {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidCategory),NewDefinitionActivity.this);
+				}
+				else if(definition.getText().toString().compareTo(word.getText().toString()) == 0) {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.wordEqDef),NewDefinitionActivity.this);
 				}
 				else {
 					TabuUtils.showConfirmDialog(" ", getResources().getString(R.string.sure),
@@ -149,9 +153,9 @@ public class NewDefinitionActivity extends Activity {
 			art.add("das");
 		}
 	}
-	
+
 	private class CategoriesQuery extends AsyncTask<Void, Void, JSONObject> {
-		
+
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
 			return ConnectionManager.getInstance().getAllCategories();
@@ -169,15 +173,15 @@ public class NewDefinitionActivity extends Activity {
 						parsedCategories.add((String) categories.get(i));
 						parsedIds.add(ids.getInt(i));
 					}
-					
+
 					category = (Spinner) findViewById(R.id.spinner1);
-					
+
 					//Add items to spinner
 					ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(NewDefinitionActivity.this,
 							android.R.layout.simple_spinner_item, parsedCategories);
 					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					category.setAdapter(dataAdapter);
-					
+
 				}
 				else {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues), NewDefinitionActivity.this);
@@ -187,20 +191,50 @@ public class NewDefinitionActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private class sendNewDefinition extends AsyncTask<Void, Void, JSONObject> {
-		
+
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
-			
+
 			SharedPreferences loginPreferences;
 			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+			String prepalabra;
+			String postpalabra;
+			String definitionStr = definition.getText().toString().trim();
+			String wordStr = word.getText().toString().trim();
+			
+			if(definitionStr.contains(wordStr)) {
+				prepalabra = "";
+				postpalabra= "";
+				String[] parts = definitionStr.split(wordStr);
+				
+				if(TabuUtils.beginsBy(wordStr, definitionStr)) {
+					prepalabra = "";
+					postpalabra = parts[1];
+				}
+				else if(TabuUtils.endsBy(wordStr, definitionStr)) {
+					postpalabra = "";
+					prepalabra = parts[0];
+				}
+				else { // Está por el medio de la frase
+					prepalabra = parts[0];
+					postpalabra = parts[1];
+				}
+				
+			}
+			else {
+				prepalabra = definition.getText().toString();
+				postpalabra = "";
+			}
 			
 			return ConnectionManager.getInstance().sendDefinition(
 					loginPreferences.getInt("id", -1),
 					article.getSelectedItem().toString(),
 					word.getText().toString(),
-					definition.getText().toString(),
+					prepalabra,
+					postpalabra,
 					hint.getText().toString(),
 					np.getValue(),
 					parsedIds.get(parsedCategories.indexOf(category.getSelectedItem().toString())));
@@ -219,7 +253,7 @@ public class NewDefinitionActivity extends Activity {
 							@Override
 							public Void apply(DialogInterface arg0) {
 								arg0.cancel();
-		
+
 								Intent conclusion = new Intent(getApplicationContext(), MainMenuActivity.class);
 								conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 								startActivity(conclusion);
@@ -243,5 +277,5 @@ public class NewDefinitionActivity extends Activity {
 			}
 		}
 	}
-	
+
 }

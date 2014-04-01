@@ -180,6 +180,15 @@ public class TabuUtils {
 	    return (textWidth >= text.getMeasuredWidth ());
 	}
 	
+	public static boolean beginsBy(String beginning, String container) {
+		return container.indexOf(beginning) == 0;
+	}
+	
+	public static boolean endsBy(String ending, String container) {
+		return container.contains(" ") &&
+				ending.compareTo(container.substring(container.lastIndexOf(" ")+1)) == 0;
+		}
+	
 	public static int getFontSizeFromBounds(String text, int maxWidth, int maxHeight) {
 		Paint paint = new Paint();
 		Rect bounds = new Rect();
@@ -210,5 +219,18 @@ public class TabuUtils {
 	public static int pxToDp(Context c, int px) {
 		DisplayMetrics displaymetrics = c.getResources().getDisplayMetrics();
 		return (int)((px * displaymetrics.density) + 0.5);
+	}
+	
+	public static String getArticleColor(String article) {
+		switch(article) {
+		case "der" :
+			return "#FF0000"; //RED
+		case "das" :
+			return "#0000FF"; //BLUE
+		case "die" :
+		case "die PL." :
+			return "#31B404"; //GREEN
+		}
+		return "#000000";
 	}
 }
