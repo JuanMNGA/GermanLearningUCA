@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tabú</string>
+    <string name="app_name">Guess It! Language Trainer</string>
     <string name="action_settings">Optionen</string>
     <string name="hello_world">Hallo!</string>
     <string name="new_register">Bist du neu? Registrier dich hier!</string>
@@ -12,7 +12,7 @@
     <string name="newAccount">Neues Bnutzerkonto</string>
     <string name="existingAccount">Ich habe bereits ein Benutzerkonto! Klick hier</string>
     <string name="title_activity_register">Neues Benutzerkonto</string>
-    <string name="loginYourAccount">Login to your Account</string>
+    <string name="loginYourAccount">Login Benutzerkonto</string>
     <string name="title_activity_main_menu">Hauptmenü</string>
     <string name="play">Spielen</string>
     <string name="stats">Statistiken</string>
@@ -27,39 +27,39 @@
     <!-- New Definition Activity -->
     <string name="writeNewArticle"> Artikle... </string>
     <string name="writeNewDef"> New Word... </string>
-    <string name="definitionBody"> Body Definition... </string>
-    <string name="category"> Category: </string>
-    <string name="hintBody"> Hint...</string>
-    <string name="errorNewDef"> Error at sending the new definition</string>
-    <string name="exists"> already exists</string>
-    <string name="emptyDefinition"> Definition field must be filled out</string>
-    <string name="emptyHint"> Hint field must be filled out</string>
-    <string name="emptyWord"> Word field must be filled out</string>
-    <string name="invalidCategory"> Category is not valid </string>
+    <string name="definitionBody"> Definition... </string>
+    <string name="category"> Kategorie: </string>
+    <string name="hintBody"> Hilfe...</string>
+    <string name="errorNewDef"> Fehlermeldung bei Defintionssendung</string>
+    <string name="exists"> existiert bereits</string>
+    <string name="emptyDefinition"> Definitionsfeld muss ergänzt werden</string>
+    <string name="emptyHint"> Hilfefeld muss ergänzt werden</string>
+    <string name="emptyWord"> Wortfeld muss ergänzt werden</string>
+    <string name="invalidCategory"> Ungültige Kategorie </string>
     <string name="wordEqDef"> Word cannot be equal to Definition</string>
 
     <!-- Review Question -->
-    <string name="added"> added</string>
-    <string name="oneword"> You have selected more than one word </string>
-    <string name="noText"> No text selected</string>
+    <string name="added"> hinzugefügt</string>
+    <string name="oneword"> Du hast mehr als ein Wort selektiert </string>
+    <string name="noText"> Kein Text selektiert</string>
     <string name="errorReason"> Couldn\'t send report reason </string>
 
     <!-- Result Activity -->
-    <string name="pistas"> verwendete Hilfen</string>
-    <string name="backToMenu"> zurück zum Menü </string>
-    <string name="back"> zurück </string>
+    <string name="pistas"> Verwendete Hilfen</string>
+    <string name="backToMenu"> Zurück zum Menü </string>
+    <string name="back"> Zurück </string>
 
     <!-- Game Activity -->
     <string name="wordHint"> Notier hier deine Antwort! </string>
-    <string name="errorQuestions"> Error in questions petition</string>
-    <string name="noQuestions"> No questions to show</string>
+    <string name="errorQuestions"> Fehlermeldung</string>
+    <string name="noQuestions"> Es gibt keine Fragen!</string>
     <string name="pista"> Hilfe</string>
     <string name="articleword"> Artikel: </string>
-    <string name="wrongAnswer1"> falsche Antwort, Versuch es nochmal! </string>
-    <string name="wrongAnswer2"> falsche Antwort </string>
+    <string name="wrongAnswer1"> Falsche Antwort, Versuch es nochmal! </string>
+    <string name="wrongAnswer2"> Falsche Antwort </string>
     <string name="loadingDefinition"> Definition wird geladen...</string>
-    <string name="OkStadistics"> Results sent</string>
-    <string name="noReason"> You must introduce a reason to report</string>
+    <string name="OkStadistics"> Resultate gesendet</string>
+    <string name="noReason"> Warum akzeptierst du nicht die Definition?</string>
     <string name="remember"> Remember!</string>
     <string name="report"> Reportar</string>
     <string name="reportReason"> Introduzca el motivo:</string>
@@ -69,12 +69,12 @@
     <string name="PlayerVsPlayer"> Multiplayer Mode</string>
     <string name="joingGroupQueue"> Join group queue</string>
     <string name="levelTxt"> Niveau: </string>
-    <string name="numQuestions"> Questions: </string>
+    <string name="numQuestions"> Fragen: </string>
     <string name="startGame"> Start </string>
-    <string name="selectAll"> All </string>
-    <string name="allLevels">All</string>
+    <string name="selectAll"> Alle </string>
+    <string name="allLevels">Alle</string>
     <string name="atLeastOneCategory"> Wähl mindestens eine Kategorie aus! </string>
-    <string name="atLeastOneQuestion"> You must select at least one question </string>
+    <string name="atLeastOneQuestion"> Selektier mindestens 1 Frage! </string>
 
     <!-- Register Activity -->
     <string name="invalidName"> Ungültiger Name</string>
@@ -90,10 +90,11 @@
     <string name="rememberMe"> Speichern</string>
 
     <!-- General -->
-    <string name="Send"> Send </string>
+    <string name="Send"> Senden </string>
+    <string name="updating"> Updating </string>
     <string name="ok"> Ok </string>
-    <string name="sure"> Are you sure that you want to SEND this new definition?</string>
-    <string name="cancel"> Cancel </string>
+    <string name="sure"> Willst du diese Definition SENDEN?</string>
+    <string name="cancel"> Löschen </string>
     <string name="error"> Fehler </string>
     <string name="noNetwork"> Internetverbindung kann nicht hergestellt werden </string>
     <string name="serverIssues"> Verbindung mit Server momentan nicht möglich</string>

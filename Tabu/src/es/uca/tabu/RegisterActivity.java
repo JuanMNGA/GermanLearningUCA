@@ -1,13 +1,8 @@
 package es.uca.tabu;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.common.base.Function;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -71,11 +66,6 @@ public class RegisterActivity extends Activity {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidPass),RegisterActivity.this);
 				}
 				else {
-
-					//Sending dialog
-					dialog = ProgressDialog.show(RegisterActivity.this, " ", 
-							getResources().getString(R.string.sending), true);
-
 					if(ConnectionManager.getInstance(RegisterActivity.this).networkWorks()) {
 						// Insert the user
 						new addUserTask().execute(
@@ -85,7 +75,6 @@ public class RegisterActivity extends Activity {
 								new String("estudiante"));
 					}
 					else {
-						dialog.cancel();
 						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),RegisterActivity.this);
 					}
 				}
@@ -94,7 +83,14 @@ public class RegisterActivity extends Activity {
 	}
 
 	private class addUserTask extends AsyncTask<String, Object, JSONObject> {
+		ProgressDialog dialog;
 
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(RegisterActivity.this, " ", 
+					getResources().getString(R.string.sending), true);
+		}
+		
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
 		protected JSONObject doInBackground(String... user) {
@@ -154,6 +150,7 @@ public class RegisterActivity extends Activity {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),RegisterActivity.this);
 				}
 			} catch (JSONException e) {
+				dialog.dismiss();
 				System.out.println("Error en Register postExecute");
 				e.printStackTrace();
 			}

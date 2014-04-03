@@ -1,15 +1,11 @@
 package es.uca.tabu;
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
-
-import com.google.common.base.Function;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -247,8 +243,14 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 	}
 	
 	private class SendReport extends AsyncTask<Object, Boolean, JSONObject> {
+		ProgressDialog dialog;
 
-		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(ReviewQuestionActivity.this, " ", 
+					getResources().getString(R.string.sending), true);
+		}
+		
 		@Override
 		protected JSONObject doInBackground(Object... info) {
 
@@ -257,8 +259,8 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 
 			return ConnectionManager.getInstance().sendReport(
 					loginPreferences.getInt("id", -1),
-					((int) info[0]),
-					((int) info[1]),
+					((Integer) info[0]),
+					((Integer) info[1]),
 					((String)info[2]));
 		}
 
@@ -269,9 +271,11 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			 * Checks for success message.
 			 **/
 			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+				dialog.dismiss();
 				backToResults();
 			}
 			else {
+				dialog.dismiss();
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorReason),ReviewQuestionActivity.this);
 			}
 		}

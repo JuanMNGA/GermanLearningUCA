@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tabú</string>
+    <string name="app_name">Guess It! Language Trainer</string>
     <string name="action_settings">Opciones</string>
     <string name="hello_world">Hola Mundo!</string>
     <string name="new_register">¿Nuevo en Tabú? ¡Registrate aquí!</string>
@@ -89,6 +89,7 @@
 
     <!-- General -->
     <string name="Send"> Enviar </string>
+    <string name="updating"> Actualizando </string>
     <string name="ok"> Ok </string>
     <string name="cancel"> Volver </string>
     <string name="sure"> ¿Estás seguro que quieres ENVIAR esta nueva definición?</string>

@@ -236,15 +236,12 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						current.increaseTries();
 						if(gameManager.validWord(current.getId(), finalWord)) {
 							submit.setChecked(true);
-							//System.out.println("FUNCIONA");
 							current.setSuccess(true);
 							if(rated)
 								current.setPuntuacion((int) rb.getRating());
 							requestNextQuestion();
 						}
 						else {
-							//System.out.println("NO FUNCIONA");
-
 							String message;
 
 							if(current.getTries() != GameManager.MAX_TRIES) {
@@ -460,15 +457,19 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	}
 
 	private class SendStadistics extends AsyncTask<Object, Boolean, JSONObject> {
+		ProgressDialog dialog;
 
-		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(GameActivity.this, " ", 
+					getResources().getString(R.string.sending), true);
+		}
+		
 		@Override
 		protected JSONObject doInBackground(Object... questionList) {
 
 			SharedPreferences loginPreferences;
-			SharedPreferences.Editor loginPrefsEditor;
 			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-			//loginPrefsEditor = loginPreferences.edit();
 
 			return ConnectionManager.getInstance().storeStadistics(
 					loginPreferences.getInt("id", -1),
@@ -482,7 +483,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			 * Checks for success message.
 			 **/
 			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-
+				dialog.cancel();
 				TabuUtils.showDialog(" ", getString(R.string.OkStadistics),
 						new Function<DialogInterface, Void>() { //Function to switch to ResultActivity when dialog button clicked
 					@Override
@@ -497,9 +498,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					} 
 				},
 				GameActivity.this);
-
 			}
 			else {
+				dialog.cancel();
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorQuestions),GameActivity.this);
 				submit.setEnabled(true);
 				clue.setEnabled(true);

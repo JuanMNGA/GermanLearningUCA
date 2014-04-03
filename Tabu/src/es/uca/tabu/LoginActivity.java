@@ -21,9 +21,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class LoginActivity extends Activity {
-
-	ProgressDialog dialog;
-
 	private static String KEY_SUCCESS = "success";
 	private static String KEY_NOMBRE = "nombre";
 	private static String KEY_EMAIL = "email";
@@ -89,10 +86,6 @@ public class LoginActivity extends Activity {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidPass),LoginActivity.this);
 				}
 				else {
-
-					//Sending dialog
-					dialog = ProgressDialog.show(LoginActivity.this, " ", 
-							getResources().getString(R.string.logging), true);
 					
 					//If there is access to Internet
 					if(ConnectionManager.getInstance(LoginActivity.this).networkWorks()) {
@@ -114,7 +107,6 @@ public class LoginActivity extends Activity {
 								pass);
 					}
 					else {
-						dialog.cancel();
 						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),LoginActivity.this);
 					}
 				}
@@ -131,8 +123,14 @@ public class LoginActivity extends Activity {
 	}
 
 	private class loginUserTask extends AsyncTask<String, Void, JSONObject> {
+		ProgressDialog dialog;
 
-		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(LoginActivity.this, " ", 
+					getResources().getString(R.string.logging), true);
+		}
+		
 		@Override
 		protected JSONObject doInBackground(String... user) {
 			return ConnectionManager.getInstance().loginUser(
@@ -171,6 +169,7 @@ public class LoginActivity extends Activity {
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
+				dialog.dismiss();
 			}
 		}
 	}

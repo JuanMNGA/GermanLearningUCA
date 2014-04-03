@@ -147,7 +147,14 @@ public class GameManager {
 	
 	private class getCategorizedQuestions extends AsyncTask<Object, Boolean, JSONObject> {
 
-		// Devuelve true si consigue meter el usuario en la base de datos
+		ProgressDialog dialog;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(c, " ", 
+					c.getResources().getString(R.string.updating), true);
+		}
+		
 		@Override
 		protected JSONObject doInBackground(Object... questioninfo) {
 			return ConnectionManager.getInstance().getQuestions(
@@ -197,12 +204,14 @@ public class GameManager {
 					
 					GameActivity ga = (GameActivity) c;
 					ga.requestNextQuestion();
-					
+					dialog.cancel();
 				}
 				else {
+					dialog.cancel();
 					TabuUtils.showDialog(c.getResources().getString(R.string.error), c.getResources().getString(R.string.errorQuestions),c);
 				}
 			} catch (JSONException e) {
+				dialog.cancel();
 				System.out.println("Error en QuestionCategorized postExecute");
 				e.printStackTrace();
 			}

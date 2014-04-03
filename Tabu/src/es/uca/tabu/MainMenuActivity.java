@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
@@ -100,6 +101,14 @@ public class MainMenuActivity extends Activity {
 
 		private ArrayList<String> mItems;
 		
+		ProgressDialog dialog;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(MainMenuActivity.this, " ", 
+					getResources().getString(R.string.updating), true);
+		}
+		
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
 		protected JSONObject doInBackground(Object... user) {
@@ -128,17 +137,20 @@ public class MainMenuActivity extends Activity {
 						}
 						Collections.sort(mItems);
 					}
+					dialog.dismiss();
 					Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
 					i.putExtra("EXTRA_WORDS", mItems);
 					startActivity(i);
 
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
+					dialog.dismiss();
 					e.printStackTrace();
 				}
 
 			}
 			else {
+				dialog.dismiss();
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),MainMenuActivity.this);
 			}
 		}

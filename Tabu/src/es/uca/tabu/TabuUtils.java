@@ -222,15 +222,13 @@ public class TabuUtils {
 	}
 	
 	public static String getArticleColor(String article) {
-		switch(article) {
-		case "der" :
+		if(article.compareTo("der") == 0)
 			return "#FF0000"; //RED
-		case "das" :
+		else if(article.compareTo("das") == 0)
 			return "#0000FF"; //BLUE
-		case "die" :
-		case "die PL." :
+		else if(article.compareTo("die") == 0 || article.compareTo("die PL.") == 0)
 			return "#31B404"; //GREEN
-		}
+		else
 		return "#000000";
 	}
 }

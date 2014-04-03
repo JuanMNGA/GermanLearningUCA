@@ -14,6 +14,7 @@ import com.google.common.base.Function;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -155,7 +156,14 @@ public class NewDefinitionActivity extends Activity {
 	}
 
 	private class CategoriesQuery extends AsyncTask<Void, Void, JSONObject> {
+		ProgressDialog dialog;
 
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(NewDefinitionActivity.this, " ", 
+					getResources().getString(R.string.updating), true);
+		}
+		
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
 			return ConnectionManager.getInstance().getAllCategories();
@@ -181,19 +189,28 @@ public class NewDefinitionActivity extends Activity {
 							android.R.layout.simple_spinner_item, parsedCategories);
 					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					category.setAdapter(dataAdapter);
-
+					dialog.dismiss();
 				}
 				else {
+					dialog.dismiss();
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues), NewDefinitionActivity.this);
 				}
 			} catch (JSONException e) {
+				dialog.dismiss();
 				e.printStackTrace();
 			}
 		}
 	}
 
 	private class sendNewDefinition extends AsyncTask<Void, Void, JSONObject> {
+		ProgressDialog dialog;
 
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(NewDefinitionActivity.this, " ", 
+					getResources().getString(R.string.sending), true);
+		}
+		
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
 
@@ -243,11 +260,11 @@ public class NewDefinitionActivity extends Activity {
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-
 				String res;
 				try {
 					res = json.getString(TabuUtils.KEY_SUCCESS);
 					if(Integer.parseInt(res) == 1){
+						dialog.dismiss();
 						TabuUtils.showDialog(" ", getString(R.string.ok),
 								new Function<DialogInterface, Void>() { 
 							@Override
@@ -264,15 +281,18 @@ public class NewDefinitionActivity extends Activity {
 						NewDefinitionActivity.this);
 					}
 					else {
+						dialog.dismiss();
 						TabuUtils.showDialog(getResources().getString(R.string.error), word.getText().toString() + " " + getResources().getString(R.string.exists), NewDefinitionActivity.this);
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
+					dialog.dismiss();
 					System.out.println("Error JSON al recibir la info");
 					e.printStackTrace();
 				}
 			}
 			else {
+				dialog.dismiss();
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorNewDef), NewDefinitionActivity.this);
 			}
 		}
