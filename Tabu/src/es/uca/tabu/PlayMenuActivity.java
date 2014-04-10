@@ -8,8 +8,11 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -127,12 +131,27 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 						// Keep playerVsComputer button dimensions
 						playerVsComputer.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
 						
-						np.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
+						
+						//StartGameBtn height
+						BitmapDrawable bd = (BitmapDrawable) getResources().getDrawable(R.drawable.start_game);
+						int startBtnHeight = bd.getBitmap().getHeight();
+						int lettersInfoHeight = ((TextView) findViewById(R.id.textView2)).getHeight();
+						RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) np.getLayoutParams();
+						layoutParams.height = startBtnHeight;
+						np.setLayoutParams(layoutParams);
+						
+						layoutParams = (android.widget.RelativeLayout.LayoutParams) lp.getLayoutParams();
+						layoutParams.height = startBtnHeight;
+						lp.setLayoutParams(layoutParams);
+						
+						System.out.println("START: " + String.valueOf(startBtnHeight) + " LETTERS: " + String.valueOf(lettersInfoHeight));
+						
+						//np.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
 						// Show settings layout
 						np.setMinValue(1);
 						np.setMaxValue(2);
 						//Levels
-						lp.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
+						//lp.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
 						lp.setMinValue(1);
 						lp.setMaxValue(5);
 						lp.setDisplayedValues(new String[] { "1", "2", "3", "4", PlayMenuActivity.this.getResources().getString(R.string.allLevels)});
@@ -476,6 +495,19 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 					}
 
 					adapter = new ImageCategoriesAdapter(PlayMenuActivity.this, parsedCategories, parsedIds);
+					ViewGroup.LayoutParams glp = gridview.getLayoutParams();
+					ViewGroup.LayoutParams settingsLp = settings.getLayoutParams();
+					ViewGroup.LayoutParams selectAllLp = selectAllBtn.getLayoutParams();
+					
+					DisplayMetrics displaymetrics = new DisplayMetrics();
+					getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+					int height = displaymetrics.heightPixels;
+
+					int location[] = new int[2];
+					selectAllBtn.getLocationOnScreen(location);
+					glp.height = height - selectAllLp.height - location[1];
+					
+					gridview.setLayoutParams(glp);
 					gridview.setAdapter(adapter);
 					gridview.setOnItemClickListener(new OnItemClickListener() {
 						public void onItemClick(AdapterView<?> parent, View v, int position, long id) {

@@ -16,6 +16,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class TabuUtils {
@@ -80,19 +82,22 @@ public class TabuUtils {
 	}
 
 	public static void showDialog(String title, String message, Context c) {
-		AlertDialog dialog = new AlertDialog.Builder(c)
+		AlertDialog.Builder dialogB = new AlertDialog.Builder(c)
 		.setTitle(title)
 		.setMessage(message)
 		.setPositiveButton(c.getResources().getString(R.string.ok),
 				new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
-			}})
-			.show();
+			}});
+
+		AlertDialog dialog = dialogB.create();
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 
 	public static void showImageDialog(String title, String message, final Function<DialogInterface, Void> func, Context c,  int image) {
-		AlertDialog dialog = new AlertDialog.Builder(c)
+		AlertDialog.Builder dialogB = new AlertDialog.Builder(c)
 		.setTitle(title)
 		.setMessage(message)
 		.setIcon(c.getResources().getDrawable(image))
@@ -100,13 +105,16 @@ public class TabuUtils {
 				new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				func.apply(dialog);
-			}})
-			.show();
+			}});
+		
+		AlertDialog dialog = dialogB.create();
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 
 	/* Call argument function when button clicked */
 	public static void showDialog(String title, String message, final Function<DialogInterface, Void> func, Context c) {
-		AlertDialog dialog = new AlertDialog.Builder(c)
+		/*AlertDialog dialog = new AlertDialog.Builder(c)
 		.setTitle(title)
 		.setMessage(message)
 		.setPositiveButton(c.getResources().getString(R.string.ok),
@@ -114,7 +122,21 @@ public class TabuUtils {
 			public void onClick(DialogInterface dialog, int id) {
 				func.apply(dialog);
 			}})
-			.show();
+			.show();*/
+
+
+		AlertDialog.Builder dialogB = new AlertDialog.Builder(c)
+		.setTitle(title)
+		.setMessage(message)
+		.setPositiveButton(c.getResources().getString(R.string.ok),
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				func.apply(dialog);
+			}});
+
+		AlertDialog dialog = dialogB.create();
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
 	}
 
 	/* Call argument function when button clicked */
@@ -127,10 +149,10 @@ public class TabuUtils {
 			public void onClick(DialogInterface dialog, int id) {
 				func.apply(dialog);
 			}})
-		.setNegativeButton(c.getResources().getString(R.string.cancel), null)
+			.setNegativeButton(c.getResources().getString(R.string.cancel), null)
 			.show();
 	}
-	
+
 	public static int getDrawable(Context context, String name)
 	{
 		try {
@@ -143,7 +165,7 @@ public class TabuUtils {
 			return -1;
 		}
 	}
-	
+
 	public static Drawable getDrawable(Context context, String name, String dummy)
 	{
 		try {
@@ -161,7 +183,7 @@ public class TabuUtils {
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 		return pattern.matcher(nfdNormalizedString).replaceAll("");
 	}
-	
+
 	public static String accentGerman(String str) {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
@@ -174,21 +196,21 @@ public class TabuUtils {
 		}
 		return result;
 	}
-	
+
 	public static boolean isTooLarge (TextView text, String newText) {
-	    float textWidth = text.getPaint().measureText(newText);
-	    return (textWidth >= text.getMeasuredWidth ());
+		float textWidth = text.getPaint().measureText(newText);
+		return (textWidth >= text.getMeasuredWidth ());
 	}
-	
+
 	public static boolean beginsBy(String beginning, String container) {
 		return container.indexOf(beginning) == 0;
 	}
-	
+
 	public static boolean endsBy(String ending, String container) {
 		return container.contains(" ") &&
 				ending.compareTo(container.substring(container.lastIndexOf(" ")+1)) == 0;
-		}
-	
+	}
+
 	public static int getFontSizeFromBounds(String text, int maxWidth, int maxHeight) {
 		Paint paint = new Paint();
 		Rect bounds = new Rect();
@@ -215,12 +237,12 @@ public class TabuUtils {
 		}
 		return incr_text_size;
 	}
-	
+
 	public static int pxToDp(Context c, int px) {
 		DisplayMetrics displaymetrics = c.getResources().getDisplayMetrics();
 		return (int)((px * displaymetrics.density) + 0.5);
 	}
-	
+
 	public static String getArticleColor(String article) {
 		if(article.compareTo("der") == 0)
 			return "#FF0000"; //RED
@@ -229,6 +251,6 @@ public class TabuUtils {
 		else if(article.compareTo("die") == 0 || article.compareTo("die PL.") == 0)
 			return "#31B404"; //GREEN
 		else
-		return "#000000";
+			return "#000000";
 	}
 }

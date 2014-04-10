@@ -5,6 +5,7 @@ import java.io.Serializable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,9 @@ public class ResultActivity extends Activity {
 		
 		questions.setText(String.valueOf(gameManager.getNumOfPassedQuestions()) + "/" + String.valueOf(gameManager.getNumOfQuestions()));
 		clues.setText(String.valueOf(gameManager.getNumOfUsedClues()) + " " + getString(R.string.pistas));
+		//questions.setTextSize(TypedValue.COMPLEX_UNIT_SP, 100f * getResources().getDisplayMetrics().density);
+		//clues.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f * getResources().getDisplayMetrics().density);
+		
 		
 		adapter = new NumberImageAdapter(ResultActivity.this);
 		gridview.setAdapter(adapter);

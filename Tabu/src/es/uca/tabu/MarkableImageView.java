@@ -71,7 +71,7 @@ public class MarkableImageView extends ImageView {
         super.onDraw(canvas);
         if(number_view) {
     		Paint imagePaint = new Paint();
-    		imagePaint.setTextSize(100f);
+    		imagePaint.setTextSize(50f * getResources().getDisplayMetrics().density);
     		imagePaint.setColor(Color.WHITE);
     		imagePaint.setFlags(Paint.FAKE_BOLD_TEXT_FLAG);
     		imagePaint.setTextAlign(Align.CENTER);

@@ -1,7 +1,7 @@
 package es.uca.tabu;
 
 import android.content.Context;
-
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -39,7 +39,10 @@ public class NumberImageAdapter extends BaseAdapter {
 		MarkableImageView imageView;
 		if (convertView == null) {  // if it's not recycled, initialize some attributes
 			imageView = new MarkableImageView(context, position, true);
-			imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+			BitmapDrawable bd = (BitmapDrawable) context.getResources().getDrawable(TabuUtils.getDrawable(context, "numbers"));
+			int w = bd.getBitmap().getWidth();
+			int h = bd.getBitmap().getHeight();
+			imageView.setLayoutParams(new GridView.LayoutParams(w, h));
 			imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
 			//imageView.setPadding(8, 8, 8, 8);
 		} else {
