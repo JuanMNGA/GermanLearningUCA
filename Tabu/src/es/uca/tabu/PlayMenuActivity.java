@@ -28,6 +28,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -125,11 +126,13 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 						// Keep playerVsComputer button dimensions
 						playerVsComputer.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-
+						
+						np.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
 						// Show settings layout
 						np.setMinValue(1);
 						np.setMaxValue(2);
 						//Levels
+						lp.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
 						lp.setMinValue(1);
 						lp.setMaxValue(5);
 						lp.setDisplayedValues(new String[] { "1", "2", "3", "4", PlayMenuActivity.this.getResources().getString(R.string.allLevels)});

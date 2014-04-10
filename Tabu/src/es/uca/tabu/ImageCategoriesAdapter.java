@@ -3,6 +3,8 @@ package es.uca.tabu;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -21,9 +23,15 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 		
 		// Random Icon
 		idImage = TabuUtils.getDrawable(c, adaptResource("random"));
+		BitmapDrawable bd = (BitmapDrawable) c.getResources().getDrawable(idImage);
+		int w = bd.getBitmap().getWidth();
+		int h = bd.getBitmap().getHeight();
+		System.out.println("ALTURA: " + h + ", ANCHURA: " + w);
+		
 		if(idImage != 0) {
 			imageView = new MarkableImageView(context, -1, false);
-			imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+			//imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+			imageView.setLayoutParams(new GridView.LayoutParams(w, h));
 			imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
 			imageView.setImageResource(idImage);
 			mImageList.add(imageView);
@@ -32,8 +40,12 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 		for(int i=0; i<parsedCategories.size(); i++) {
 			idImage = TabuUtils.getDrawable(c, adaptResource(parsedCategories.get(i)));
 			if(idImage != 0) {
+				bd = (BitmapDrawable) c.getResources().getDrawable(idImage);
+				w = bd.getBitmap().getWidth();
+				h = bd.getBitmap().getHeight();
 				imageView = new MarkableImageView(context, parsedIds.get(i), false);
-				imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+				//imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
+				imageView.setLayoutParams(new GridView.LayoutParams(w, h));
 				imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
 				imageView.setImageResource(idImage);
 				mImageList.add(imageView);
