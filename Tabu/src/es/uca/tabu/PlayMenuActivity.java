@@ -68,7 +68,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 		playerVsPlayer.setEnabled(false);
 		groupQueue.setEnabled(false);
-		
+
 		selectAllBtn = (Button) findViewById(R.id.selectAllBtn);
 		startGameBtn = (Button) findViewById(R.id.startBtn);
 
@@ -130,8 +130,8 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 						// Keep playerVsComputer button dimensions
 						playerVsComputer.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-						
-						
+
+
 						//StartGameBtn height
 						BitmapDrawable bd = (BitmapDrawable) getResources().getDrawable(R.drawable.start_game);
 						int startBtnHeight = bd.getBitmap().getHeight();
@@ -139,13 +139,13 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 						RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) np.getLayoutParams();
 						layoutParams.height = startBtnHeight;
 						np.setLayoutParams(layoutParams);
-						
+
 						layoutParams = (android.widget.RelativeLayout.LayoutParams) lp.getLayoutParams();
 						layoutParams.height = startBtnHeight;
 						lp.setLayoutParams(layoutParams);
-						
+
 						System.out.println("START: " + String.valueOf(startBtnHeight) + " LETTERS: " + String.valueOf(lettersInfoHeight));
-						
+
 						//np.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
 						// Show settings layout
 						np.setMinValue(1);
@@ -159,39 +159,32 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 						settings.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (height<<2), 2.5f));
 
-						//If there is access to Internet
-						if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
-							new CategoriesQuery().execute();
-							new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
 
-							startGameBtn.setOnClickListener(new View.OnClickListener() {
-								public void onClick(View v) {
-									if(atLeastOneCategorySelected()) {
-										if(np.getValue() > 0) {
-											startGameBtn.setEnabled(false);
-											Intent startGame = new Intent(getApplicationContext(), GameActivity.class);
-											startGame.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-											startGame.putExtra("EXTRA_CHECKED_CATEGORIES", getCheckedCategories());
-											startGame.putExtra("EXTRA_NUM_OF_QUESTIONS", np.getValue());
-											startGame.putExtra("EXTRA_LEVEL", lp.getValue());
-											startActivity(startGame);
-											finish();
-										}
-										else {
-											TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneQuestion),PlayMenuActivity.this);
-										}
+						new CategoriesQuery().execute();
+						new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
+
+						startGameBtn.setOnClickListener(new View.OnClickListener() {
+							public void onClick(View v) {
+								if(atLeastOneCategorySelected()) {
+									if(np.getValue() > 0) {
+										startGameBtn.setEnabled(false);
+										Intent startGame = new Intent(getApplicationContext(), GameActivity.class);
+										startGame.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+										startGame.putExtra("EXTRA_CHECKED_CATEGORIES", getCheckedCategories());
+										startGame.putExtra("EXTRA_NUM_OF_QUESTIONS", np.getValue());
+										startGame.putExtra("EXTRA_LEVEL", lp.getValue());
+										startActivity(startGame);
+										finish();
 									}
 									else {
-										TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneCategory),PlayMenuActivity.this);
+										TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneQuestion),PlayMenuActivity.this);
 									}
-								} 
-							});
-						}
-						else {
-							TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),PlayMenuActivity.this);
-						}
-
-
+								}
+								else {
+									TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneCategory),PlayMenuActivity.this);
+								}
+							} 
+						});
 					}
 
 					@Override
@@ -268,16 +261,8 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 								settings.setVisibility(View.INVISIBLE);
 								settings.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (height<<2), 2.5f));
 
-								//If there is access to Internet
-								if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
-
-									new QuestionsQuery().execute();
-									new CategoriesQuery().execute();
-
-								}
-								else {
-									TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),PlayMenuActivity.this);
-								}
+								new QuestionsQuery().execute();
+								new CategoriesQuery().execute();
 
 							}
 
@@ -425,7 +410,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		return super.onOptionsItemSelected(item);
 	}
 
-	// Obtiene el número máximo de preguntas que hay para ese nivel y esas categorías
+	// Obtiene el nï¿½mero mï¿½ximo de preguntas que hay para ese nivel y esas categorï¿½as
 	private class QuestionsQuery extends AsyncTask<Object, Object, JSONObject> {
 
 		ProgressDialog dialog;
@@ -435,16 +420,25 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 			dialog = ProgressDialog.show(PlayMenuActivity.this, " ", 
 					getResources().getString(R.string.updating), true);
 		}
-		
+
 		@Override
 		protected JSONObject doInBackground(Object... level) {
-			return ConnectionManager.getInstance().getMaxQuestions((Integer) level[0], (ArrayList<Integer>) level[1]);
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().getMaxQuestions((Integer) level[0], (ArrayList<Integer>) level[1]);
+			}
+			else
+				return null;
 		}
 
 		// Informa al usuario de lo sucedido
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),PlayMenuActivity.this);
+				}
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 					String res = json.getString(KEY_QUESTIONS);
 					np.setMaxValue(Integer.parseInt(res));
@@ -478,12 +472,21 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
-			return ConnectionManager.getInstance().getAllCategories();
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().getAllCategories();
+			}
+			else
+				return null;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),PlayMenuActivity.this);
+				}
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 					final ArrayList<String> parsedCategories = new ArrayList<String>();
 					ArrayList<Integer> parsedIds = new ArrayList<Integer>();
@@ -498,7 +501,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 					ViewGroup.LayoutParams glp = gridview.getLayoutParams();
 					ViewGroup.LayoutParams settingsLp = settings.getLayoutParams();
 					ViewGroup.LayoutParams selectAllLp = selectAllBtn.getLayoutParams();
-					
+
 					DisplayMetrics displaymetrics = new DisplayMetrics();
 					getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 					int height = displaymetrics.heightPixels;
@@ -506,7 +509,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 					int location[] = new int[2];
 					selectAllBtn.getLocationOnScreen(location);
 					glp.height = height - selectAllLp.height - location[1];
-					
+
 					gridview.setLayoutParams(glp);
 					gridview.setAdapter(adapter);
 					gridview.setOnItemClickListener(new OnItemClickListener() {

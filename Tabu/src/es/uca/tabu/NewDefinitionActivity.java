@@ -1,7 +1,6 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -163,16 +162,25 @@ public class NewDefinitionActivity extends Activity {
 			dialog = ProgressDialog.show(NewDefinitionActivity.this, " ", 
 					getResources().getString(R.string.updating), true);
 		}
-		
+
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
-			return ConnectionManager.getInstance().getAllCategories();
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(NewDefinitionActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().getAllCategories();
+			}
+			else
+				return null;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
-				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),NewDefinitionActivity.this);
+				}
+				else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 					parsedCategories = new ArrayList<String>();
 					parsedIds = new ArrayList<Integer>();
 					JSONArray categories = json.getJSONArray(TabuUtils.KEY_CATEGORIES);
@@ -210,7 +218,7 @@ public class NewDefinitionActivity extends Activity {
 			dialog = ProgressDialog.show(NewDefinitionActivity.this, " ", 
 					getResources().getString(R.string.sending), true);
 		}
-		
+
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
 
@@ -221,12 +229,12 @@ public class NewDefinitionActivity extends Activity {
 			String postpalabra;
 			String definitionStr = definition.getText().toString().trim();
 			String wordStr = word.getText().toString().trim();
-			
+
 			if(definitionStr.contains(wordStr)) {
 				prepalabra = "";
 				postpalabra= "";
 				String[] parts = definitionStr.split(wordStr);
-				
+
 				if(TabuUtils.beginsBy(wordStr, definitionStr)) {
 					prepalabra = "";
 					postpalabra = parts[1];
@@ -235,33 +243,42 @@ public class NewDefinitionActivity extends Activity {
 					postpalabra = "";
 					prepalabra = parts[0];
 				}
-				else { // Está por el medio de la frase
+				else { // Estï¿½ por el medio de la frase
 					prepalabra = parts[0];
 					postpalabra = parts[1];
 				}
-				
+
 			}
 			else {
 				prepalabra = definition.getText().toString();
 				postpalabra = "";
 			}
-			
-			return ConnectionManager.getInstance().sendDefinition(
-					loginPreferences.getInt("id", -1),
-					article.getSelectedItem().toString(),
-					word.getText().toString(),
-					prepalabra,
-					postpalabra,
-					hint.getText().toString(),
-					np.getValue(),
-					parsedIds.get(parsedCategories.indexOf(category.getSelectedItem().toString())));
+
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(NewDefinitionActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().sendDefinition(
+						loginPreferences.getInt("id", -1),
+						article.getSelectedItem().toString(),
+						word.getText().toString(),
+						prepalabra,
+						postpalabra,
+						hint.getText().toString(),
+						np.getValue(),
+						parsedIds.get(parsedCategories.indexOf(category.getSelectedItem().toString())));
+			}
+			else
+				return null;
 		}
 
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-				String res;
-				try {
+			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),NewDefinitionActivity.this);
+				}
+				else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+					String res;
 					res = json.getString(TabuUtils.KEY_SUCCESS);
 					if(Integer.parseInt(res) == 1){
 						dialog.dismiss();
@@ -284,16 +301,16 @@ public class NewDefinitionActivity extends Activity {
 						dialog.dismiss();
 						TabuUtils.showDialog(getResources().getString(R.string.error), word.getText().toString() + " " + getResources().getString(R.string.exists), NewDefinitionActivity.this);
 					}
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					dialog.dismiss();
-					System.out.println("Error JSON al recibir la info");
-					e.printStackTrace();
 				}
-			}
-			else {
+				else {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorNewDef), NewDefinitionActivity.this);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
 				dialog.dismiss();
-				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorNewDef), NewDefinitionActivity.this);
+				System.out.println("Error JSON al recibir la info");
+				e.printStackTrace();
 			}
 		}
 	}

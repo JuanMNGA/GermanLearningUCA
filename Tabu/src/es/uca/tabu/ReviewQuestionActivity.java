@@ -1,6 +1,9 @@
 package es.uca.tabu;
 
+import java.util.ArrayList;
+
 import org.json.JSONObject;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,10 +20,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnTouchListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -105,22 +110,30 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 							AlertDialog.Builder editalert = new AlertDialog.Builder(ReviewQuestionActivity.this);
 							editalert.setTitle(getResources().getString(R.string.report));
 							editalert.setMessage(getResources().getString(R.string.reportReason));
-							final EditText input = new EditText(ReviewQuestionActivity.this);
+							final Spinner reason = new Spinner(ReviewQuestionActivity.this);
+							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.MATCH_PARENT,
+									LinearLayout.LayoutParams.MATCH_PARENT);
+							reason.setLayoutParams(lp);
+							editalert.setView(reason);
+							final ArrayList<String> reasons = new ArrayList<String>();
+							TabuUtils.fillReportReasons(ReviewQuestionActivity.this, reasons);
+							ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ReviewQuestionActivity.this,
+									android.R.layout.simple_spinner_item, reasons);
+							dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+							reason.setAdapter(dataAdapter);
+							
+							
+							/*final EditText input = new EditText(ReviewQuestionActivity.this);
 							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 									LinearLayout.LayoutParams.MATCH_PARENT,
 									LinearLayout.LayoutParams.MATCH_PARENT);
 							input.setLayoutParams(lp);
-							editalert.setView(input);
+							editalert.setView(input);*/
 
 							editalert.setPositiveButton(getResources().getString(R.string.report), new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog, int whichButton) {
-									if(input.getText().toString() != "")
-										q.setReport(input.getText().toString());
-									else
-										TabuUtils.showDialog(
-												getResources().getString(R.string.error), 
-												getResources().getString(R.string.noReason),
-												ReviewQuestionActivity.this);
+									q.setReport(String.valueOf(reasons.indexOf(reason.getSelectedItem().toString())));
 								}
 							});
 							editalert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -154,7 +167,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 				// Get left margin in dp
 				int margins = TabuUtils.pxToDp(this, 20);
 				rememberBox.setVisibility(View.VISIBLE);
-				System.out.println("Tiene artículo");
+				System.out.println("Tiene artï¿½culo");
 				//article.setText(getString(R.string.articleword) + current.getArticle());
 				//article.setText(current.getArticle());
 
@@ -257,11 +270,16 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			SharedPreferences loginPreferences;
 			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(ReviewQuestionActivity.this).networkWorks()) {
 			return ConnectionManager.getInstance().sendReport(
 					loginPreferences.getInt("id", -1),
 					((Integer) info[0]),
 					((Integer) info[1]),
 					((String)info[2]));
+			}
+			else
+				return null;
 		}
 
 		// Informa al usuario de lo sucedido
@@ -270,7 +288,11 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			/**
 			 * Checks for success message.
 			 **/
-			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+			if(json == null) {
+				dialog.dismiss();
+				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),ReviewQuestionActivity.this);
+			}
+			else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 				dialog.dismiss();
 				backToResults();
 			}

@@ -89,6 +89,13 @@
     <string name="userNotExists"> Incorrect email or password!</string>
     <string name="rememberMe"> Remember Me</string>
 
+    <!-- Reports -->
+    <string name="improperContent"> Improper content </string>
+    <string name="offensiveContent"> Offensive content </string>
+    <string name="orthographicError"> Ortographic error </string>
+    <string name="sintaxError"> Sintax error </string>
+    <string name="grammarError"> Grammar error </string>
+    
     <!-- General -->
     <string name="Send"> Send </string>
     <string name="updating"> Updating </string>
@@ -101,5 +108,6 @@
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_result">ResultActivity</string>
     <string name="title_activity_review_question">ReviewQuestionActivity</string>
+    <string name="rateDef"> ¡Rate this definition! </string>
 
 </resources>

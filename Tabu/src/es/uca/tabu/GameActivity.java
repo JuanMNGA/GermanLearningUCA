@@ -7,7 +7,10 @@ import org.json.JSONObject;
 import com.google.common.base.Function;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -23,13 +26,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -47,13 +55,30 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 	private TextView prepalabra;
 	private TextView postpalabra;
+	private TextView time;
 	private EditText palabra;
+
+	BalloonHint bh = null;
 
 	RatingBar rb;
 	boolean rated; // To make rating optional
 	float lastRating=0;
 
 	ProgressDialog dialog;
+
+	TabuCountDownTimer timerCount;
+	float fontSize;
+
+	@Override
+	public void onDestroy()
+	{
+		if(bh != null){
+			bh.needForceDismiss();
+			bh.delayedDismiss(0);
+		}
+
+		super.onDestroy();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +87,18 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().hide();
 		setContentView(R.layout.activity_game);
-
 		submit = (MarkableButton)findViewById(R.id.submit);
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
 		rememberBox = (LinearLayout) findViewById(R.id.rememberBox);
-
 		prepalabra = (TextView) findViewById(R.id.prepalabra);
 		palabra = (EditText) findViewById(R.id.palabra);
 		postpalabra = (TextView) findViewById(R.id.postpalabra);
-
-		// Rating bar
+		time = (TextView) findViewById(R.id.timer);
 		rb = (RatingBar) findViewById(R.id.ratingBar);
+		
+		fontSize = new TextView(this).getTextSize();
+		
 		rated = false;
 		rb.setOnRatingBarChangeListener(this);
 		rb.setOnTouchListener(new OnTouchListener() {
@@ -89,24 +114,25 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						rb.setRating(0.0f);
 						// Report dialog
 						AlertDialog.Builder editalert = new AlertDialog.Builder(GameActivity.this);
-						editalert.setTitle("Report");
-						editalert.setMessage("Enter report reason here:");
-						final EditText input = new EditText(GameActivity.this);
+						editalert.setTitle(getResources().getString(R.string.report));
+						editalert.setMessage(getResources().getString(R.string.reportReason));
+						final Spinner reason = new Spinner(GameActivity.this);
 						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 								LinearLayout.LayoutParams.MATCH_PARENT,
 								LinearLayout.LayoutParams.MATCH_PARENT);
-						input.setLayoutParams(lp);
-						editalert.setView(input);
+						reason.setLayoutParams(lp);
+						editalert.setView(reason);
+						final ArrayList<String> reasons = new ArrayList<String>();
+						TabuUtils.fillReportReasons(GameActivity.this, reasons);
+						ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(GameActivity.this,
+								android.R.layout.simple_spinner_item, reasons);
+						dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+						reason.setAdapter(dataAdapter);
 
 						editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
-								if(input.getText().toString() != "")
-									gameManager.getCurrentQuestion().setReport(input.getText().toString());
-								else
-									TabuUtils.showDialog(
-											getResources().getString(R.string.error), 
-											getResources().getString(R.string.noReason),
-											GameActivity.this);
+								gameManager.getCurrentQuestion().setReport(String.valueOf(reasons.indexOf(reason.getSelectedItem().toString())));
+								requestNextQuestion();
 							}
 						});
 						editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -134,8 +160,6 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				}
 				return true;
 			}});
-
-
 
 		/*
 		rb.setOnTouchListener(new OnTouchListener() {
@@ -191,7 +215,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 				SharedPreferences loginPreferences;
 				loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-				
+
 				if(startSelection != endSelection) {
 					String selectedText = prepalabra.getText().toString().substring(startSelection, endSelection);
 					if(!selectedText.contains(" ")) {
@@ -230,86 +254,103 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				String finalWord = palabra.getText().toString();
 				if(finalWord.length() != 0) {
 					submit.setEnabled(false);
-					if(ConnectionManager.getInstance(GameActivity.this).networkWorks()) {
-
-						final Question current = gameManager.getCurrentQuestion();
-						current.increaseTries();
-						if(gameManager.validWord(current.getId(), finalWord)) {
-							submit.setChecked(true);
-							current.setSuccess(true);
-							if(rated)
-								current.setPuntuacion((int) rb.getRating());
-							requestNextQuestion();
-						}
-						else {
-							String message;
-
-							if(current.getTries() != GameManager.MAX_TRIES) {
-								message = getResources().getString(R.string.wrongAnswer1) + " - " + String.valueOf(current.getTries()) + "/" + String.valueOf(GameManager.MAX_TRIES);
-							}
-							else {
-								message = getResources().getString(R.string.wrongAnswer2);
-							}
-							// Avisa del fallo y cuando OK o cambia de pregunta o reintenta
-							TabuUtils.showImageDialog(" ", message,
-									new Function<DialogInterface, Void>() {
-								@Override
-								public Void apply(DialogInterface arg0) {
-									arg0.cancel();
-
-									if(rated)
-										current.setPuntuacion((short) rb.getRating());
-
-									if(current.getTries() == GameManager.MAX_TRIES) {
-										current.setSuccess(false);
-										requestNextQuestion();
-									}
-									else {
-										submit.setEnabled(true);
-										palabra.setText("");
-									}
-									return null;
-								} 
-							},
-							GameActivity.this,
-							R.drawable.reject);
-						}
-					}
-					else {
-						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),GameActivity.this);
-						submit.setEnabled(true);
-					}
+					checkAnswer(finalWord);
 				}
 			} 
 		});
 	}
 
+	public void checkAnswer(String finalWord) {
+		final Question current = gameManager.getCurrentQuestion();
+		current.increaseTries();
+		if(finalWord.compareTo("") != 0 && gameManager.validWord(current.getId(), finalWord)) {
+			submit.setChecked(true);
+			current.setSuccess(true);
+			if(rated)
+				current.setPuntuacion((int) rb.getRating());
+			requestNextQuestion();
+		}
+		else {
+			String message;
+			int timeToClose = Integer.MAX_VALUE;
+
+			if(current.getTries() != GameManager.MAX_TRIES) {
+				message = getResources().getString(R.string.wrongAnswer1) + " - " + String.valueOf(current.getTries()) + "/" + String.valueOf(GameManager.MAX_TRIES);
+				timeToClose = 5;
+			}
+			else {
+				message = getResources().getString(R.string.wrongAnswer2);
+			}
+
+			if(!(this.isFinishing()))
+			{
+				// Avisa del fallo y cuando OK o cambia de pregunta o reintenta
+				TabuUtils.showImageTimedDialog(" ", message,
+						new Function<DialogInterface, Void>() {
+					@Override
+					public Void apply(DialogInterface arg0) {
+						arg0.dismiss();
+
+						if(rated)
+							current.setPuntuacion((short) rb.getRating());
+
+						if(current.getTries() == GameManager.MAX_TRIES) {
+							current.setSuccess(false);
+							requestNextQuestion();
+						}
+						else {
+							submit.setEnabled(true);
+							palabra.setText("");
+							timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
+							timerCount.start();
+							time.setTextColor(Color.BLACK);
+							time.setText(String.valueOf(gameManager.getTime()));
+						}
+						time.setTextSize(fontSize);
+						return null;
+					} 
+				},
+				GameActivity.this,
+				R.drawable.reject,
+				timeToClose);
+			}
+		}
+
+	}
+
 	public void requestNextQuestion(){
 		final Question current = gameManager.next();
-
 		if(current != null) {
 			rb.setRating(0);
 			rated = false;
 			palabra.setText("");
 			clue.setText("");
+
+			timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
+			timerCount.start();
+			time.setText(String.valueOf(gameManager.getTime()));
+			time.setTextColor(Color.BLACK);
+			time.setTextSize(fontSize);
+
 			rememberBox.setVisibility(View.GONE);
 
 			// PREPALABRA - PALABRA - POSTPALABRA STUFF
 			prepalabra.setText(current.getPrepalabra());
 			postpalabra.setText(current.getPostpalabra());
-			
+
 			// Get left margin in dp
 			int margins = TabuUtils.pxToDp(this, 20);
-			
+
 			//lastLine + word to guess... fits in textView?
 			int start = prepalabra.getLayout().getLineStart(prepalabra.getLineCount()-1);
 			int end = prepalabra.getLayout().getLineEnd(prepalabra.getLineCount()-1);
 			String lastLine = prepalabra.getText().toString().substring(start,end);
 			String lastLineFilled = lastLine + "    " + current.getName(); // 4 extra characters because of the editText interface
-			float lineHeight = prepalabra.getLineHeight() * prepalabra.getLineSpacingMultiplier() + prepalabra.getLineSpacingExtra();
+
+			//float lineHeight = prepalabra.getLineHeight() * prepalabra.getLineSpacingMultiplier() + prepalabra.getLineSpacingExtra();
+			float lineHeight = prepalabra.getLineHeight();
 			if(TabuUtils.isTooLarge(prepalabra, lastLineFilled)){
 				//New line
-				System.out.println("NUEVA LINEA");
 				FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 				params.setMargins(margins, (int) ((int) (lineHeight * (prepalabra.getLineCount())) - (palabra.getHeight()/4) + (lineHeight/4)), 0, 0);
 				palabra.setLayoutParams(params);
@@ -318,7 +359,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(postpalabra.getMeasuredWidth(), LayoutParams.WRAP_CONTENT);
 				params2.setMargins(margins, (int) ((int) (lineHeight * (prepalabra.getLineCount()+1)) + (lineHeight/4)), 0, 0);
 				postpalabra.setLayoutParams(params2);
-				
+
 			}
 			else {
 				// Same Line
@@ -341,11 +382,11 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				params2.setMargins(margins, (int) (lineHeight * (prepalabra.getLineCount()) + (lineHeight/4)), 0, 0);
 				postpalabra.setLayoutParams(params2);
 			}
-			
+
 			// Check if there is an article
 			if((current.getArticle() != null && !current.getArticle().isEmpty())) {
 				rememberBox.setVisibility(View.VISIBLE);
-				System.out.println("Tiene artículo");
+				System.out.println("Tiene artï¿½culo");
 				//article.setText(getString(R.string.articleword) + current.getArticle());
 				//article.setText(current.getArticle());
 
@@ -411,6 +452,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			clue.setEnabled(true);
 			clue.setChecked(false);
 			submit.setChecked(false);
+
+			// Rate definition ballonhint!
+			showRateTip();
 		}
 		else {
 
@@ -430,6 +474,37 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.game, menu);
 		return true;
+	}
+
+	private void showRateTip() {
+		// Rate definition ballonhint!
+		ViewTreeObserver vto = rb.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@SuppressLint("NewApi")
+			@Override
+			public void onGlobalLayout() {
+				int width = rb.getWidth();
+				int height = rb.getHeight();
+
+				bh = new BalloonHint(GameActivity.this, rb, MeasureSpec.AT_MOST);
+				int location[] = new int[] {15,height};
+
+				bh.setBalloonConfig(getString(R.string.rateDef), 
+						TabuUtils.getFontSizeFromBounds(getString(R.string.rateDef), width, height), 
+						false, Color.WHITE, width, height);
+				bh.setBackgroundDrawable(getResources().getDrawable(R.drawable.bocadillo));
+				bh.delayedShow(10, location);
+				bh.delayedDismiss(7000);
+
+				ViewTreeObserver obs = rb.getViewTreeObserver();
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					obs.removeOnGlobalLayoutListener(this);
+				} else {
+					obs.removeGlobalOnLayoutListener(this);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -464,16 +539,21 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			dialog = ProgressDialog.show(GameActivity.this, " ", 
 					getResources().getString(R.string.sending), true);
 		}
-		
+
 		@Override
 		protected JSONObject doInBackground(Object... questionList) {
 
 			SharedPreferences loginPreferences;
 			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
-			return ConnectionManager.getInstance().storeStadistics(
-					loginPreferences.getInt("id", -1),
-					(ArrayList<Question>)questionList[0]);
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(GameActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().storeStadistics(
+						loginPreferences.getInt("id", -1),
+						(ArrayList<Question>)questionList[0]);
+			}
+			else
+				return null;
 		}
 
 		// Informa al usuario de lo sucedido
@@ -482,7 +562,12 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			/**
 			 * Checks for success message.
 			 **/
-			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+			if(json == null) {
+				dialog.dismiss();
+				submit.setEnabled(true);
+				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),GameActivity.this);
+			}
+			else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 				dialog.cancel();
 				TabuUtils.showDialog(" ", getString(R.string.OkStadistics),
 						new Function<DialogInterface, Void>() { //Function to switch to ResultActivity when dialog button clicked
@@ -508,5 +593,26 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				submit.setChecked(false);
 			}
 		}
+	}
+
+	private class TabuCountDownTimer extends CountDownTimer {
+		public TabuCountDownTimer(long millisInFuture, long countDownInterval) {
+			super(millisInFuture, countDownInterval);
+		}
+
+		@Override
+		public void onFinish() {
+			time.setText("00");
+			String finalWord = palabra.getText().toString();
+			checkAnswer(finalWord);
+		}
+		@Override
+		public void onTick(long millisUntilFinished) {
+			time.setText(String.format("%02d", millisUntilFinished / 1000));
+			if(Integer.valueOf(time.getText().toString()) == 5) {
+				time.setTextColor(Color.RED);
+				time.setTextSize((float) (fontSize*1.25));
+			}
+		}   
 	}
 }

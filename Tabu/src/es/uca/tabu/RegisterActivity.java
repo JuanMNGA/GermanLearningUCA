@@ -2,7 +2,9 @@ package es.uca.tabu;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import com.google.common.base.Function;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -66,17 +68,12 @@ public class RegisterActivity extends Activity {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidPass),RegisterActivity.this);
 				}
 				else {
-					if(ConnectionManager.getInstance(RegisterActivity.this).networkWorks()) {
 						// Insert the user
 						new addUserTask().execute(
 								name,
 								pass,
 								email,
 								new String("estudiante"));
-					}
-					else {
-						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),RegisterActivity.this);
-					}
 				}
 			}
 		});
@@ -94,11 +91,16 @@ public class RegisterActivity extends Activity {
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
 		protected JSONObject doInBackground(String... user) {
-			return ConnectionManager.getInstance().addNewUser(
-					user[0],
-					user[1],
-					user[2],
-					user[3]);
+			
+			if(ConnectionManager.getInstance(RegisterActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().addNewUser(
+						user[0],
+						user[1],
+						user[2],
+						user[3]);
+			}
+			else
+				return null;
 		}
 
 		// Informa al usuario de lo sucedido
@@ -108,7 +110,10 @@ public class RegisterActivity extends Activity {
 			 * Checks for success message.
 			 **/
 			try {
-				if (!json.isNull(KEY_SUCCESS)) {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),RegisterActivity.this);
+				} else if (!json.isNull(KEY_SUCCESS)) {
 					String res = json.getString(KEY_SUCCESS);
 					String red = json.getString(KEY_ERROR);
 					if(Integer.parseInt(res) == 1){

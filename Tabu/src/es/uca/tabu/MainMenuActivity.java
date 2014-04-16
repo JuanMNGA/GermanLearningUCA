@@ -27,7 +27,7 @@ public class MainMenuActivity extends Activity {
 		setContentView(R.layout.main_menu);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+
 		Button playMenu = (Button) findViewById(R.id.btnPlay);
 
 		// Listening to register new account link
@@ -39,7 +39,7 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
+
 		Button newDef = (Button) findViewById(R.id.btnNewDef);
 
 		// Listening to register new account link
@@ -51,7 +51,7 @@ public class MainMenuActivity extends Activity {
 				startActivity(i);
 			}
 		});
-		
+
 		Button dictionary = (Button) findViewById(R.id.btnDictionary);
 
 		// Listening to register new account link
@@ -96,11 +96,11 @@ public class MainMenuActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private class initializeNotes extends AsyncTask<Object, Boolean, JSONObject> {
 
 		private ArrayList<String> mItems;
-		
+
 		ProgressDialog dialog;
 
 		@Override
@@ -108,7 +108,7 @@ public class MainMenuActivity extends Activity {
 			dialog = ProgressDialog.show(MainMenuActivity.this, " ", 
 					getResources().getString(R.string.updating), true);
 		}
-		
+
 		// Devuelve true si consigue meter el usuario en la base de datos
 		@Override
 		protected JSONObject doInBackground(Object... user) {
@@ -116,19 +116,25 @@ public class MainMenuActivity extends Activity {
 			SharedPreferences loginPreferences;
 			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
-			return ConnectionManager.getInstance().getNotes(
-					loginPreferences.getInt("id", -1));
+			if(ConnectionManager.getInstance(MainMenuActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().getNotes(
+						loginPreferences.getInt("id", -1));
+			}
+			else
+				return null;
 		}
 
 		// Informa al usuario de lo sucedido
 		@Override
 		protected void onPostExecute(JSONObject json) {
-			/**
-			 * Checks for success message.
-			 **/
-			if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-				JSONArray notes;
-				try {
+			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),MainMenuActivity.this);
+				}
+				else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+					JSONArray notes;
+
 					notes = json.getJSONArray("notes");
 					mItems = new ArrayList<String>();
 					if(notes.length() > 0) {
@@ -141,19 +147,17 @@ public class MainMenuActivity extends Activity {
 					Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
 					i.putExtra("EXTRA_WORDS", mItems);
 					startActivity(i);
-
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					dialog.dismiss();
-					e.printStackTrace();
 				}
-
-			}
-			else {
+				else {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),MainMenuActivity.this);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
 				dialog.dismiss();
-				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),MainMenuActivity.this);
+				e.printStackTrace();
 			}
 		}
-	}
 
+	}
 }

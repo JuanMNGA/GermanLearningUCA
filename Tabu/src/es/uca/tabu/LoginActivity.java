@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.uca.tabu.utils.Environment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -24,39 +25,44 @@ public class LoginActivity extends Activity {
 	private static String KEY_SUCCESS = "success";
 	private static String KEY_NOMBRE = "nombre";
 	private static String KEY_EMAIL = "email";
-	
-    private CheckBox saveLoginCheckBox;
-    private SharedPreferences loginPreferences;
-    private SharedPreferences.Editor loginPrefsEditor;
+
+	private CheckBox saveLoginCheckBox;
+	private SharedPreferences loginPreferences;
+	private SharedPreferences.Editor loginPrefsEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 
-		/* Temporalmente en alemán */
+		/* Temporalmente en alemï¿½n */
 		Resources res = this.getResources();
-	    // Change locale settings in the app.
-	    DisplayMetrics dm = res.getDisplayMetrics();
-	    android.content.res.Configuration conf = res.getConfiguration();
-	    conf.locale = Locale.GERMAN;
-	    res.updateConfiguration(conf, dm);
+		// Change locale settings in the app.
+		DisplayMetrics dm = res.getDisplayMetrics();
+		android.content.res.Configuration conf = res.getConfiguration();
+		conf.locale = Locale.GERMAN;
+		res.updateConfiguration(conf, dm);
 		
+		//Store screensize
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		Environment.getInstance().setScreenHeight(dm.heightPixels);
+		Environment.getInstance().setScreenWidth(dm.widthPixels);
+
 		// setting default screen to login.xml
 		setContentView(R.layout.login);
-		
+
 		// Load default options if rememberMe is checked
 		saveLoginCheckBox = (CheckBox)findViewById(R.id.rememberMeCheckBox);
 		loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        loginPrefsEditor = loginPreferences.edit();
-        
-        if (loginPreferences.getBoolean("saveLogin", false)) {
-        	((EditText) findViewById(R.id.reg_email)).setText(loginPreferences.getString("email", ""));
-        	((EditText) findViewById(R.id.reg_password)).setText(loginPreferences.getString("password", ""));
-            saveLoginCheckBox.setChecked(true);
-            ((View) findViewById(R.id.dummyLayout)).requestFocus();
-        }
-		
+		loginPrefsEditor = loginPreferences.edit();
+
+		if (loginPreferences.getBoolean("saveLogin", false)) {
+			((EditText) findViewById(R.id.reg_email)).setText(loginPreferences.getString("email", ""));
+			((EditText) findViewById(R.id.reg_password)).setText(loginPreferences.getString("password", ""));
+			saveLoginCheckBox.setChecked(true);
+			((View) findViewById(R.id.dummyLayout)).requestFocus();
+		}
+
 		TextView registerScreen = (TextView) findViewById(R.id.link_to_register);
 
 		// Listening to register new account link
@@ -86,33 +92,25 @@ public class LoginActivity extends Activity {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidPass),LoginActivity.this);
 				}
 				else {
-					
-					//If there is access to Internet
-					if(ConnectionManager.getInstance(LoginActivity.this).networkWorks()) {
-						
-						// Save remember me options
-			            if (saveLoginCheckBox.isChecked()) {
-			                loginPrefsEditor.putBoolean("saveLogin", true);
-			                loginPrefsEditor.putString("email", email);
-			                loginPrefsEditor.putString("password", pass);
-			                loginPrefsEditor.commit();
-			            } else {
-			                loginPrefsEditor.clear();
-			                loginPrefsEditor.commit();
-			            }
-						
-						// Login the user
-						new loginUserTask().execute(
-								email,
-								pass);
+					// Save remember me options
+					if (saveLoginCheckBox.isChecked()) {
+						loginPrefsEditor.putBoolean("saveLogin", true);
+						loginPrefsEditor.putString("email", email);
+						loginPrefsEditor.putString("password", pass);
+						loginPrefsEditor.commit();
+					} else {
+						loginPrefsEditor.clear();
+						loginPrefsEditor.commit();
 					}
-					else {
-						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),LoginActivity.this);
-					}
+
+					// Login the user
+					new loginUserTask().execute(
+							email,
+							pass);
 				}
 			}
 		});
-        
+
 	}
 
 	@Override
@@ -130,27 +128,36 @@ public class LoginActivity extends Activity {
 			dialog = ProgressDialog.show(LoginActivity.this, " ", 
 					getResources().getString(R.string.logging), true);
 		}
-		
+
 		@Override
 		protected JSONObject doInBackground(String... user) {
-			return ConnectionManager.getInstance().loginUser(
-					user[0],
-					user[1]);
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(LoginActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().loginUser(
+						user[0],
+						user[1]);
+			}
+			else
+				return null;
 		}
 
 		// Informa al usuario de lo sucedido
 		@Override
 		protected void onPostExecute(JSONObject json) {
 			try {
-				if (!json.isNull(KEY_SUCCESS)) {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),LoginActivity.this);
+				}
+				else if (!json.isNull(KEY_SUCCESS)) {
 					String res = json.getString(KEY_SUCCESS);
 					if(Integer.parseInt(res) == 1){
 						dialog.dismiss();
-						
+
 						JSONObject json_user = json.getJSONObject("user");
 						loginPrefsEditor.putInt("id", json_user.getInt("id"));
 						loginPrefsEditor.commit();
-											
+
 						Intent mainmenu = new Intent(getApplicationContext(), MainMenuActivity.class);
 						mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(mainmenu);

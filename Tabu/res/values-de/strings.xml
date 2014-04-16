@@ -89,6 +89,13 @@
     <string name="userNotExists"> Benutzername/Kennwort nicht korrekt</string>
     <string name="rememberMe"> Speichern</string>
 
+    <!-- Reports -->
+    <string name="improperContent"> Inhalt ist nicht korrekt </string>
+    <string name="offensiveContent"> Inhalt ist offensiv </string>
+    <string name="orthographicError"> Orthographiefehler </string>
+    <string name="sintaxError"> Satzbau ist nicht korrekt </string>
+    <string name="grammarError"> Grammatikfehler </string>
+    
     <!-- General -->
     <string name="Send"> Senden </string>
     <string name="updating"> Updating </string>
@@ -98,6 +105,7 @@
     <string name="error"> Fehler </string>
     <string name="noNetwork"> Internetverbindung kann nicht hergestellt werden </string>
     <string name="serverIssues"> Verbindung mit Server momentan nicht möglich</string>
+    <string name="rateDef"> ¡Valora la definición! </string>
     
     <!-- Titles -->
     <string name="title_activity_game">GameActivity</string>

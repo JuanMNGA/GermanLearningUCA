@@ -1,6 +1,7 @@
 package es.uca.tabu;
 
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,10 +15,8 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 public class TabuUtils {
@@ -66,7 +65,7 @@ public class TabuUtils {
 		char[] chars = str.toCharArray();
 
 		for (char c : chars) {
-			if(!Character.isLetter(c)) {
+			if(!Character.isLetter(c) && Character.toString(c).compareTo(" ") != 0) {
 				return false;
 			}
 		}
@@ -112,6 +111,43 @@ public class TabuUtils {
 		dialog.show();
 	}
 
+	public static void showImageTimedDialog(String title, String message, final Function<DialogInterface, Void> func, Context c,  int image, int time) {
+		AlertDialog.Builder dialogB = new AlertDialog.Builder(c)
+		.setTitle(title)
+		.setMessage(message)
+		.setIcon(c.getResources().getDrawable(image))
+		.setPositiveButton(c.getResources().getString(R.string.ok),
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				func.apply(dialog);
+			}});
+		
+		final AlertDialog dialog = dialogB.create();
+		dialog.setCanceledOnTouchOutside(false);
+		dialog.show();
+		
+		// Hide after some seconds
+		final Handler handler  = new Handler();
+		final Runnable runnable = new Runnable() {
+		    @Override
+		    public void run() {
+		        if (dialog.isShowing()) {
+		        	func.apply(dialog);
+		        }
+		    }
+		};
+
+		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+		    @Override
+		    public void onDismiss(DialogInterface dialog) {
+		        handler.removeCallbacks(runnable);
+		    }
+		});
+
+		// Close dialog in time sec
+		handler.postDelayed(runnable, 1000 * time);
+	}
+	
 	/* Call argument function when button clicked */
 	public static void showDialog(String title, String message, final Function<DialogInterface, Void> func, Context c) {
 		/*AlertDialog dialog = new AlertDialog.Builder(c)
@@ -188,11 +224,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("sz", "ß");
+			result = str.replaceAll("oe", "ï¿½").replaceAll("ae", "ï¿½").replaceAll("ue", "ï¿½").replaceAll("ss", "ï¿½");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("sz", "ß");
+			result = str.replaceAll("oe", "ï¿½").replaceAll("ae", "ï¿½").replaceAll("ue", "ï¿½").replaceAll("ss", "ï¿½");
 		}
 		return result;
 	}
@@ -235,7 +271,7 @@ public class TabuUtils {
 			else
 				incr_text_size++;
 		}
-		return incr_text_size;
+		return --incr_text_size;
 	}
 
 	public static int pxToDp(Context c, int px) {
@@ -248,9 +284,17 @@ public class TabuUtils {
 			return "#FF0000"; //RED
 		else if(article.compareTo("das") == 0)
 			return "#0000FF"; //BLUE
-		else if(article.compareTo("die") == 0 || article.compareTo("die PL.") == 0)
+		else if(article.compareTo("die") == 0)
 			return "#31B404"; //GREEN
 		else
 			return "#000000";
+	}
+	
+	public static void fillReportReasons(Context c, ArrayList<String> al) {
+		al.add(c.getString(R.string.improperContent));
+		al.add(c.getString(R.string.offensiveContent));
+		al.add(c.getString(R.string.orthographicError));
+		al.add(c.getString(R.string.sintaxError));
+		al.add(c.getString(R.string.grammarError));
 	}
 }

@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -66,8 +67,33 @@ public class ConnectionManager {
 		return instance;
 	}
 
+	/* Auxiliar function, Must be called from async task */
 	public Boolean networkWorks() {
+		ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if (netInfo != null && netInfo.isConnected()) {
+			try {
+				URL url = new URL("http://www.google.com");
+				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+				urlc.setConnectTimeout(3000);
+				urlc.connect();
+				if (urlc.getResponseCode() == 200) {
+					return true;
+				}
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
+	/*public Boolean networkWorks() {
+		System.out.println("ConnectionManager: networkWorks()");
 		try {
+			System.out.println("ConnectionManager: networkWorks()2");
 			return new NetCheck().execute().get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -78,7 +104,7 @@ public class ConnectionManager {
 			e.printStackTrace();
 			return false;
 		}
-	}
+	}*/
 	
 	public JSONObject addNewUser(String nombre, String password, String email, String rol) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
@@ -172,7 +198,7 @@ public class ConnectionManager {
 	}
 	
 	public JSONObject storeStadistics(Integer user_id, ArrayList<Question> questionList) {
-		// Gran cuca usando librería GSON de google para parsear el arraylist de questions directamente
+		// Gran cuca usando librerï¿½a GSON de google para parsear el arraylist de questions directamente
 		Gson gson = new Gson();
 		JsonElement element = gson.toJsonTree(questionList, new TypeToken<ArrayList<Question>>() {}.getType());
 		if(!element.isJsonArray()) {
@@ -252,8 +278,8 @@ public class ConnectionManager {
 	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		//server = new String("http://192.168.1.33/tabu/");
-		server = new String("http://94.247.31.212/tabu/");
+		server = new String("http://192.168.1.35/tabu/");
+		//server = new String("http://94.247.31.212/tabu/");
 		jsonParser = new JSONParser();
 	}
 	
@@ -262,8 +288,11 @@ public class ConnectionManager {
 	 **/
 	public class NetCheck extends AsyncTask<Void, Void, Boolean>
 	{
+		
 		@Override
 		protected Boolean doInBackground(Void... params) {
+
+			System.out.println("ConnectionManager: doInBackground()");
 			/**
 			 * Gets current device state and checks for working internet connection by trying Google.
 			 **/

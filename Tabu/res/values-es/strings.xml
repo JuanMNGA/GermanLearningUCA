@@ -60,7 +60,7 @@
     <string name="noReason"> Motivo del reporte vacío</string>
     <string name="remember"> ¡Recuerda!</string>
     <string name="report"> Reportar</string>
-    <string name="reportReason"> Introduzca el motivo:</string>
+    <string name="reportReason"> Elija el motivo:</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Jugador Vs Máquina</string>
@@ -86,6 +86,13 @@
     <string name="logging"> Autenticando usuario...</string>
     <string name="userNotExists"> Usuario o contraseña incorrectos</string>
     <string name="rememberMe"> Recuerdame</string>
+    
+    <!-- Reports -->
+    <string name="improperContent"> Contenido no es correcto </string>
+    <string name="offensiveContent"> Contenido ofensivo </string>
+    <string name="orthographicError"> Error ortográfico </string>
+    <string name="sintaxError"> Error sintáctico </string>
+    <string name="grammarError"> Error de gramática </string>
 
     <!-- General -->
     <string name="Send"> Enviar </string>
@@ -96,5 +103,6 @@
     <string name="error"> Error </string>
     <string name="noNetwork"> Es imposible conectar a Internet </string>
     <string name="serverIssues"> Imposible conectar con el servidor</string>
+    <string name="rateDef"> ¡Valora la definición! </string>
 
 </resources>
