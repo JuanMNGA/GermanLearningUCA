@@ -60,7 +60,7 @@
     <string name="loadingDefinition"> Definition wird geladen...</string>
     <string name="OkStadistics"> Resultate gesendet</string>
     <string name="noReason"> Warum akzeptierst du nicht die Definition?</string>
-    <string name="remember"> Remember!</string>
+    <string name="remember">  Merke dir!</string>
     <string name="report"> Reportar</string>
     <string name="reportReason"> Introduzca el motivo:</string>
 
@@ -100,6 +100,7 @@
     <string name="orthographicError"> Orthographiefehler </string>
     <string name="sintaxError"> Satzbau ist nicht korrekt </string>
     <string name="grammarError"> Grammatikfehler </string>
+    <string name="difficultDefinition"> Definition ist kompliziert </string>
     
     <!-- General -->
     <string name="Send"> Senden </string>

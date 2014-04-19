@@ -67,6 +67,14 @@
                     android:textColor="#000000" />
 
                 <Button
+                    android:id="@+id/audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/dictionary" />
+
+                <Button
                     android:id="@+id/dictionary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -74,8 +82,7 @@
                     android:background="@drawable/dictionary" />
             </LinearLayout>
         </LinearLayout>
-        
-        
+
         <LinearLayout
             android:id="@+id/rememberBox"
             android:layout_width="fill_parent"

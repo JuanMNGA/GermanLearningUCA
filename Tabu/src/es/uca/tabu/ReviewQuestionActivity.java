@@ -1,38 +1,44 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnTouchListener;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReviewQuestionActivity extends Activity implements RatingBar.OnRatingBarChangeListener {
+public class ReviewQuestionActivity extends Activity implements 
+android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListener {
 
-	Button backBtn, dictionaryBtn;
+	Button backBtn, dictionaryBtn, audioBtn;
 	TextView definition;
+	
+	private TextToSpeech tts;
 
 	private TextView remember;
 	private LinearLayout rememberBox;
@@ -51,6 +57,8 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 		getActionBar().hide();
 		setContentView(R.layout.activity_review_question);
 
+		tts = new TextToSpeech(this, this);
+		
 		rated = false;
 
 		Bundle extras = getIntent().getExtras();
@@ -84,7 +92,14 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			coloredWord += "<font color=" + color + ">" + q.getName() + " </font> ";
 			coloredWord += "<font color=#000000>" + q.getPostpalabra() + " </font> ";
 			definition.setText(Html.fromHtml(coloredWord));
-
+			
+			audioBtn = (Button) findViewById(R.id.audio);
+			audioBtn.setEnabled(false);
+			audioBtn.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {			
+					tts.speak(definition.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+				} 
+			});
 
 			// Rating bar
 			rb = (RatingBar) findViewById(R.id.ratingBar);
@@ -234,6 +249,17 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 
 	}
 
+    @Override
+    public void onDestroy() {
+        // Don't forget to shutdown tts!
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+        super.onDestroy();
+    }
+ 
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -301,6 +327,25 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 				TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorReason),ReviewQuestionActivity.this);
 			}
 		}
+	}
+
+	@Override
+	public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+        	Resources res = this.getResources();
+    		android.content.res.Configuration conf = res.getConfiguration();
+            int result = tts.setLanguage(conf.locale);
+ 
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                System.out.println("TTS: " + "This Language is not supported");
+            } else {
+                audioBtn.setEnabled(true);
+            }
+ 
+        } else {
+        	System.out.println("TTS: " + "Initilization Failed!");
+        }	
 	}
 
 }
