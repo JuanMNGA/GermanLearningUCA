@@ -85,7 +85,11 @@
     <!-- Login Activity -->
     <string name="logging"> Autenticando usuario...</string>
     <string name="userNotExists"> Usuario o contraseña incorrectos</string>
+    <string name="emailNotExists"> El email introducido no está registrado </string>
     <string name="rememberMe"> Recuerdame</string>
+    <string name="recover"> Olvidé la contraseña</string>
+    <string name="newPassword"> Te hemos enviado una nueva contraseña al email. </string>
+    <string name="sureReset"> ¿Seguro que quieres una NUEVA contraseña?</string>
     
     <!-- Reports -->
     <string name="improperContent"> Contenido no es correcto </string>

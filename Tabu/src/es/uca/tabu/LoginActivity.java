@@ -5,11 +5,13 @@ import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.common.base.Function;
 import es.uca.tabu.utils.Environment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -110,7 +112,33 @@ public class LoginActivity extends Activity {
 				}
 			}
 		});
+		
+		Button forgot = (Button) findViewById(R.id.btnRemember);
+		forgot.setOnClickListener(new View.OnClickListener() {
 
+			public void onClick(View v) {
+				final String email = ((EditText) findViewById(R.id.reg_email)).getText().toString();
+
+				// Validate data
+				if(!TabuUtils.validateEmail(email)) {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidEmail),LoginActivity.this);
+				}
+				else {
+					TabuUtils.showConfirmDialog(" ", getResources().getString(R.string.sureReset),
+							new Function<DialogInterface, Void>() {
+						@Override
+						public Void apply(DialogInterface arg0) {
+							arg0.cancel();
+							// Login the user
+							new forgotMyPassTask().execute(email);
+							return null;
+						} 
+					},
+					LoginActivity.this);
+
+				}
+			}
+		});
 	}
 
 	@Override
@@ -168,6 +196,55 @@ public class LoginActivity extends Activity {
 					}else{
 						dialog.dismiss();
 						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.userNotExists),LoginActivity.this);
+					}
+				}
+				else {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),LoginActivity.this);
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+				dialog.dismiss();
+			}
+		}
+	}
+	
+	private class forgotMyPassTask extends AsyncTask<String, Void, JSONObject> {
+		ProgressDialog dialog;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(LoginActivity.this, " ", 
+					getResources().getString(R.string.sending), true);
+		}
+
+		@Override
+		protected JSONObject doInBackground(String... user) {
+			//If there is access to Internet
+			if(ConnectionManager.getInstance(LoginActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().resetPassword(
+						user[0]);
+			}
+			else
+				return null;
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),LoginActivity.this);
+				}
+				else if (!json.isNull(KEY_SUCCESS)) {
+					String res = json.getString(KEY_SUCCESS);
+					if(Integer.parseInt(res) == 1){
+						dialog.dismiss();
+						TabuUtils.showDialog(" ", getResources().getString(R.string.newPassword),LoginActivity.this);
+					}else{
+						dialog.dismiss();
+						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.emailNotExists),LoginActivity.this);
 					}
 				}
 				else {

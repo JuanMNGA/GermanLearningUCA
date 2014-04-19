@@ -87,7 +87,12 @@
     <!-- Login Activity -->
     <string name="logging"> Benutzer wird überprüft...</string>
     <string name="userNotExists"> Benutzername/Kennwort nicht korrekt</string>
+    <string name="emailNotExists"> El email introducido no está registrado </string>
     <string name="rememberMe"> Speichern</string>
+    <string name="recover"> Reset my password</string>
+    <string name="newPassword"> A new password has been sent to your email</string>
+    <string name="sureReset"> Are you sure that you want to RESET your password?</string>
+    
 
     <!-- Reports -->
     <string name="improperContent"> Inhalt ist nicht korrekt </string>

@@ -37,7 +37,7 @@ public class ConnectionManager {
 
 	private static String login_tag = "login";
 	private static String register_tag = "register";
-	private static String forpass_tag = "forpass";
+	private static String reset_pass_tag = "resetpass";
 	private static String chgpass_tag = "chgpass";
 	
 	
@@ -131,6 +131,16 @@ public class ConnectionManager {
 		return json;
 	}
 
+	public JSONObject resetPassword(String email) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", reset_pass_tag));
+		params.add(new BasicNameValuePair("email", email));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register.php", params);
+
+		return json;
+	}
+	
 	public JSONObject getQuestions(Integer numQuestions, Integer level, ArrayList<Integer> categories) {
 		
 		JSONArray jsArray = new JSONArray(categories);
@@ -278,8 +288,8 @@ public class ConnectionManager {
 	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		server = new String("http://192.168.1.35/tabu/");
-		//server = new String("http://94.247.31.212/tabu/");
+		//server = new String("http://192.168.1.35/tabu/");
+		server = new String("http://94.247.31.212/tabu/");
 		jsonParser = new JSONParser();
 	}
 	
