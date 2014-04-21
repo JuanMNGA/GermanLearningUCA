@@ -52,10 +52,13 @@ public class GameManager {
 	}
 
 	public void clean() {
+		questions.clear();
+		categories.clear();
 		c = null;
 		currentQuestion = null;
 		questions = null;
 		categories = null;
+		
 	}
 
 	public int getTime() {

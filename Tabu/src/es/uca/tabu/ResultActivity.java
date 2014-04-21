@@ -24,6 +24,14 @@ public class ResultActivity extends Activity {
 	GridView gridview;
 	NumberImageAdapter adapter;
 	Button backToMenuBtn;
+	GameManager gameManager;
+	
+	@Override
+	public void onDestroy()
+	{
+		gameManager.clean();
+		super.onDestroy();
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +45,7 @@ public class ResultActivity extends Activity {
 		gridview = (GridView) findViewById(R.id.gridview);
 		backToMenuBtn = (Button) findViewById(R.id.backToMenu);
 		
-		final GameManager gameManager = GameManager.getInstance(ResultActivity.this);
+		gameManager = GameManager.getInstance(ResultActivity.this);
 		
 		questions.setText(String.valueOf(gameManager.getNumOfPassedQuestions()) + "/" + String.valueOf(gameManager.getNumOfQuestions()));
 		clues.setText(String.valueOf(gameManager.getNumOfUsedClues()) + " " + getString(R.string.pistas));
