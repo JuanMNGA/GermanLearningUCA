@@ -97,6 +97,7 @@
     <string name="orthographicError"> Error ortográfico </string>
     <string name="sintaxError"> Error sintáctico </string>
     <string name="grammarError"> Error de gramática </string>
+    <string name="difficultDefinition"> Definición complicada</string>
 
     <!-- General -->
     <string name="Send"> Enviar </string>

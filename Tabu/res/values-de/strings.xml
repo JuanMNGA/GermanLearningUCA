@@ -100,6 +100,7 @@
     <string name="orthographicError"> Orthographiefehler </string>
     <string name="sintaxError"> Satzbau ist nicht korrekt </string>
     <string name="grammarError"> Grammatikfehler </string>
+    <string name="difficultDefinition"> Definition ist kompliziert </string>
     
     <!-- General -->
     <string name="Send"> Senden </string>

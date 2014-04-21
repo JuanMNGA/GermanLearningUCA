@@ -86,7 +86,8 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 				String pass  = ((EditText) findViewById(R.id.reg_password)).getText().toString();
 				String email = ((EditText) findViewById(R.id.reg_email)).getText().toString();
-
+				email = email.toLowerCase();
+				
 				// Validate data
 				if(!TabuUtils.validateEmail(email)) {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidEmail),LoginActivity.this);
@@ -118,8 +119,8 @@ public class LoginActivity extends Activity {
 		forgot.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				final String email = ((EditText) findViewById(R.id.reg_email)).getText().toString();
-
+				final String email = ((EditText) findViewById(R.id.reg_email)).getText().toString().toLowerCase();;
+				
 				// Validate data
 				if(!TabuUtils.validateEmail(email)) {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidEmail),LoginActivity.this);

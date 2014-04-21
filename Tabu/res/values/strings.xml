@@ -99,6 +99,7 @@
     <string name="orthographicError"> Ortographic error </string>
     <string name="sintaxError"> Sintax error </string>
     <string name="grammarError"> Grammar error </string>
+    <string name="difficultDefinition"> Hard definition</string>
     
     <!-- General -->
     <string name="Send"> Send </string>
