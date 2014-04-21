@@ -165,7 +165,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			// Check if there is an article
 			if((q.getArticle() != null && !q.getArticle().isEmpty())) {
 				// Get left margin in dp
-				int margins = TabuUtils.pxToDp(this, 20);
+				int margins = TabuUtils.pxToDp(20);
 				rememberBox.setVisibility(View.VISIBLE);
 				System.out.println("Tiene art�culo");
 				//article.setText(getString(R.string.articleword) + current.getArticle());

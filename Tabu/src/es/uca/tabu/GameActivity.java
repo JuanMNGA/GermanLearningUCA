@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import com.google.common.base.Function;
 
+import es.uca.tabu.utils.Environment;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -51,6 +53,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	private MarkableButton dictionary;
 	private TextView remember;
 	private LinearLayout rememberBox;
+	//private FrameLayout rememberBox;
 	private TextView rememberInside; 
 
 	private TextView prepalabra;
@@ -66,7 +69,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 	ProgressDialog dialog;
 
-	TabuCountDownTimer timerCount;
+	//TabuCountDownTimer timerCount;
 	float fontSize;
 
 	@Override
@@ -91,6 +94,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
 		rememberBox = (LinearLayout) findViewById(R.id.rememberBox);
+		//rememberBox = (FrameLayout) findViewById(R.id.rememberBox);
 		prepalabra = (TextView) findViewById(R.id.prepalabra);
 		palabra = (EditText) findViewById(R.id.palabra);
 		postpalabra = (TextView) findViewById(R.id.postpalabra);
@@ -301,8 +305,8 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						else {
 							submit.setEnabled(true);
 							palabra.setText("");
-							timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
-							timerCount.start();
+							/*timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
+							timerCount.start();*/
 							time.setTextColor(Color.BLACK);
 							time.setText(String.valueOf(gameManager.getTime()));
 						}
@@ -326,11 +330,11 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			palabra.setText("");
 			clue.setText("");
 
-			timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
+			/*timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
 			timerCount.start();
 			time.setText(String.valueOf(gameManager.getTime()));
 			time.setTextColor(Color.BLACK);
-			time.setTextSize(fontSize);
+			time.setTextSize(fontSize);*/
 
 			rememberBox.setVisibility(View.GONE);
 
@@ -339,7 +343,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			postpalabra.setText(current.getPostpalabra());
 
 			// Get left margin in dp
-			int margins = TabuUtils.pxToDp(this, 20);
+			int margins = TabuUtils.pxToDp(20);
 
 			//lastLine + word to guess... fits in textView?
 			int start = prepalabra.getLayout().getLineStart(prepalabra.getLineCount()-1);
@@ -386,29 +390,66 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			// Check if there is an article
 			if((current.getArticle() != null && !current.getArticle().isEmpty())) {
 				rememberBox.setVisibility(View.VISIBLE);
-				System.out.println("Tiene art�culo");
-				//article.setText(getString(R.string.articleword) + current.getArticle());
-				//article.setText(current.getArticle());
+				showRememberArticle();
+			}
+
+			prepalabra.setTextIsSelectable(true);
+			postpalabra.setTextIsSelectable(true);
+			submit.setEnabled(true);
+			clue.setEnabled(true);
+			clue.setChecked(false);
+			submit.setChecked(false);
+
+			// Rate definition ballonhint!
+			showRateTip();
+		}
+		else {
+
+			new SendStadistics().execute(gameManager.getQuestions());
+		}
+	}
+
+	/**
+	 * Set up the {@link android.app.ActionBar}.
+	 */
+	private void setupActionBar() {
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.game, menu);
+		return true;
+	}
+
+	private void showRememberArticle() {
+		ViewTreeObserver vto = rememberBox.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@SuppressLint("NewApi")
+			@Override
+			public void onGlobalLayout() {
+				final Question current = gameManager.getCurrentQuestion();
+				int margins = TabuUtils.pxToDp(20);
 
 				// Creates a remember textview and place it at the right-top corner of rememberbox
-				//rememberBox.setGravity(Gravity.RIGHT);
-
 				remember = (TextView) findViewById(R.id.remember);
 				rememberInside = (TextView) findViewById(R.id.rememberInside);
 
 				// Display remember! message on top-right corner of rememberBox
 				// width and height of remember box
-				BitmapDrawable bd = (BitmapDrawable) this.getResources().getDrawable(R.drawable.remember);
-				int width = bd.getBitmap().getWidth();
-				int height = bd.getBitmap().getHeight();
-				//remember dimensions
-				int max_height1 = (int) (height*0.23);
-				int max_width1 = (int) (width*0.076);
-				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
+				int width = rememberBox.getWidth();
+				int height = rememberBox.getHeight();
+				
+				//remember dimensions	
+				int max_height1 = TabuUtils.dpToPx((int) (height*0.18));
+				int max_width1 = TabuUtils.dpToPx((int) (width*0.177));
 
+				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
+				
 				//Display remember contain
-				final int max_height2 = 40;
-				final int max_width2 = (int) (width*0.5 - margins);
+				final int max_height2 = height - max_height1;
+				final int max_width2 = (int) (width - margins);
 				rememberInside.setText(current.getArticle());
 				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
 				rememberInside.setEllipsize(null);
@@ -443,37 +484,16 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					}
 
 				});
+				
+				ViewTreeObserver obs = rememberBox.getViewTreeObserver();
 
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					obs.removeOnGlobalLayoutListener(this);
+				} else {
+					obs.removeGlobalOnLayoutListener(this);
+				}
 			}
-
-			prepalabra.setTextIsSelectable(true);
-			postpalabra.setTextIsSelectable(true);
-			submit.setEnabled(true);
-			clue.setEnabled(true);
-			clue.setChecked(false);
-			submit.setChecked(false);
-
-			// Rate definition ballonhint!
-			showRateTip();
-		}
-		else {
-
-			new SendStadistics().execute(gameManager.getQuestions());
-		}
-	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.game, menu);
-		return true;
+		});
 	}
 
 	private void showRateTip() {

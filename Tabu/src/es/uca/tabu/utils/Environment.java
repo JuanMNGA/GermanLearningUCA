@@ -6,6 +6,7 @@ public class Environment {
 	private static Environment instance = null;
 	
 	int width, height;
+	float density;
 	
 	public static Environment getInstance() {
 		if(instance == null)
@@ -21,11 +22,19 @@ public class Environment {
 		this.height = height;
 	}
 	
+	public void setDensity(float density) {
+		this.density = density;
+	}
+	
 	public int getScreenWidth() {
 		return width;
 	}
 	
 	public int getScreenHeight() {
 		return height;
+	}
+	
+	public float getDensity() {
+		return density;
 	}
 }

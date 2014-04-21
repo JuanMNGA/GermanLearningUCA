@@ -9,6 +9,7 @@ import junit.framework.Assert;
 
 import com.google.common.base.Function;
 
+import es.uca.tabu.utils.Environment;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -274,11 +275,15 @@ public class TabuUtils {
 		return --incr_text_size;
 	}
 
-	public static int pxToDp(Context c, int px) {
-		DisplayMetrics displaymetrics = c.getResources().getDisplayMetrics();
-		return (int)((px * displaymetrics.density) + 0.5);
+	public static int pxToDp(int px) {
+		return (int)((px * Environment.getInstance().getDensity()) + 0.5);
 	}
-
+	
+	public static int dpToPx(int dp) {
+		//return (int)((dp * Environment.getInstance().getDensity()) + 0.5);
+		return (int)((dp - 0.5) / Environment.getInstance().getDensity());
+	}
+	
 	public static String getArticleColor(String article) {
 		if(article.compareTo("der") == 0)
 			return "#FF0000"; //RED

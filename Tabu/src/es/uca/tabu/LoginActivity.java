@@ -49,7 +49,8 @@ public class LoginActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		Environment.getInstance().setScreenHeight(dm.heightPixels);
 		Environment.getInstance().setScreenWidth(dm.widthPixels);
-
+		Environment.getInstance().setDensity(dm.density);
+		
 		// setting default screen to login.xml
 		setContentView(R.layout.login);
 
