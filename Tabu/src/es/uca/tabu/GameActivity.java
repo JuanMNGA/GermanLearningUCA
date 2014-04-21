@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
-
-import es.uca.tabu.utils.Environment;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -36,7 +33,6 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -53,7 +49,6 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	private MarkableButton dictionary;
 	private TextView remember;
 	private LinearLayout rememberBox;
-	//private FrameLayout rememberBox;
 	private TextView rememberInside; 
 
 	private TextView prepalabra;
@@ -307,10 +302,10 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 							palabra.setText("");
 							/*timerCount = new TabuCountDownTimer(gameManager.getTime() * 1000, 1000);
 							timerCount.start();*/
-							time.setTextColor(Color.BLACK);
-							time.setText(String.valueOf(gameManager.getTime()));
+							//time.setTextColor(Color.BLACK);
+							//time.setText(String.valueOf(gameManager.getTime()));
 						}
-						time.setTextSize(fontSize);
+						//time.setTextSize(fontSize);
 						return null;
 					} 
 				},
@@ -435,11 +430,11 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				// Creates a remember textview and place it at the right-top corner of rememberbox
 				remember = (TextView) findViewById(R.id.remember);
 				rememberInside = (TextView) findViewById(R.id.rememberInside);
-
+				
 				// Display remember! message on top-right corner of rememberBox
 				// width and height of remember box
-				int width = rememberBox.getWidth();
-				int height = rememberBox.getHeight();
+				final int width = rememberBox.getWidth();
+				final int height = rememberBox.getHeight();
 				
 				//remember dimensions	
 				int max_height1 = TabuUtils.dpToPx((int) (height*0.18));
@@ -448,8 +443,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
 				
 				//Display remember contain
-				final int max_height2 = height - max_height1;
-				final int max_width2 = (int) (width - margins);
+				//final int max_height2 = TabuUtils.dpToPx((int)height - max_height1*4);
+				final int max_height2 = 40;
+				final int max_width2 = TabuUtils.dpToPx((int) (width - margins));
 				rememberInside.setText(current.getArticle());
 				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
 				rememberInside.setEllipsize(null);
@@ -480,7 +476,6 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						String formattedText = "<font color=" + TabuUtils.getArticleColor(current.getArticle()) + ">" + current.getArticle() + " </font> <font color=#000000>" + s.toString() + "</font>";
 						rememberInside.setText(Html.fromHtml(formattedText));
 						rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
-
 					}
 
 				});

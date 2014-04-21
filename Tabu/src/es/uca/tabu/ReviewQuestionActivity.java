@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -15,14 +16,19 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.View.OnTouchListener;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,6 +55,9 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 	float lastRating=0;
 
 	Question q;
+	
+	AlertDialog dialog;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -180,8 +189,10 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 			// Check if there is an article
 			if((q.getArticle() != null && !q.getArticle().isEmpty())) {
 				// Get left margin in dp
-				int margins = TabuUtils.pxToDp(20);
 				rememberBox.setVisibility(View.VISIBLE);
+				showRememberArticle();
+				
+				/*
 				System.out.println("Tiene art�culo");
 				//article.setText(getString(R.string.articleword) + current.getArticle());
 				//article.setText(current.getArticle());
@@ -215,7 +226,7 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 				text = q.getArticle() + " " + q.getName();
 				String formattedText = "<font color=" + TabuUtils.getArticleColor(q.getArticle()) + ">" + q.getArticle() + " </font> <font color=#000000>" + q.getName() + "</font>";
 				rememberInside.setText(Html.fromHtml(formattedText));
-				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
+				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));*/
 			}
 			//Notepad button
 			dictionaryBtn = (Button) findViewById(R.id.dictionary);
@@ -241,6 +252,11 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 					}
 				} 
 			});
+			
+			
+			dialog = ProgressDialog.show(ReviewQuestionActivity.this, " ", 
+					getResources().getString(R.string.updating), true);
+			
 		}
 		else
 		{
@@ -329,6 +345,56 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 		}
 	}
 
+	private void showRememberArticle() {
+		ViewTreeObserver vto = rememberBox.getViewTreeObserver();
+		vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@SuppressLint("NewApi")
+			@Override
+			public void onGlobalLayout() {
+				int margins = TabuUtils.pxToDp(20);
+
+				// Creates a remember textview and place it at the right-top corner of rememberbox
+				remember = (TextView) findViewById(R.id.remember);
+				rememberInside = (TextView) findViewById(R.id.rememberInside);
+
+				// Display remember! message on top-right corner of rememberBox
+				// width and height of remember box
+				int width = rememberBox.getWidth();
+				int height = rememberBox.getHeight();
+				
+				//remember dimensions	
+				int max_height1 = TabuUtils.dpToPx((int) (height*0.18));
+				int max_width1 = TabuUtils.dpToPx((int) (width*0.177));
+
+				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
+				
+				//Display remember contain
+				//final int max_height2 = TabuUtils.dpToPx((int)height - max_height1*4);
+				final int max_height2 = 40;
+				final int max_width2 = TabuUtils.dpToPx((int) (width - margins));
+				rememberInside.setText(q.getArticle());
+				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
+				rememberInside.setEllipsize(null);
+				rememberInside.setTextColor(Color.parseColor(TabuUtils.getArticleColor(q.getArticle())));
+				
+				//Apply color and size
+				String text;
+				text = q.getArticle() + " " + q.getName();
+				String formattedText = "<font color=" + TabuUtils.getArticleColor(q.getArticle()) + ">" + q.getArticle() + " </font> <font color=#000000>" + q.getName() + "</font>";
+				rememberInside.setText(Html.fromHtml(formattedText));
+				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
+				
+				ViewTreeObserver obs = rememberBox.getViewTreeObserver();
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+					obs.removeOnGlobalLayoutListener(this);
+				} else {
+					obs.removeGlobalOnLayoutListener(this);
+				}
+			}
+		});
+	}
+	
 	@Override
 	public void onInit(int status) {
         if (status == TextToSpeech.SUCCESS) {
@@ -345,7 +411,8 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
  
         } else {
         	System.out.println("TTS: " + "Initilization Failed!");
-        }	
+        }
+        dialog.dismiss();
 	}
 
 }

@@ -280,7 +280,6 @@ public class TabuUtils {
 	}
 	
 	public static int dpToPx(int dp) {
-		//return (int)((dp * Environment.getInstance().getDensity()) + 0.5);
 		return (int)((dp - 0.5) / Environment.getInstance().getDensity());
 	}
 	

@@ -169,7 +169,7 @@
                 android:id="@+id/rememberInside"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal"
+                android:gravity="center|center_vertical|center_horizontal"
                 android:singleLine="true"
                 android:text="" />
         </LinearLayout>
