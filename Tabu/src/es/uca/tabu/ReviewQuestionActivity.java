@@ -79,7 +79,7 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 			backBtn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {			
 					if(rated) {
-						new SendReport().execute(q.getId(), rb.getRating(), q.getReport());
+						new SendReport().execute(q.getId(), (int)rb.getRating(), q.getReport());
 					}
 					else {
 						backToResults();

@@ -29,7 +29,6 @@ public class ResultActivity extends Activity {
 	@Override
 	public void onDestroy()
 	{
-		gameManager.clean();
 		super.onDestroy();
 	}
 	
