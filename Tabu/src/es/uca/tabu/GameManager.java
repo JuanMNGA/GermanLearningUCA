@@ -1,15 +1,19 @@
 package es.uca.tabu;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -53,12 +57,15 @@ public class GameManager {
 
 	public void clean() {
 		questions.clear();
-		categories.clear();
+		if(categories != null) {
+			categories.clear();
+			categories = null;
+		}
 		c = null;
 		currentQuestion = null;
 		questions = null;
-		categories = null;
 		
+
 	}
 
 	public int getTime() {
@@ -148,6 +155,30 @@ public class GameManager {
 	public void deleteQuestion(Question q) {
 		questions.remove(q);
 		numberOfQuestions--;
+	}
+
+	public void saveCurrentGame() {
+		//Creating a shared preference
+		Type arrayListOfQuestions = new TypeToken<ArrayList<Question>>(){}.getType();
+		SharedPreferences  prefs = c.getSharedPreferences("last_game", c.MODE_PRIVATE);
+		Editor prefsEditor = prefs.edit();
+		Gson gson = new Gson();
+		String json_questions = gson.toJson(questions, arrayListOfQuestions);
+		prefsEditor.putString("questions", json_questions);
+		prefsEditor.commit();
+	}
+	
+	public boolean initializeFromSharedPreferences() {
+		SharedPreferences  prefs = c.getSharedPreferences("last_game", c.MODE_PRIVATE);
+		Gson gson = new Gson();
+	    String json = prefs.getString("questions", "");
+	    if(json.compareTo("") != 0) {
+	    	Type arrayListOfQuestions = new TypeToken<ArrayList<Question>>(){}.getType();
+	    	questions = gson.fromJson(json, arrayListOfQuestions);
+	    	numberOfQuestions = questions.size();
+	    	return true;
+	    }
+	    return false;
 	}
 
 	private GameManager() {}

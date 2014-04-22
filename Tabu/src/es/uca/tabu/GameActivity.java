@@ -590,6 +590,8 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					public Void apply(DialogInterface arg0) {
 						arg0.cancel();
 
+						gameManager.saveCurrentGame();
+						
 						Intent conclusion = new Intent(getApplicationContext(), ResultActivity.class);
 						conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(conclusion);

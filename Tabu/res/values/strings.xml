@@ -60,8 +60,8 @@
     <string name="loadingDefinition"> Loading definition&#8230;</string>
     <string name="OkStadistics"> Results sent</string>
     <string name="noReason"> You must introduce a reason to report</string>
-	<string name="remember"> Remember!</string>
-	<string name="report"> Report</string>
+    <string name="remember"> Remember!</string>
+    <string name="report"> Report</string>
     <string name="reportReason"> Reason to report:</string>
 
     <!-- Play Menu Activity -->
@@ -100,7 +100,7 @@
     <string name="sintaxError"> Sintax error </string>
     <string name="grammarError"> Grammar error </string>
     <string name="difficultDefinition"> Hard definition</string>
-    
+
     <!-- General -->
     <string name="Send"> Send </string>
     <string name="updating"> Updating </string>
@@ -114,5 +114,6 @@
     <string name="title_activity_result">ResultActivity</string>
     <string name="title_activity_review_question">ReviewQuestionActivity</string>
     <string name="rateDef"> ¡Rate this definition! </string>
+    <string name="title_activity_statistics">StatisticsActivity</string>
 
 </resources>
