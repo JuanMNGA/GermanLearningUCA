@@ -14,10 +14,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.widget.Toast;
 
-public class GameManager {
+public class GameManager implements 
+android.speech.tts.TextToSpeech.OnInitListener {
 
 	private static String KEY_PREPALABRA = "prepalabras";
 	private static String KEY_POSTPALABRA = "postpalabras";
@@ -40,6 +43,8 @@ public class GameManager {
 	private Question currentQuestion = null;
 
 	private static Context c = null;
+	
+	private TextToSpeech tts = null;
 
 	public static GameManager getInstance() {
 		if(instance == null)
@@ -49,23 +54,32 @@ public class GameManager {
 
 	public static GameManager getInstance(Context c2) {
 		if(instance == null) {
-			instance = new GameManager();
+			instance = new GameManager(c2);
 		}
 		c = c2;
+		
 		return instance;
 	}
-
+	
+	public void destroy() {
+        // Don't forget to shutdown tts!
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+	}
+	
 	public void clean() {
-		questions.clear();
+		if(questions != null) {
+			questions.clear();
+			questions = null;
+		}
 		if(categories != null) {
 			categories.clear();
 			categories = null;
 		}
-		c = null;
-		currentQuestion = null;
-		questions = null;
 		
-
+		currentQuestion = null;
 	}
 
 	public int getTime() {
@@ -181,7 +195,14 @@ public class GameManager {
 	    return false;
 	}
 
-	private GameManager() {}
+	public TextToSpeech getTTS() {
+		return tts;
+	}
+	
+	private GameManager() {	}
+	private GameManager(Context context) {
+		tts = new TextToSpeech(context.getApplicationContext(), this);
+	}
 
 
 	private class getCategorizedQuestions extends AsyncTask<Object, Boolean, JSONObject> {
@@ -300,6 +321,26 @@ public class GameManager {
 				TabuUtils.showDialog(c.getResources().getString(R.string.error), c.getResources().getString(R.string.serverIssues),c);
 			}
 		}
+	}
+
+	@Override
+	public void onInit(int status) {
+		// TODO Auto-generated method stub
+        if (status == TextToSpeech.SUCCESS) {
+        	Resources res = c.getResources();
+    		android.content.res.Configuration conf = res.getConfiguration();
+            int result = tts.setLanguage(conf.locale);
+ 
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                System.out.println("TTS: " + "This Language is not supported");
+            } else {
+                System.out.println("TTS: " + "Speech engine initialized");
+            }
+ 
+        } else {
+        	System.out.println("TTS: " + "Initilization Failed!");
+        }
 	}
 
 }

@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
+
 import es.uca.tabu.utils.Environment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -127,6 +128,8 @@ public class LoginActivity extends Activity {
 				}
 				else {
 					TabuUtils.showConfirmDialog(" ", getResources().getString(R.string.sureReset),
+							R.string.Yes,
+							R.string.No,
 							new Function<DialogInterface, Void>() {
 						@Override
 						public Void apply(DialogInterface arg0) {
@@ -137,7 +140,6 @@ public class LoginActivity extends Activity {
 						} 
 					},
 					LoginActivity.this);
-
 				}
 			}
 		});

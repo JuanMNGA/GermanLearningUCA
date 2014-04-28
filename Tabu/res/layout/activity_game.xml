@@ -94,7 +94,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:numStars="5"
-                    android:stepSize="1.0" />
+                    android:stepSize="1.0"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- Contiene botones -->
@@ -112,9 +113,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:visibility="gone"
                     android:gravity="center_horizontal"
-                    android:text="30" />
+                    android:text="30"
+                    android:visibility="gone" />
 
                 <es.uca.tabu.MarkableButton
                     android:id="@+id/submit"
@@ -134,12 +135,22 @@
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/clue" />
 
+                <Button
+                    android:id="@+id/audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/sound"
+                    android:visibility="gone" />
+
                 <es.uca.tabu.MarkableButton
                     android:id="@+id/dictionary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/dictionary" />
+                    android:background="@drawable/dictionary"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -173,7 +184,6 @@
                 android:singleLine="true"
                 android:text="" />
         </LinearLayout>
-
     </LinearLayout>
 
 </ScrollView>

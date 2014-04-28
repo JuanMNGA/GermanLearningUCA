@@ -1,6 +1,5 @@
 package es.uca.tabu.utils;
 
-
 public class Environment {
 
 	private static Environment instance = null;

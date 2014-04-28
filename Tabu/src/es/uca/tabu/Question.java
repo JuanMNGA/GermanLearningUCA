@@ -14,6 +14,7 @@ public class Question implements Serializable {
 	Integer mPuntuacion;
 	short mTries; 
 	String mReport;
+	boolean mAnswered;
 
 	public Question(int id, String name, String article, String prepalabra, String postpalabra, String body, boolean success) {
 		mId = id;
@@ -27,6 +28,7 @@ public class Question implements Serializable {
 		mClue = false;
 		mReport = null;
 		mPuntuacion = -1;
+		mAnswered = false;
 	}
 
 
@@ -151,6 +153,16 @@ public class Question implements Serializable {
 
 	public void setClueBody(String body) {
 		this.mClueBody = body;
+	}
+
+
+	public boolean isAnswered() {
+		return mAnswered;
+	}
+
+
+	public void setAnswered(boolean answered) {
+		this.mAnswered = answered;
 	}
 	
 }

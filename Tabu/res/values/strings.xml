@@ -105,6 +105,8 @@
     <string name="Send"> Send </string>
     <string name="updating"> Updating </string>
     <string name="ok"> Ok </string>
+    <string name="Yes"> Yes</string>
+    <string name="No"> No</string>
     <string name="cancel"> Cancel </string>
     <string name="sure"> Are you sure that you want to SEND this new definition?</string>
     <string name="error"> Error </string>

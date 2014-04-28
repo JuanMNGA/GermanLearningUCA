@@ -1,10 +1,7 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
-import java.util.Locale;
-
 import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,17 +9,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.text.Editable;
 import android.text.Html;
-import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,13 +30,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ReviewQuestionActivity extends Activity implements 
-android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListener {
+public class ReviewQuestionActivity extends Activity implements RatingBar.OnRatingBarChangeListener {
 
 	Button backBtn, dictionaryBtn, audioBtn;
 	TextView definition;
-	
-	private TextToSpeech tts;
 
 	private TextView remember;
 	private LinearLayout rememberBox;
@@ -65,8 +54,6 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().hide();
 		setContentView(R.layout.activity_review_question);
-
-		tts = new TextToSpeech(this, this);
 		
 		rated = false;
 
@@ -103,10 +90,10 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 			definition.setText(Html.fromHtml(coloredWord));
 			
 			audioBtn = (Button) findViewById(R.id.audio);
-			audioBtn.setEnabled(false);
 			audioBtn.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {			
-					tts.speak(definition.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+				public void onClick(View v) {		
+					//if(GameManager.getInstance(ReviewQuestionActivity.this).getTTS() != null)
+					GameManager.getInstance(ReviewQuestionActivity.this).getTTS().speak(definition.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
 				} 
 			});
 
@@ -254,8 +241,8 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 			});
 			
 			
-			dialog = ProgressDialog.show(ReviewQuestionActivity.this, " ", 
-					getResources().getString(R.string.updating), true);
+			//dialog = ProgressDialog.show(ReviewQuestionActivity.this, " ", 
+			//		getResources().getString(R.string.updating), true);
 			
 		}
 		else
@@ -267,11 +254,6 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 
     @Override
     public void onDestroy() {
-        // Don't forget to shutdown tts!
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
         super.onDestroy();
     }
  
@@ -393,26 +375,6 @@ android.speech.tts.TextToSpeech.OnInitListener, RatingBar.OnRatingBarChangeListe
 				}
 			}
 		});
-	}
-	
-	@Override
-	public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-        	Resources res = this.getResources();
-    		android.content.res.Configuration conf = res.getConfiguration();
-            int result = tts.setLanguage(conf.locale);
- 
-            if (result == TextToSpeech.LANG_MISSING_DATA
-                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                System.out.println("TTS: " + "This Language is not supported");
-            } else {
-                audioBtn.setEnabled(true);
-            }
- 
-        } else {
-        	System.out.println("TTS: " + "Initilization Failed!");
-        }
-        dialog.dismiss();
 	}
 
 }

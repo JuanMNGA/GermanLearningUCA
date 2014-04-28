@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
+
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,7 +32,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -38,12 +42,14 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NavUtils;
 
 public class GameActivity extends Activity implements RatingBar.OnRatingBarChangeListener {
 
 	private GameManager gameManager;
 
+	private Button audioBtn;
 	private MarkableButton submit;
 	private MarkableButton clue;
 	private MarkableButton dictionary;
@@ -66,6 +72,8 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 	//TabuCountDownTimer timerCount;
 	float fontSize;
+	
+	InputMethodManager imm;
 
 	@Override
 	public void onDestroy()
@@ -81,10 +89,17 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		//Hide Action bar
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().hide();
+		
+		// Set xml view
 		setContentView(R.layout.activity_game);
+		
+		// To hide/show keyboard
+		imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+		
 		submit = (MarkableButton)findViewById(R.id.submit);
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
@@ -95,6 +110,14 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		postpalabra = (TextView) findViewById(R.id.postpalabra);
 		time = (TextView) findViewById(R.id.timer);
 		rb = (RatingBar) findViewById(R.id.ratingBar);
+		
+		audioBtn = (Button) findViewById(R.id.audio);
+		audioBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {	
+				// Prepalabra will contain the whole definition in rating screen
+				gameManager.getTTS().speak(prepalabra.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+			} 
+		});
 		
 		fontSize = new TextView(this).getTextSize();
 		
@@ -249,12 +272,24 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 		submit.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-
+				Question current = gameManager.getCurrentQuestion();
 				String finalWord = palabra.getText().toString();
-				if(finalWord.length() != 0) {
-					submit.setEnabled(false);
-					checkAnswer(finalWord);
-				}
+				if(finalWord.length() != 0 ) {
+					if(current.isAnswered() == false) {
+						submit.setEnabled(false);
+						checkAnswer(finalWord);
+					}
+					else {
+						// Next
+						if(rated) {
+							current.setPuntuacion((int) rb.getRating());
+							requestNextQuestion();
+						} else {
+							//Dialog ... you haven't rate
+						}
+						
+					}
+				} // Empty answer... else
 			} 
 		});
 	}
@@ -263,11 +298,15 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		final Question current = gameManager.getCurrentQuestion();
 		current.increaseTries();
 		if(finalWord.compareTo("") != 0 && gameManager.validWord(current.getId(), finalWord)) {
-			submit.setChecked(true);
+			
+			/*submit.setChecked(true);
 			current.setSuccess(true);
 			if(rated)
 				current.setPuntuacion((int) rb.getRating());
-			requestNextQuestion();
+			requestNextQuestion();*/
+			current.setSuccess(true);
+			current.setAnswered(true);
+			showRatingMode(current);
 		}
 		else {
 			String message;
@@ -290,12 +329,14 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					public Void apply(DialogInterface arg0) {
 						arg0.dismiss();
 
-						if(rated)
-							current.setPuntuacion((short) rb.getRating());
+						/*if(rated)
+							current.setPuntuacion((short) rb.getRating());*/
 
 						if(current.getTries() == GameManager.MAX_TRIES) {
 							current.setSuccess(false);
-							requestNextQuestion();
+							current.setAnswered(true);
+							showRatingMode(current);
+							//requestNextQuestion();
 						}
 						else {
 							submit.setEnabled(true);
@@ -317,6 +358,61 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 	}
 
+	public void showQuestionMode() {
+		palabra.setVisibility(View.VISIBLE);
+		postpalabra.setVisibility(View.VISIBLE);
+		clue.setVisibility(View.VISIBLE);
+		rb.setVisibility(View.GONE);
+		dictionary.setVisibility(View.GONE);
+		audioBtn.setVisibility(View.GONE);
+		if(bh != null)
+			bh.dismiss();
+		palabra.requestFocus();
+		imm.showSoftInput(palabra, 0);
+	}
+	
+	public void showRatingMode(Question q) {
+		palabra.setVisibility(View.GONE);
+		postpalabra.setVisibility(View.GONE);
+		clue.setVisibility(View.GONE);
+		
+		//Adapt prepalabra
+		String color;
+		if(q.isSuccess()) {
+			color = "#006400";
+		}
+		else {
+			color = "#FF0000";
+		}
+		String coloredWord = "<font color=#000000>" + q.getPrepalabra() + " </font> ";
+		coloredWord += "<font color=" + color + ">" + q.getName() + " </font> ";
+		coloredWord += "<font color=#000000>" + q.getPostpalabra() + " </font> ";
+		prepalabra.setText(Html.fromHtml(coloredWord));
+		
+		rb.setVisibility(View.VISIBLE);
+
+		lastRating=0;
+		
+		audioBtn.setVisibility(View.VISIBLE);
+		dictionary.setVisibility(View.VISIBLE);
+		
+		// If article not null, update remember box with the correct answer
+		if(rememberBox.getVisibility() == View.VISIBLE) {
+			int max_width2 = TabuUtils.dpToPx((int) (rememberBox.getWidth() - 20));
+			String text;
+			text = q.getArticle() + " " + q.getName();
+			String formattedText = "<font color=" + TabuUtils.getArticleColor(q.getArticle()) + ">" + q.getArticle() + " </font> <font color=#000000>" + q.getName() + "</font>";
+			rememberInside.setText(Html.fromHtml(formattedText));
+			rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, 40));
+		}
+		
+		// Rate definition ballonhint!
+		showRateTip();
+		submit.setEnabled(true);
+		
+		imm.hideSoftInputFromWindow(palabra.getWindowToken(), 0);
+	}
+	
 	public void requestNextQuestion(){
 		final Question current = gameManager.next();
 		if(current != null) {
@@ -394,12 +490,10 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			clue.setEnabled(true);
 			clue.setChecked(false);
 			submit.setChecked(false);
-
-			// Rate definition ballonhint!
-			showRateTip();
+			showQuestionMode();
 		}
 		else {
-
+			
 			new SendStadistics().execute(gameManager.getQuestions());
 		}
 	}
@@ -551,6 +645,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 
 		@Override
 		protected void onPreExecute() {
+			submit.setEnabled(false);
 			dialog = ProgressDialog.show(GameActivity.this, " ", 
 					getResources().getString(R.string.sending), true);
 		}
@@ -591,7 +686,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 						arg0.cancel();
 
 						gameManager.saveCurrentGame();
-						
+						gameManager.getTTS().stop();
 						Intent conclusion = new Intent(getApplicationContext(), ResultActivity.class);
 						conclusion.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(conclusion);

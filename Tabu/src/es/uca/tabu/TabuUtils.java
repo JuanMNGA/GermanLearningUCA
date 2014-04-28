@@ -189,6 +189,20 @@ public class TabuUtils {
 			.setNegativeButton(c.getResources().getString(R.string.cancel), null)
 			.show();
 	}
+	
+	/* Call argument function when button clicked */
+	public static void showConfirmDialog(String title, String message, int positive, int negative, final Function<DialogInterface, Void> func, Context c) {
+		AlertDialog dialog = new AlertDialog.Builder(c)
+		.setTitle(title)
+		.setMessage(message)
+		.setPositiveButton(positive,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				func.apply(dialog);
+			}})
+			.setNegativeButton(negative, null)
+			.show();
+	}
 
 	public static int getDrawable(Context context, String name)
 	{
