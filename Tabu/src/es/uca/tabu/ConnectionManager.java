@@ -288,8 +288,8 @@ public class ConnectionManager {
 	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		//server = new String("http://192.168.1.35/tabu/");
-		server = new String("http://94.247.31.212/tabu/");
+		server = new String("http://192.168.1.35/tabu/");
+		//server = new String("http://94.247.31.212/tabu/");
 		jsonParser = new JSONParser();
 	}
 	

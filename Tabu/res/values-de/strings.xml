@@ -101,6 +101,7 @@
     <string name="sintaxError"> Satzbau ist nicht korrekt </string>
     <string name="grammarError"> Grammatikfehler </string>
     <string name="difficultDefinition"> Definition ist kompliziert </string>
+    <string name="badAudio"> Audioqualität so lala</string>
     
     <!-- Statistics -->
     <string name="nolastgame"> Play a game first</string>

@@ -98,6 +98,7 @@
     <string name="sintaxError"> Error sintáctico </string>
     <string name="grammarError"> Error de gramática </string>
     <string name="difficultDefinition"> Definición complicada</string>
+    <string name="badAudio"> La calidad del audio no es buena</string>
 
     <!-- Statistics -->
     <string name="nolastgame"> Juega una partida antes</string>

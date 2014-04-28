@@ -315,5 +315,6 @@ public class TabuUtils {
 		al.add(c.getString(R.string.sintaxError));
 		al.add(c.getString(R.string.grammarError));
 		al.add(c.getString(R.string.difficultDefinition));
+		al.add(c.getString(R.string.badAudio));
 	}
 }

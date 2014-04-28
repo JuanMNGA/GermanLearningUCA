@@ -100,6 +100,7 @@
     <string name="sintaxError"> Sintax error </string>
     <string name="grammarError"> Grammar error </string>
     <string name="difficultDefinition"> Hard definition</string>
+    <string name="badAudio"> Audio quality is not good</string>
 
     <!-- Statistics -->
     <string name="nolastgame"> Play a game first</string>
