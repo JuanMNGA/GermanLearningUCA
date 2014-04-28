@@ -306,6 +306,7 @@ public class NewDefinitionActivity extends Activity {
 					dialog.dismiss();
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.errorNewDef), NewDefinitionActivity.this);
 				}
+				send.setEnabled(true);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				dialog.dismiss();

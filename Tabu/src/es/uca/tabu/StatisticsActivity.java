@@ -27,9 +27,9 @@ public class StatisticsActivity extends Activity {
 		setContentView(R.layout.activity_statistics);
 
 		//set grid view item 
-		Bitmap lastGameIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.berufe);
+		Bitmap lastGameIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.lastgame);
 
-		gridArray.add(new Item(lastGameIcon,"Last Game"));
+		gridArray.add(new Item(lastGameIcon,getString(R.string.lastGame)));
 
 		gridView = (GridView) findViewById(R.id.gridView1);
 
@@ -44,8 +44,8 @@ public class StatisticsActivity extends Activity {
 					startActivity(conclusion);
 					finish();
 				}
-				//else ... mensajito de que no hay ultima partida
-				//Toast.makeText(getApplicationContext(),gridArray.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+				else 
+					TabuUtils.showDialog(getString(R.string.error), getString(R.string.nolastgame), StatisticsActivity.this);
 			} });
 
 

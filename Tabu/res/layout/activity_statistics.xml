@@ -13,7 +13,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:columnWidth="80dp"
+        android:columnWidth="200dp"
         android:gravity="center"
         android:numColumns="2"
         android:stretchMode="columnWidth" >

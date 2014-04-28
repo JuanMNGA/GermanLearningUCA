@@ -99,6 +99,10 @@
     <string name="grammarError"> Error de gramática </string>
     <string name="difficultDefinition"> Definición complicada</string>
 
+    <!-- Statistics -->
+    <string name="nolastgame"> Juega una partida antes</string>
+    <string name="lastGame"> Última Partida </string>
+    
     <!-- General -->
     <string name="Send"> Enviar </string>
     <string name="updating"> Actualizando </string>

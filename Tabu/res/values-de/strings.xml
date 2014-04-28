@@ -102,6 +102,11 @@
     <string name="grammarError"> Grammatikfehler </string>
     <string name="difficultDefinition"> Definition ist kompliziert </string>
     
+    <!-- Statistics -->
+    <string name="nolastgame"> Play a game first</string>
+    <string name="lastGame"> Last Game </string>
+    
+    
     <!-- General -->
     <string name="Send"> Senden </string>
     <string name="updating"> Updating </string>
