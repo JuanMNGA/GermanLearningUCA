@@ -9,7 +9,7 @@
     <string name="password">Kennwort</string>
     <string name="login">Login</string>
     <string name="fullName">Name</string>
-    <string name="newAccount">Neues Bnutzerkonto</string>
+    <string name="newAccount">Neues Benutzerkonto</string>
     <string name="existingAccount">Ich habe bereits ein Benutzerkonto! Klick hier</string>
     <string name="title_activity_register">Neues Benutzerkonto</string>
     <string name="loginYourAccount">Login Benutzerkonto</string>
@@ -25,8 +25,8 @@
     <string name="title_activity_dictionary">Notizblock</string>
 
     <!-- New Definition Activity -->
-    <string name="writeNewArticle"> Artikle... </string>
-    <string name="writeNewDef"> New Word... </string>
+    <string name="writeNewArticle"> Artikel... </string>
+    <string name="writeNewDef"> Neues Wort... </string>
     <string name="definitionBody"> Definition... </string>
     <string name="category"> Kategorie: </string>
     <string name="hintBody"> Hilfe...</string>
@@ -51,7 +51,7 @@
     <string name="back"> Zurück </string>
 
     <!-- Game Activity -->
-    <string name="wordHint"> Notier hier deine Antwort! </string>
+    <string name="wordHint"> Notier hier!</string>
     <string name="errorQuestions"> Fehlermeldung</string>
     <string name="noQuestions"> Es gibt keine Fragen!</string>
     <string name="pista"> Hilfe</string>
@@ -63,7 +63,7 @@
     <string name="noReason"> Warum akzeptierst du nicht die Definition?</string>
     <string name="remember">  Merke dir!</string>
     <string name="report"> Reportar</string>
-    <string name="reportReason"> Introduzca el motivo:</string>
+    <string name="reportReason"> Selektier das Motiv!</string>
     <string name="sureExit"> ¿Estás seguro que quieres SALIR del juego? </string>
     <string name="punish"> Si lo haces a menudo serás penalizado </string>
 
