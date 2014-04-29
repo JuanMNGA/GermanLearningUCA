@@ -37,6 +37,7 @@
     <string name="emptyWord"> Word field must be filled out</string>
     <string name="invalidCategory"> Category is not valid </string>
     <string name="wordEqDef"> Word cannot be equal to Definition</string>
+    <string name="nowordsleft"> No words to define, play to unlock it</string>
 
     <!-- Review Question -->
     <string name="added"> added</string>
@@ -63,6 +64,8 @@
     <string name="remember"> Remember!</string>
     <string name="report"> Report</string>
     <string name="reportReason"> Reason to report:</string>
+    <string name="sureExit"> ¿Are you sure that you want to EXIT? </string>
+    <string name="punish"> You will be penalized if it becomes usual</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Player Vs Computer</string>
@@ -109,6 +112,7 @@
     <!-- General -->
     <string name="Send"> Send </string>
     <string name="updating"> Updating </string>
+    <string name="loading"> Loading</string>
     <string name="ok"> Ok </string>
     <string name="Yes"> Yes</string>
     <string name="No"> No</string>

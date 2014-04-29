@@ -41,8 +41,10 @@ public class MainMenuActivity extends Activity {
 		newDef.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				Intent i = new Intent(getApplicationContext(), NewDefinitionActivity.class);
-				startActivity(i);
+				
+				new getWordToDef().execute();
+				//Intent i = new Intent(getApplicationContext(), NewDefinitionActivity.class);
+				//startActivity(i);
 			}
 		});
 
@@ -153,6 +155,73 @@ public class MainMenuActivity extends Activity {
 					Intent i = new Intent(getApplicationContext(), DictionaryActivity.class);
 					i.putExtra("EXTRA_WORDS", mItems);
 					startActivity(i);
+				}
+				else {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),MainMenuActivity.this);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				dialog.dismiss();
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	private class getWordToDef extends AsyncTask<Object, Boolean, JSONObject> {
+		ProgressDialog dialog;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(MainMenuActivity.this, " ", 
+					getResources().getString(R.string.loading), true);
+		}
+
+		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected JSONObject doInBackground(Object... user) {
+
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+			if(ConnectionManager.getInstance(MainMenuActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().getWordToDef(
+						loginPreferences.getInt("id", -1));
+			}
+			else
+				return null;
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),MainMenuActivity.this);
+				}
+				else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+
+					if(json.getInt(TabuUtils.KEY_SUCCESS) == 2) {
+						dialog.dismiss();
+						TabuUtils.showDialog(" ", getResources().getString(R.string.nowordsleft),MainMenuActivity.this);
+					}
+					else {
+						dialog.dismiss();
+						
+						String nombre = json.getString("nombre");
+						String articulo = json.getString("articulo");
+						String categoria = json.getString("categoria");
+						int dificultad = json.getInt("dificultad");
+						
+						Intent i = new Intent(getApplicationContext(), NewDefinitionActivity.class);
+						i.putExtra("EXTRA_NAME", nombre);
+						i.putExtra("EXTRA_ARTICLE", articulo);
+						i.putExtra("EXTRA_CATEGORY", categoria);
+						i.putExtra("EXTRA_LEVEL", dificultad);
+						startActivity(i);
+					}
 				}
 				else {
 					dialog.dismiss();

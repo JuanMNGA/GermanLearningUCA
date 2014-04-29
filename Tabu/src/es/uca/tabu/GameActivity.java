@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
-
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,6 +73,23 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	
 	InputMethodManager imm;
 
+	@Override
+	public void onBackPressed() {
+		TabuUtils.showConfirmDialog(getString(R.string.sureExit), getResources().getString(R.string.punish),
+				R.string.Yes,
+				R.string.No,
+				new Function<DialogInterface, Void>() {
+			@Override
+			public Void apply(DialogInterface arg0) {
+				arg0.cancel();
+				// Login the user
+				GameActivity.super.onBackPressed();
+				return null;
+			} 
+		},
+		GameActivity.this);
+	}
+	
 	@Override
 	public void onDestroy()
 	{

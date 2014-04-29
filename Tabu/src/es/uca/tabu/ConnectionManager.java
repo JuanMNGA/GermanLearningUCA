@@ -39,8 +39,7 @@ public class ConnectionManager {
 	private static String register_tag = "register";
 	private static String reset_pass_tag = "resetpass";
 	private static String chgpass_tag = "chgpass";
-	
-	
+	private static String getWordToDef = "provideWordForDef";
 	private static String numQuestions_tag = "questions";
 	private static String questions_tag = "getquestions";
 	private static String sendDefinition_tag = "addDefinition";
@@ -141,7 +140,7 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject getQuestions(Integer numQuestions, Integer level, ArrayList<Integer> categories) {
+	public JSONObject getQuestions(Integer user_id, Integer numQuestions, Integer level, ArrayList<Integer> categories) {
 		
 		JSONArray jsArray = new JSONArray(categories);
 		JSONObject jsCategories = new JSONObject();
@@ -149,6 +148,7 @@ public class ConnectionManager {
 			jsCategories.put("level", level);
 			jsCategories.put("numOfQuestions", numQuestions);
 			jsCategories.put("categories", jsArray);
+			jsCategories.put("user_id", user_id);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			System.out.println("ERROR EN QETQUESTIONS:");
@@ -159,6 +159,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("tag", questions_tag));
 		params.add(new BasicNameValuePair("categories", jsCategories.toString()));
 		params.add(new BasicNameValuePair("numOfQuestions", Integer.toString(numQuestions)));
+		params.add(new BasicNameValuePair("user_id", Integer.toString(user_id)));
 		
 		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
 		
@@ -286,10 +287,20 @@ public class ConnectionManager {
 		return json;
 	}
 	
+	public JSONObject getWordToDef(Integer user_id) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", getWordToDef));
+		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
-		server = new String("http://192.168.1.35/tabu/");
-		//server = new String("http://94.247.31.212/tabu/");
+		//server = new String("http://192.168.1.35/tabu/");
+		server = new String("http://94.247.31.212/tabu/");
 		jsonParser = new JSONParser();
 	}
 	

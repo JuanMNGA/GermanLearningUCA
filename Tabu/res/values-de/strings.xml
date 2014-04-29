@@ -37,6 +37,7 @@
     <string name="emptyWord"> Wortfeld muss ergänzt werden</string>
     <string name="invalidCategory"> Ungültige Kategorie </string>
     <string name="wordEqDef"> Word cannot be equal to Definition</string>
+    <string name="nowordsleft"> No words to define, play to unlock it</string>
 
     <!-- Review Question -->
     <string name="added"> hinzugefügt</string>
@@ -63,6 +64,8 @@
     <string name="remember">  Merke dir!</string>
     <string name="report"> Reportar</string>
     <string name="reportReason"> Introduzca el motivo:</string>
+    <string name="sureExit"> ¿Estás seguro que quieres SALIR del juego? </string>
+    <string name="punish"> Si lo haces a menudo serás penalizado </string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Single Player Mode</string>
@@ -111,6 +114,7 @@
     <!-- General -->
     <string name="Send"> Senden </string>
     <string name="updating"> Updating </string>
+    <string name="loading"> Cargando</string>
     <string name="ok"> Ok </string>
     <string name="Yes"> Ja</string>
     <string name="No"> Nein</string>

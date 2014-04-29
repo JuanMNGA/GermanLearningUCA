@@ -159,7 +159,8 @@ android.speech.tts.TextToSpeech.OnInitListener {
 	}
 
 	public Boolean validWord(Integer id, String word) {
-		return questions.contains(new Question(id, word, "", "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", "", "", false));
+		return questions.contains(new Question(id, word, "", "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGermanVowel(word), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.accentGerman(TabuUtils.accentGermanVowel(word)), "", "", "", "", false));
 	}
 
 	public void addWordToBloc(Integer id, String word) {
@@ -218,9 +219,13 @@ android.speech.tts.TextToSpeech.OnInitListener {
 		@Override
 		protected JSONObject doInBackground(Object... questioninfo) {
 
+			SharedPreferences loginPreferences;
+			loginPreferences = c.getApplicationContext().getSharedPreferences("loginPrefs", c.getApplicationContext().MODE_PRIVATE);
+			
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(c).networkWorks()) {
 				return ConnectionManager.getInstance().getQuestions(
+						(Integer)loginPreferences.getInt("id", -1),
 						(Integer)questioninfo[0],
 						(Integer)questioninfo[1],
 						(ArrayList<Integer>) questioninfo[2]);

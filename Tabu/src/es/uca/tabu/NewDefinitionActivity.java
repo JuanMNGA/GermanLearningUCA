@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -36,6 +35,8 @@ public class NewDefinitionActivity extends Activity {
 	TextView word;
 	TextView definition;
 	TextView hint;
+	
+	String categoria;
 
 	ArrayList<String> parsedCategories;
 	ArrayList<Integer> parsedIds;
@@ -71,6 +72,26 @@ public class NewDefinitionActivity extends Activity {
 		dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		article.setAdapter(dataAdapter);
 
+		Bundle extras = getIntent().getExtras();
+		if(extras != null) {
+			String nombre = extras.getString("EXTRA_NAME");
+			String articulo = extras.getString("EXTRA_ARTICLE");
+			categoria = extras.getString("EXTRA_CATEGORY");
+			int dificultad = extras.getInt("EXTRA_LEVEL");
+			
+			word.setText(nombre);
+			word.setFocusable(false);
+			np.setValue(dificultad);
+			np.setEnabled(false);
+			article.setSelection(articles.indexOf(articulo));
+			article.setEnabled(false);
+		}
+		else
+		{
+			System.out.println("NO WORDS");
+		}
+		
+		
 		//Initialize categories
 		new CategoriesQuery().execute();
 
@@ -151,6 +172,8 @@ public class NewDefinitionActivity extends Activity {
 			art.add("der");
 			art.add("die PL.");
 			art.add("das");
+			art.add("der/die Pl.");
+			art.add("das/die Pl.");
 		}
 	}
 
@@ -197,6 +220,10 @@ public class NewDefinitionActivity extends Activity {
 							android.R.layout.simple_spinner_item, parsedCategories);
 					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					category.setAdapter(dataAdapter);
+					
+					category.setSelection(parsedCategories.indexOf(categoria));
+					category.setEnabled(false);
+					
 					dialog.dismiss();
 				}
 				else {

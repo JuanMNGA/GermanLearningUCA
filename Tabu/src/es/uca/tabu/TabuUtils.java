@@ -239,11 +239,24 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("oe", "�").replaceAll("ae", "�").replaceAll("ue", "�").replaceAll("ss", "�");
+			result = str.replaceAll("ss", "ß");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("oe", "�").replaceAll("ae", "�").replaceAll("ue", "�").replaceAll("ss", "�");
+			result = str.replaceAll("ss", "ß");
+		}
+		return result;
+	}
+	
+	public static String accentGermanVowel(String str) {
+		String result;
+		if(Character.isUpperCase(str.charAt(0))) {
+			str.toLowerCase();
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("ss", "ß");
+			Character.toUpperCase(result.charAt(0));
+		}
+		else {
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("ss", "ß");
 		}
 		return result;
 	}
