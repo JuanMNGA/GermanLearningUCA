@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="es.uca.tabu.LoginActivity"
+            android:name="es.uca.tabu.LanguageSelectionActivity"
             android:configChanges="locale|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
@@ -28,6 +28,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="es.uca.tabu.LoginActivity"
+            android:configChanges="locale|orientation"
+            android:label="@string/login"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="es.uca.tabu.RegisterActivity"
             android:configChanges="locale|orientation"
             android:label="@string/title_activity_register"
@@ -35,6 +41,7 @@
         </activity>
         <activity
             android:name="es.uca.tabu.MainMenuActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_main_menu"
             android:parentActivityName="es.uca.tabu.LoginActivity"
             android:screenOrientation="portrait" >
@@ -44,6 +51,7 @@
         </activity>
         <activity
             android:name="es.uca.tabu.PlayMenuActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_play_menu"
             android:parentActivityName="es.uca.tabu.MainMenuActivity"
             android:screenOrientation="portrait" >
@@ -53,6 +61,7 @@
         </activity>
         <activity
             android:name="es.uca.tabu.NewDefinitionActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_new_definition"
             android:parentActivityName="es.uca.tabu.MainMenuActivity"
             android:screenOrientation="portrait" >
@@ -62,6 +71,7 @@
         </activity>
         <activity
             android:name="es.uca.tabu.DictionaryActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_dictionary"
             android:parentActivityName="es.uca.tabu.MainMenuActivity"
             android:screenOrientation="portrait" >
@@ -71,6 +81,7 @@
         </activity>
         <activity
             android:name="es.uca.tabu.GameActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_game"
             android:parentActivityName="es.uca.tabu.PlayMenuActivity"
             android:screenOrientation="portrait" >
@@ -80,15 +91,14 @@
         </activity>
         <activity
             android:name="es.uca.tabu.ResultActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_result"
             android:parentActivityName="es.uca.tabu.GameActivity"
             android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.uca.tabu.GameActivity" />
         </activity>
         <activity
             android:name="es.uca.tabu.ReviewQuestionActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_review_question"
             android:parentActivityName="es.uca.tabu.ResultActivity"
             android:screenOrientation="portrait" >
@@ -98,12 +108,28 @@
         </activity>
         <activity
             android:name="es.uca.tabu.StatisticsActivity"
+            android:configChanges="locale|orientation"
             android:label="@string/title_activity_statistics"
-            android:parentActivityName="es.uca.tabu.MainMenuActivity"
-            android:screenOrientation="portrait" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.uca.tabu.MainMenuActivity" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" >
+        </activity>
+        <activity
+            android:name="es.uca.tabu.IndividualStatistics"
+            android:configChanges="locale|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" >
+        </activity>
+        <activity
+            android:name="es.uca.tabu.PlayStatistics"
+            android:configChanges="locale|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" >
+        </activity>
+        <activity
+            android:name="es.uca.tabu.DefStatistics"
+            android:configChanges="locale|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat" >
         </activity>
     </application>
 

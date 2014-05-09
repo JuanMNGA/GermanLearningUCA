@@ -105,9 +105,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//Hide Action bar
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getActionBar().hide();
+		TabuUtils.hideActionBar(this);
 		
 		// Set xml view
 		setContentView(R.layout.activity_game);
@@ -513,12 +511,6 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		}
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

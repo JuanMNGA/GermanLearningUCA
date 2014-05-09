@@ -106,6 +106,8 @@
     <!-- Statistics -->
     <string name="nolastgame"> Juega una partida antes</string>
     <string name="lastGame"> Última Partida </string>
+    <string name="playStatistics"> Estadísticas de Juego</string>
+    <string name="defStatistics"> Estadísticas de Definiciones</string>
     
     <!-- General -->
     <string name="Send"> Enviar </string>

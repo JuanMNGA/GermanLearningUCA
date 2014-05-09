@@ -39,7 +39,7 @@ public class ConnectionManager {
 	private static String register_tag = "register";
 	private static String reset_pass_tag = "resetpass";
 	private static String chgpass_tag = "chgpass";
-	private static String getWordToDef = "provideWordForDef";
+	private static String getWordToDef_tag = "provideWordForDef";
 	private static String numQuestions_tag = "questions";
 	private static String questions_tag = "getquestions";
 	private static String sendDefinition_tag = "addDefinition";
@@ -49,6 +49,7 @@ public class ConnectionManager {
 	private static String getNotes_tag = "getNotes";
 	private static String addWord_tag = "addWord";
 	private static String sendReport_tag = "sendReport";
+	private static String getStatistics_tag = "get_statistics";
 	
 	private static Context c = null;
 
@@ -166,12 +167,13 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject getMaxQuestions(Integer level, ArrayList<Integer> categories) {
+	public JSONObject getMaxQuestions(Integer level, ArrayList<Integer> categories, String lang) {
 		JSONArray jsArray = new JSONArray(categories);
 		JSONObject jsCategories = new JSONObject();
 		
 		try {
 			jsCategories.put("level", level);
+			jsCategories.put("idioma", lang);
 			jsCategories.put("categories", jsArray);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -199,9 +201,10 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject getAllCategories() {
+	public JSONObject getAllCategories(String lang) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", categories_tag));
+		params.add(new BasicNameValuePair("idioma", lang));
 		
 		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
 
@@ -287,10 +290,22 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject getWordToDef(Integer user_id) {
+	public JSONObject getStatistics(Integer user_id, String lang) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
-		params.add(new BasicNameValuePair("tag", getWordToDef));
+		params.add(new BasicNameValuePair("tag", getStatistics_tag));
 		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		params.add(new BasicNameValuePair("idioma", lang));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
+	public JSONObject getWordToDef(Integer user_id, String lang) {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", getWordToDef_tag));
+		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		params.add(new BasicNameValuePair("idioma", lang));
 		
 		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
 
@@ -300,7 +315,8 @@ public class ConnectionManager {
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
 		//server = new String("http://192.168.1.35/tabu/");
-		server = new String("http://94.247.31.212/tabu/");
+		//server = new String("http://94.247.31.212/tabu/");
+		server = new String("http://94.247.31.212/tabu/Granada/");
 		jsonParser = new JSONParser();
 	}
 	

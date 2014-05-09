@@ -6,7 +6,7 @@ public class Environment {
 	
 	int width, height;
 	float density;
-	
+		
 	public static Environment getInstance() {
 		if(instance == null)
 			instance =  new Environment();
@@ -36,4 +36,5 @@ public class Environment {
 	public float getDensity() {
 		return density;
 	}
+	
 }

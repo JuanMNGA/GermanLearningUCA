@@ -1,0 +1,207 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#e5e5e5" >
+
+        <LinearLayout
+            android:id="@+id/tabBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp" >
+
+            <ImageView
+                android:id="@+id/BtnSlide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="0px"
+                android:padding="0px"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="Menu"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/Tabla"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+
+        <TableRow
+            android:id="@+id/Fila1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/infoRatio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:layout_span="1"
+                android:text="Ratio de acierto"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ratio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="10.50%"
+                android:layout_span="1"
+                android:textSize="40sp" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#e5e5e5" />
+
+        <TableRow
+            android:id="@+id/Fila2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/infoJugados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Palabras jugadas"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/jugados"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="540"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#e5e5e5" />
+
+        <TableRow
+            android:id="@+id/Fila3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/infoMejorCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Mejor Categoría"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/mejorCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="Fútbol"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#e5e5e5" />
+
+        <TableRow
+            android:id="@+id/Fila4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/infoPeorCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Peor Categoría"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/peorCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="Belleza"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#e5e5e5" />
+
+        <TableRow
+            android:id="@+id/Fila5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:id="@+id/infoNivelJugado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Nivel más jugado"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/nivelJugado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="3"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="#e5e5e5" />
+    </TableLayout>
+
+</LinearLayout>

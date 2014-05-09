@@ -107,7 +107,9 @@
 
     <!-- Statistics -->
     <string name="nolastgame"> Play a game first</string>
-    <string name="lastGame"> Last Game </string>
+    <string name="lastGame"> Last Game</string>
+    <string name="playStatistics"> Play Statistics</string>
+    <string name="defStatistics"> Definitions Statistics</string>
     
     <!-- General -->
     <string name="Send"> Send </string>

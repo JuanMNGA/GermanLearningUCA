@@ -26,7 +26,7 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 		BitmapDrawable bd = (BitmapDrawable) c.getResources().getDrawable(idImage);
 		int w = bd.getBitmap().getWidth();
 		int h = bd.getBitmap().getHeight();
-		System.out.println("ALTURA: " + h + ", ANCHURA: " + w);
+		//System.out.println("ALTURA: " + h + ", ANCHURA: " + w);
 		
 		if(idImage != 0) {
 			imageView = new MarkableImageView(context, -1, false);
@@ -38,7 +38,7 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 		}
 
 		for(int i=0; i<parsedCategories.size(); i++) {
-			idImage = TabuUtils.getDrawable(c, adaptResource(parsedCategories.get(i)));
+			idImage = TabuUtils.getDrawable(c, TabuUtils.translateCategory(adaptResource(parsedCategories.get(i))));
 			if(idImage != 0) {
 				bd = (BitmapDrawable) c.getResources().getDrawable(idImage);
 				w = bd.getBitmap().getWidth();
@@ -50,9 +50,9 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 				imageView.setImageResource(idImage);
 				mImageList.add(imageView);
 				
-				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", añadida");
-			} else
-				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", no existe");
+				//System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", aï¿½adida");
+			} //else
+				//System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", no existe");
 		}
 	}
 

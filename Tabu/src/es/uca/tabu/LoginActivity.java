@@ -1,13 +1,10 @@
 package es.uca.tabu;
 
-import java.util.Locale;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
 
-import es.uca.tabu.utils.Environment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -15,8 +12,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -37,20 +32,6 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
-		/* Temporalmente en alem�n */
-		Resources res = this.getResources();
-		// Change locale settings in the app.
-		DisplayMetrics dm = res.getDisplayMetrics();
-		android.content.res.Configuration conf = res.getConfiguration();
-		conf.locale = Locale.GERMAN;
-		res.updateConfiguration(conf, dm);
-		
-		//Store screensize
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		Environment.getInstance().setScreenHeight(dm.heightPixels);
-		Environment.getInstance().setScreenWidth(dm.widthPixels);
-		Environment.getInstance().setDensity(dm.density);
 		
 		// setting default screen to login.xml
 		setContentView(R.layout.login);

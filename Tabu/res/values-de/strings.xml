@@ -95,7 +95,6 @@
     <string name="recover"> Reset my password</string>
     <string name="newPassword"> A new password has been sent to your email</string>
     <string name="sureReset"> Are you sure that you want to RESET your password?</string>
-    
 
     <!-- Reports -->
     <string name="improperContent"> Inhalt ist nicht korrekt </string>
@@ -105,11 +104,12 @@
     <string name="grammarError"> Grammatikfehler </string>
     <string name="difficultDefinition"> Definition ist kompliziert </string>
     <string name="badAudio"> Audioqualität so lala</string>
-    
+
     <!-- Statistics -->
     <string name="nolastgame"> Play a game first</string>
     <string name="lastGame"> Last Game </string>
-    
+    <string name="playStatistics"> Play Statistics</string>
+    <string name="defStatistics"> Definitions Statistics</string>
     
     <!-- General -->
     <string name="Send"> Senden </string>
@@ -124,7 +124,7 @@
     <string name="noNetwork"> Internetverbindung kann nicht hergestellt werden </string>
     <string name="serverIssues"> Verbindung mit Server momentan nicht möglich</string>
     <string name="rateDef"> ¡Valora la definición! </string>
-    
+
     <!-- Titles -->
     <string name="title_activity_game">GameActivity</string>
     <string name="title_activity_result">ResultActivity</string>

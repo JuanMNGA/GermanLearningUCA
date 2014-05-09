@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="0px"
+    android:background="#00ffffff"
+    android:padding="0px" >
+    
+    <LinearLayout
+        android:id="@+id/menulist"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/stadisticsTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Statistics"
+            android:textSize="35sp" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp" >
+        </ListView>
+    </LinearLayout>
+    <!--
+    This HorizontalScrollView will contain a LinearLayout that will contain a transparent
+    View (that allows the menu above to show through) and the other application Views.
+    -->
+
+    <es.uca.tabu.utils.MyHorizontalScrollView
+        android:id="@+id/menuScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="0px"
+        android:fadingEdge="none"
+        android:fadingEdgeLength="0px"
+        android:padding="0px"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:id="@+id/top"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_margin="0px"
+            android:orientation="horizontal"
+            android:padding="0px" >
+
+            <!-- The views inside here will be added programmatically. -->
+        </LinearLayout>
+    </es.uca.tabu.utils.MyHorizontalScrollView>
+
+</FrameLayout>

@@ -21,13 +21,16 @@ import android.support.v4.app.NavUtils;
 
 public class MainMenuActivity extends Activity {
 
+	private static String KEY_PLAYSTATISTICS = "play";
+	private static String KEY_DEFSTATISTICS = "def";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
-		// Show the Up button in the action bar.
-		setupActionBar();
 
+		StatisticsManager.reset();
+		
 		Button playMenu = (Button) findViewById(R.id.btnPlay);
 		playMenu.setOnClickListener(new View.OnClickListener() {
 
@@ -41,10 +44,7 @@ public class MainMenuActivity extends Activity {
 		newDef.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				
 				new getWordToDef().execute();
-				//Intent i = new Intent(getApplicationContext(), NewDefinitionActivity.class);
-				//startActivity(i);
 			}
 		});
 
@@ -62,49 +62,23 @@ public class MainMenuActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent result = new Intent(getApplicationContext(), StatisticsActivity.class);
-				result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(result);
-				finish();
+				new initializeStatistics().execute();
 			}
 		});
 		
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-	}
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main_menu, menu);
-		return true;
+	public void onBackPressed() {
+		Intent mainmenu = new Intent(getApplicationContext(), LoginActivity.class);
+		mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(mainmenu);
+		/**
+		 * Close Login Screen
+		 **/
+		finish();
 	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
+	
 	private class initializeNotes extends AsyncTask<Object, Boolean, JSONObject> {
 
 		private ArrayList<String> mItems;
@@ -187,7 +161,7 @@ public class MainMenuActivity extends Activity {
 
 			if(ConnectionManager.getInstance(MainMenuActivity.this).networkWorks()) {
 				return ConnectionManager.getInstance().getWordToDef(
-						loginPreferences.getInt("id", -1));
+						loginPreferences.getInt("id", -1), loginPreferences.getString("language", ""));
 			}
 			else
 				return null;
@@ -222,6 +196,73 @@ public class MainMenuActivity extends Activity {
 						i.putExtra("EXTRA_LEVEL", dificultad);
 						startActivity(i);
 					}
+				}
+				else {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.serverIssues),MainMenuActivity.this);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				dialog.dismiss();
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	private class initializeStatistics extends AsyncTask<Object, Boolean, JSONObject> {
+		ProgressDialog dialog;
+
+		@Override
+		protected void onPreExecute() {
+			dialog = ProgressDialog.show(MainMenuActivity.this, " ", 
+					getResources().getString(R.string.loading), true);
+		}
+
+		// Devuelve true si consigue meter el usuario en la base de datos
+		@Override
+		protected JSONObject doInBackground(Object... user) {
+
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+
+			if(ConnectionManager.getInstance(MainMenuActivity.this).networkWorks()) {
+				return ConnectionManager.getInstance().getStatistics(
+						loginPreferences.getInt("id", -1), loginPreferences.getString("language", ""));
+			}
+			else
+				return null;
+		}
+
+		// Informa al usuario de lo sucedido
+		@Override
+		protected void onPostExecute(JSONObject json) {
+			try {
+				if(json == null) {
+					dialog.dismiss();
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),MainMenuActivity.this);
+				}
+				else if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
+					
+					StatisticsManager sm = StatisticsManager.getInstance(MainMenuActivity.this);
+					
+					JSONObject jsonPlayStatistics  = json.getJSONObject(KEY_PLAYSTATISTICS);
+					sm.setIRatio(jsonPlayStatistics.getDouble("ratio"));
+					sm.setIWorstCat(jsonPlayStatistics.getString("peorcategoria"));
+					sm.setIMostPlayedLevel(jsonPlayStatistics.getInt("nivelmasjugado"));
+					sm.setIBestCat(jsonPlayStatistics.getString("mejorcategoria"));
+					sm.setIPlayed(jsonPlayStatistics.getInt("jugadas"));
+					
+					JSONObject jsonDefStatistics  = json.getJSONObject(KEY_DEFSTATISTICS);
+					sm.setIAVGDefRating(jsonDefStatistics.getDouble("estrellas"));
+					sm.setIDefRate(jsonDefStatistics.getDouble("ratio"));
+					sm.setINumOfReports(jsonDefStatistics.getInt("reports"));
+					
+					dialog.dismiss();
+					Intent result = new Intent(getApplicationContext(), StatisticsActivity.class);
+					result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(result);
+					finish();
 				}
 				else {
 					dialog.dismiss();

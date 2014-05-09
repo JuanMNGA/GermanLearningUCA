@@ -2,6 +2,10 @@ package es.uca.tabu;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,14 +14,20 @@ import junit.framework.Assert;
 import com.google.common.base.Function;
 
 import es.uca.tabu.utils.Environment;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
+import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
+import android.view.Window;
 import android.widget.TextView;
 
 public class TabuUtils {
@@ -106,7 +116,7 @@ public class TabuUtils {
 			public void onClick(DialogInterface dialog, int id) {
 				func.apply(dialog);
 			}});
-		
+
 		AlertDialog dialog = dialogB.create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
@@ -122,33 +132,33 @@ public class TabuUtils {
 			public void onClick(DialogInterface dialog, int id) {
 				func.apply(dialog);
 			}});
-		
+
 		final AlertDialog dialog = dialogB.create();
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
-		
+
 		// Hide after some seconds
 		final Handler handler  = new Handler();
 		final Runnable runnable = new Runnable() {
-		    @Override
-		    public void run() {
-		        if (dialog.isShowing()) {
-		        	func.apply(dialog);
-		        }
-		    }
+			@Override
+			public void run() {
+				if (dialog.isShowing()) {
+					func.apply(dialog);
+				}
+			}
 		};
 
 		dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-		    @Override
-		    public void onDismiss(DialogInterface dialog) {
-		        handler.removeCallbacks(runnable);
-		    }
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				handler.removeCallbacks(runnable);
+			}
 		});
 
 		// Close dialog in time sec
 		handler.postDelayed(runnable, 1000 * time);
 	}
-	
+
 	/* Call argument function when button clicked */
 	public static void showDialog(String title, String message, final Function<DialogInterface, Void> func, Context c) {
 		/*AlertDialog dialog = new AlertDialog.Builder(c)
@@ -189,7 +199,7 @@ public class TabuUtils {
 			.setNegativeButton(c.getResources().getString(R.string.cancel), null)
 			.show();
 	}
-	
+
 	/* Call argument function when button clicked */
 	public static void showConfirmDialog(String title, String message, int positive, int negative, final Function<DialogInterface, Void> func, Context c) {
 		AlertDialog dialog = new AlertDialog.Builder(c)
@@ -247,7 +257,7 @@ public class TabuUtils {
 		}
 		return result;
 	}
-	
+
 	public static String accentGermanVowel(String str) {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
@@ -305,11 +315,11 @@ public class TabuUtils {
 	public static int pxToDp(int px) {
 		return (int)((px * Environment.getInstance().getDensity()) + 0.5);
 	}
-	
+
 	public static int dpToPx(int dp) {
 		return (int)((dp - 0.5) / Environment.getInstance().getDensity());
 	}
-	
+
 	public static String getArticleColor(String article) {
 		if(article.compareTo("der") == 0)
 			return "#FF0000"; //RED
@@ -320,7 +330,7 @@ public class TabuUtils {
 		else
 			return "#000000";
 	}
-	
+
 	public static void fillReportReasons(Context c, ArrayList<String> al) {
 		al.add(c.getString(R.string.improperContent));
 		al.add(c.getString(R.string.offensiveContent));
@@ -330,4 +340,54 @@ public class TabuUtils {
 		al.add(c.getString(R.string.difficultDefinition));
 		al.add(c.getString(R.string.badAudio));
 	}
+
+	@SuppressLint("NewApi")
+	public static void hideActionBar(Context c) {
+		//Hide Action bar
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			((Activity) c).getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+			((Activity) c).getActionBar().hide();
+		}
+		else {
+			((Activity) c).getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+			android.support.v7.app.ActionBar actionBar = ((ActionBarActivity) c).getSupportActionBar();
+			actionBar.hide();
+		}
+	}
+	
+	public static String getPercentColor(float number) {
+		if(number<40f)
+			return "#FF0000"; //RED
+		else if(number<65f)
+			return "#FFE600"; //YELLOW
+		else
+			return "#9CCB19"; //GREEN
+	}
+	
+	public static String translateCategory(String category) {
+		Map<String, String> englishCategories = new HashMap<String, String>();
+		englishCategories.put("food_drink", "essen_trinken");
+		englishCategories.put("weather_seasons", "wetter_jahreszeiten");
+		englishCategories.put("weeks_months", "wochentage_monate");
+		englishCategories.put("free_time", "freizeit");
+		englishCategories.put("appearance", "aussehen");
+		englishCategories.put("personality", "charaktereigenschaften");
+		englishCategories.put("jobs", "berufe");
+		englishCategories.put("opinions", "eine_meinung_aussern");
+		englishCategories.put("home", "wohnung");
+		englishCategories.put("clothes_fashion", "kleidung_mode");
+		englishCategories.put("countries_languages_nationalities", "länder_sprachen_nationalitat");
+		englishCategories.put("studies", "studium_universitat");
+		englishCategories.put("family_friends", "familie_freunde");
+		englishCategories.put("meeting_a_person", "begrassen_sich_vorstellen");
+		englishCategories.put("feelings", "gefahle_befinden");
+		englishCategories.put("city", "stadt");
+		englishCategories.put("daily_life", "tagesablauf");
+		
+		if(englishCategories.containsKey(category))
+			return englishCategories.get(category);
+		else 
+			return category;
+	}
+	
 }

@@ -188,9 +188,12 @@ public class NewDefinitionActivity extends Activity {
 
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+			
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(NewDefinitionActivity.this).networkWorks()) {
-				return ConnectionManager.getInstance().getAllCategories();
+				return ConnectionManager.getInstance().getAllCategories(loginPreferences.getString("language", ""));
 			}
 			else
 				return null;

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -422,9 +423,12 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 		@Override
 		protected JSONObject doInBackground(Object... level) {
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+			
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
-				return ConnectionManager.getInstance().getMaxQuestions((Integer) level[0], (ArrayList<Integer>) level[1]);
+				return ConnectionManager.getInstance().getMaxQuestions((Integer) level[0], (ArrayList<Integer>) level[1], loginPreferences.getString("language", ""));
 			}
 			else
 				return null;
@@ -471,9 +475,13 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 		@Override
 		protected JSONObject doInBackground(Void... nothing) {
+			
+			SharedPreferences loginPreferences;
+			loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+			
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(PlayMenuActivity.this).networkWorks()) {
-				return ConnectionManager.getInstance().getAllCategories();
+				return ConnectionManager.getInstance().getAllCategories(loginPreferences.getString("language", ""));
 			}
 			else
 				return null;

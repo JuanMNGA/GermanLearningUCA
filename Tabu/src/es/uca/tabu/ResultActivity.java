@@ -74,6 +74,28 @@ public class ResultActivity extends Activity {
 		});
 	}
 
+	@Override
+	public void onBackPressed() {
+		if(StatisticsManager.isAlive()) {
+			Intent mainmenu = new Intent(getApplicationContext(), IndividualStatistics.class);
+			mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(mainmenu);
+			/**
+			 * Close Login Screen
+			 **/
+			finish();
+		} else {
+			Intent mainmenu = new Intent(getApplicationContext(), MainMenuActivity.class);
+			mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(mainmenu);
+			/**
+			 * Close Login Screen
+			 **/
+			finish();
+		}
+
+	}
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
