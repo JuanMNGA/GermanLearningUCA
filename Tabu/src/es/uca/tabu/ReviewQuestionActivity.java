@@ -1,7 +1,9 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
+
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,9 +46,9 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 	float lastRating=0;
 
 	Question q;
-	
+
 	AlertDialog dialog;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,14 +56,14 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().hide();
 		setContentView(R.layout.activity_review_question);
-		
+
 		rated = false;
 
 		Bundle extras = getIntent().getExtras();
 		q = null;
 		if(extras != null) {
 			q = (Question) extras.getSerializable("EXTRA_QUESTION");
-			
+
 			backBtn = (Button) findViewById(R.id.backToMenu);
 			backBtn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {			
@@ -88,7 +90,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			coloredWord += "<font color=" + color + ">" + q.getName() + " </font> ";
 			coloredWord += "<font color=#000000>" + q.getPostpalabra() + " </font> ";
 			definition.setText(Html.fromHtml(coloredWord));
-			
+
 			audioBtn = (Button) findViewById(R.id.audio);
 			audioBtn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {		
@@ -100,10 +102,10 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			// Rating bar
 			rb = (RatingBar) findViewById(R.id.ratingBar);
 			rated = false;
-			
+
 			if(q.getPuntuacion() != null)
 				rb.setRating(q.getPuntuacion());
-			
+
 			rb.setOnRatingBarChangeListener(this);
 			rb.setOnTouchListener(new OnTouchListener() {
 				@Override
@@ -113,10 +115,10 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 						float width = rb.getWidth();
 						float starsf = (touchPositionX / width) * 5.0f;
 						int stars = (int)starsf + 1;
-						
+
 						if(stars == lastRating) {
 							rb.setRating(0.0f);
-							
+
 							// Report dialog
 							AlertDialog.Builder editalert = new AlertDialog.Builder(ReviewQuestionActivity.this);
 							editalert.setTitle(getResources().getString(R.string.report));
@@ -133,8 +135,8 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 									android.R.layout.simple_spinner_item, reasons);
 							dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 							reason.setAdapter(dataAdapter);
-							
-							
+
+
 							/*final EditText input = new EditText(ReviewQuestionActivity.this);
 							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
 									LinearLayout.LayoutParams.MATCH_PARENT,
@@ -178,7 +180,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 				// Get left margin in dp
 				rememberBox.setVisibility(View.VISIBLE);
 				showRememberArticle();
-				
+
 				/*
 				System.out.println("Tiene art�culo");
 				//article.setText(getString(R.string.articleword) + current.getArticle());
@@ -207,7 +209,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
 				rememberInside.setEllipsize(null);
 				rememberInside.setTextColor(Color.parseColor(TabuUtils.getArticleColor(q.getArticle())));
-				
+
 				//Apply color and size
 				String text;
 				text = q.getArticle() + " " + q.getName();
@@ -239,11 +241,11 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 					}
 				} 
 			});
-			
-			
+
+
 			//dialog = ProgressDialog.show(ReviewQuestionActivity.this, " ", 
 			//		getResources().getString(R.string.updating), true);
-			
+
 		}
 		else
 		{
@@ -252,12 +254,23 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 
 	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
- 
-	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		Intent mainmenu = new Intent(getApplicationContext(), ResultActivity.class);
+		mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(mainmenu);
+		/**
+		 * Close Login Screen
+		 **/
+		finish();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -271,14 +284,14 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 		// TODO Auto-generated method stub
 		rated = true;
 	}
-	
+
 	private void backToResults() {
 		Intent result = new Intent(getApplicationContext(), ResultActivity.class);
 		result.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(result);
 		finish();
 	}
-	
+
 	private class SendReport extends AsyncTask<Object, Boolean, JSONObject> {
 		ProgressDialog dialog;
 
@@ -287,7 +300,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			dialog = ProgressDialog.show(ReviewQuestionActivity.this, " ", 
 					getResources().getString(R.string.sending), true);
 		}
-		
+
 		@Override
 		protected JSONObject doInBackground(Object... info) {
 
@@ -296,11 +309,11 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(ReviewQuestionActivity.this).networkWorks()) {
-			return ConnectionManager.getInstance().sendReport(
-					loginPreferences.getInt("id", -1),
-					((Integer) info[0]),
-					((Integer) info[1]),
-					((String)info[2]));
+				return ConnectionManager.getInstance().sendReport(
+						loginPreferences.getInt("id", -1),
+						((Integer) info[0]),
+						((Integer) info[1]),
+						((String)info[2]));
 			}
 			else
 				return null;
@@ -343,13 +356,13 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 				// width and height of remember box
 				int width = rememberBox.getWidth();
 				int height = rememberBox.getHeight();
-				
+
 				//remember dimensions	
 				int max_height1 = TabuUtils.dpToPx((int) (height*0.18));
 				int max_width1 = TabuUtils.dpToPx((int) (width*0.177));
 
 				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
-				
+
 				//Display remember contain
 				//final int max_height2 = TabuUtils.dpToPx((int)height - max_height1*4);
 				final int max_height2 = 40;
@@ -358,14 +371,14 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(rememberInside.getText().toString(), max_width2, max_height2));
 				rememberInside.setEllipsize(null);
 				rememberInside.setTextColor(Color.parseColor(TabuUtils.getArticleColor(q.getArticle())));
-				
+
 				//Apply color and size
 				String text;
 				text = q.getArticle() + " " + q.getName();
 				String formattedText = "<font color=" + TabuUtils.getArticleColor(q.getArticle()) + ">" + q.getArticle() + " </font> <font color=#000000>" + q.getName() + "</font>";
 				rememberInside.setText(Html.fromHtml(formattedText));
 				rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, max_height2));
-				
+
 				ViewTreeObserver obs = rememberBox.getViewTreeObserver();
 
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
