@@ -294,7 +294,8 @@ public class NewDefinitionActivity extends Activity {
 						postpalabra,
 						hint.getText().toString(),
 						np.getValue(),
-						parsedIds.get(parsedCategories.indexOf(category.getSelectedItem().toString())));
+						parsedIds.get(parsedCategories.indexOf(category.getSelectedItem().toString())),
+						loginPreferences.getString("language", ""));
 			}
 			else
 				return null;

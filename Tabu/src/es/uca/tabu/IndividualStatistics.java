@@ -45,12 +45,12 @@ public class IndividualStatistics extends ActionBarActivity {
 
 		//set grid view item 
 		Bitmap lastGameIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.lastgame);
-		Bitmap PlayIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.lastgame);
-		Bitmap defIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.lastgame);
+		Bitmap PlayIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.playstat);
+		Bitmap defIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.definitionstat);
 		
 		gridArray.add(new Item(lastGameIcon,getString(R.string.lastGame)));
 		gridArray.add(new Item(PlayIcon, getString(R.string.playStatistics)));
-		gridArray.add(new Item(PlayIcon, getString(R.string.defStatistics)));
+		gridArray.add(new Item(defIcon, getString(R.string.defStatistics)));
 
 		gridView = (GridView) app.findViewById(R.id.gridView1);
 

@@ -127,6 +127,18 @@ public class LoginActivity extends Activity {
 	}
 
 	@Override
+	public void onBackPressed() {
+		Intent mainmenu = new Intent(getApplicationContext(), LanguageSelectionActivity.class);
+		mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(mainmenu);
+		/**
+		 * Close Login Screen
+		 **/
+		finish();
+	}
+
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.login, menu);

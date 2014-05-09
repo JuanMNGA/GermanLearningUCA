@@ -50,9 +50,9 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 				imageView.setImageResource(idImage);
 				mImageList.add(imageView);
 				
-				//System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", a�adida");
-			} //else
-				//System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", no existe");
+				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", added");
+			} else
+				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", no existe");
 		}
 	}
 

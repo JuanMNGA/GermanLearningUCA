@@ -271,7 +271,7 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject sendDefinition(Integer user_id, String article, String word, String prepalabra, String postpalabra, String hint, Integer level, Integer category_id) {
+	public JSONObject sendDefinition(Integer user_id, String article, String word, String prepalabra, String postpalabra, String hint, Integer level, Integer category_id, String lang) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", sendDefinition_tag));
 		params.add(new BasicNameValuePair("id_user", user_id.toString()));
@@ -282,6 +282,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("clue", hint));
 		params.add(new BasicNameValuePair("level", level.toString()));
 		params.add(new BasicNameValuePair("id_category", category_id.toString()));
+		params.add(new BasicNameValuePair("idioma", lang));
 		
 		System.out.println(params.toString());
 		
