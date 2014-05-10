@@ -60,7 +60,7 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
                 android:layout_span="1"
-                android:text="Ratio de acierto"
+                android:text="@string/ratiosucc"
                 android:textSize="20sp" />
 
             <TextView
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="Palabras jugadas"
+                android:text="@string/wordsPlayed"
                 android:textSize="20sp" />
 
             <TextView
@@ -123,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="Mejor Categoría"
+                android:text="@string/bestCat"
                 android:textSize="20sp" />
 
             <TextView
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="Peor Categoría"
+                android:text="@string/WorstCat"
                 android:textSize="20sp" />
 
             <TextView
@@ -185,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="Nivel más jugado"
+                android:text="@string/mostplayedlevel"
                 android:textSize="20sp" />
 
             <TextView

@@ -15,7 +15,7 @@
     <string name="loginYourAccount">Login to your Account</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
     <string name="play">Play</string>
-    <string name="stats">Stadistics</string>
+    <string name="stats">Statistics</string>
     <string name="dictionary">Notebook</string>
     <string name="newdef">New Definition</string>
     <string name="title_item_list">Items</string>
@@ -68,8 +68,8 @@
     <string name="punish"> You will be penalized if it becomes usual</string>
 
     <!-- Play Menu Activity -->
-    <string name="PlayerVsComputer"> Player Vs Computer</string>
-    <string name="PlayerVsPlayer"> Player Vs Player</string>
+    <string name="PlayerVsComputer"> Single Player Mode</string>
+    <string name="PlayerVsPlayer"> Multiplayer Mode</string>
     <string name="joingGroupQueue"> Join group queue</string>
     <string name="levelTxt"> Level: </string>
     <string name="numQuestions"> Questions: </string>
@@ -108,8 +108,16 @@
     <!-- Statistics -->
     <string name="nolastgame"> Play a game first</string>
     <string name="lastGame"> Last Game</string>
-    <string name="playStatistics"> Play Statistics</string>
+    <string name="playStatistics"> Game Statistics</string>
     <string name="defStatistics"> Definitions Statistics</string>
+    <string name="avgRating"> Average Rating</string>
+    <string name="avgSuccRatio"> Average success ratio</string>
+    <string name="numReports"> Nº of reports </string>
+    <string name="ratiosucc"> Success ratio</string>
+    <string name="wordsPlayed"> Words played</string>
+    <string name="bestCat"> Best category</string>
+    <string name="WorstCat"> Worst category</string>
+    <string name="mostplayedlevel"> Most played level</string>
     
     <!-- General -->
     <string name="Send"> Send </string>

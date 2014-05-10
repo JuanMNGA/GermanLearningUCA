@@ -3,7 +3,7 @@
     package="es.uca.tabu"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
@@ -15,7 +15,7 @@
         android:allowBackup="true"
         android:icon="@drawable/guessiticon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppBaseTheme" >
         <activity
             android:name="es.uca.tabu.LanguageSelectionActivity"
             android:configChanges="locale|orientation"
@@ -111,25 +111,25 @@
             android:configChanges="locale|orientation"
             android:label="@string/title_activity_statistics"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" >
+            android:theme="@style/AppBaseTheme" >
         </activity>
         <activity
             android:name="es.uca.tabu.IndividualStatistics"
             android:configChanges="locale|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" >
+            android:theme="@style/AppBaseTheme" >
         </activity>
         <activity
             android:name="es.uca.tabu.PlayStatistics"
             android:configChanges="locale|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" >
+            android:theme="@style/AppBaseTheme" >
         </activity>
         <activity
             android:name="es.uca.tabu.DefStatistics"
             android:configChanges="locale|orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat" >
+            android:theme="@style/AppBaseTheme" >
         </activity>
     </application>
 

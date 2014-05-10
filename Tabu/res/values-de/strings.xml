@@ -64,8 +64,8 @@
     <string name="remember">  Merke dir!</string>
     <string name="report"> Reportar</string>
     <string name="reportReason"> Selektier das Motiv!</string>
-    <string name="sureExit"> ¿Estás seguro que quieres SALIR del juego? </string>
-    <string name="punish"> Si lo haces a menudo serás penalizado </string>
+    <string name="sureExit"> Are you sure you want to QUIT? </string>
+    <string name="punish"> Please complete the game </string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Single Player Mode</string>
@@ -90,7 +90,7 @@
     <!-- Login Activity -->
     <string name="logging"> Benutzer wird überprüft...</string>
     <string name="userNotExists"> Benutzername/Kennwort nicht korrekt</string>
-    <string name="emailNotExists"> El email introducido no está registrado </string>
+    <string name="emailNotExists"> Diese E-Mail ist nicht registriert</string>
     <string name="rememberMe"> Speichern</string>
     <string name="recover"> Reset my password</string>
     <string name="newPassword"> A new password has been sent to your email</string>
@@ -100,21 +100,30 @@
     <string name="improperContent"> Inhalt ist nicht korrekt </string>
     <string name="offensiveContent"> Inhalt ist offensiv </string>
     <string name="orthographicError"> Orthographiefehler </string>
-    <string name="sintaxError"> Satzbau ist nicht korrekt </string>
+    <string name="sintaxError"> Syntax ist nicht korrekt </string>
     <string name="grammarError"> Grammatikfehler </string>
     <string name="difficultDefinition"> Definition ist kompliziert </string>
-    <string name="badAudio"> Audioqualität so lala</string>
+    <string name="badAudio"> Audio so lala</string>
 
     <!-- Statistics -->
-    <string name="nolastgame"> Play a game first</string>
-    <string name="lastGame"> Last Game </string>
-    <string name="playStatistics"> Play Statistics</string>
-    <string name="defStatistics"> Definitions Statistics</string>
+    <string name="nolastgame"> Spiel zuerst!</string>
+    <string name="lastGame"> Letztes Spiel</string>
+    <string name="playStatistics"> Spiele Statistiken</string>
+    <string name="defStatistics"> Statistiken-Definitionen</string>
+    <string name="avgRating"> Average Rating</string>
+    <string name="avgSuccRatio"> Average success ratio</string>
+    <string name="numReports"> Nº of reports </string>
+    <string name="ratiosucc"> Success ratio</string>
+    <string name="wordsPlayed"> Words played</string>
+    <string name="bestCat"> Best category</string>
+    <string name="WorstCat"> Worst category</string>
+    <string name="mostplayedlevel"> Most played level</string>
+    
     
     <!-- General -->
     <string name="Send"> Senden </string>
     <string name="updating"> Updating </string>
-    <string name="loading"> Cargando</string>
+    <string name="loading"> Loading</string>
     <string name="ok"> Ok </string>
     <string name="Yes"> Ja</string>
     <string name="No"> Nein</string>
@@ -123,7 +132,7 @@
     <string name="error"> Fehler </string>
     <string name="noNetwork"> Internetverbindung kann nicht hergestellt werden </string>
     <string name="serverIssues"> Verbindung mit Server momentan nicht möglich</string>
-    <string name="rateDef"> ¡Valora la definición! </string>
+    <string name="rateDef"> Evaluier!</string>
 
     <!-- Titles -->
     <string name="title_activity_game">GameActivity</string>

@@ -45,7 +45,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:gravity="left"
-        android:text="Average rating"
+        android:text="@string/avgRating"
         android:textSize="20sp" />
 
     <RatingBar
@@ -78,8 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="Average success ratio"
-                android:textSize="20sp" />
+                android:text="@string/avgSuccRatio"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/ratio"
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="left"
-                android:text="Nº of reports"
+                android:text="@string/numReports"
                 android:textSize="20sp" />
 
             <TextView

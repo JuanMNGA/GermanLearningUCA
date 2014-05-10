@@ -376,7 +376,7 @@ public class TabuUtils {
 		englishCategories.put("opinions", "eine_meinung_aussern");
 		englishCategories.put("home", "wohnung");
 		englishCategories.put("clothes_fashion", "kleidung_mode");
-		englishCategories.put("countries_languages_nationalities", "länder_sprachen_nationalitat");
+		englishCategories.put("countries_languages_nationalities", "lander_sprachen_nationalitat");
 		englishCategories.put("studies", "studium_universitat");
 		englishCategories.put("family_friends", "familie_freunde");
 		englishCategories.put("meeting_a_person", "begrussen_sich_vorstellen");
