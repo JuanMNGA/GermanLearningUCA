@@ -281,8 +281,14 @@ public class TabuUtils {
 	}
 
 	public static boolean endsBy(String ending, String container) {
+		/*if(ending.contains(" "))
+			return container.endsWith(ending);
+			
 		return container.contains(" ") &&
-				ending.compareTo(container.substring(container.lastIndexOf(" ")+1)) == 0;
+				ending.compareTo(container.substring(container.lastIndexOf(" ")+1)) == 0;*/
+		//System.out.println("CONTAINER: '"+container+"'");
+		//System.out.println("ENDING: '"+ending+"'");
+		return container.endsWith(ending);
 	}
 
 	public static int getFontSizeFromBounds(String text, int maxWidth, int maxHeight) {
