@@ -262,11 +262,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("ss", "ß");
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü").replaceAll("ss", "ß");
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü");
 		}
 		return result;
 	}

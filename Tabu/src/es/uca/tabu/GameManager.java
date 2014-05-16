@@ -159,7 +159,15 @@ android.speech.tts.TextToSpeech.OnInitListener {
 	}
 
 	public Boolean validWord(Integer id, String word) {
+		
+		System.out.println("Palabra: " + word);
+		System.out.println("Solución: " + getCurrentQuestion().getName());
+		System.out.println("Respuesta1: " + TabuUtils.accentGerman(word));
+		System.out.println("Respuesta2: " + TabuUtils.accentGermanVowel(word));
+		System.out.println("Respuesta3: " + TabuUtils.accentGerman(TabuUtils.accentGermanVowel(word)));
+		
 		return questions.contains(new Question(id, word, "", "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGermanVowel(word), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", "", "", false)) ||
 				questions.contains(new Question(id, TabuUtils.accentGerman(TabuUtils.accentGermanVowel(word)), "", "", "", "", false));
 	}
 

@@ -317,7 +317,8 @@ public class ConnectionManager {
 		httpclient = new DefaultHttpClient();
 		//server = new String("http://192.168.1.35/tabu/");
 		//server = new String("http://94.247.31.212/tabu/");
-		server = new String("http://94.247.31.212/tabu/Granada/");
+		//server = new String("http://94.247.31.212/tabu/Granada/");
+		server = new String("http://94.247.31.212/tabu/UCA_Multilingue/");
 		jsonParser = new JSONParser();
 	}
 	

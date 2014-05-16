@@ -606,7 +606,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				int location[] = new int[] {15,height};
 
 				bh.setBalloonConfig(getString(R.string.rateDef), 
-						TabuUtils.getFontSizeFromBounds(getString(R.string.rateDef), width, height), 
+						TabuUtils.getFontSizeFromBounds(getString(R.string.rateDef), width-30, height-30), 
 						false, Color.WHITE, width, height);
 				bh.setBackgroundDrawable(getResources().getDrawable(R.drawable.bocadillo));
 				bh.delayedShow(10, location);
