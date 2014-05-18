@@ -252,19 +252,22 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject getNotes(Integer user_id) {
+	public JSONObject getNotes(Integer user_id, String lang) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", getNotes_tag));
 		params.add(new BasicNameValuePair("user_id", user_id.toString()));
+		params.add(new BasicNameValuePair("idioma", lang));
 		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		
 		return json;
 	}
 	
-	public JSONObject addWordToBloc(Integer user_id, String word) {
+	public JSONObject addWordToBloc(Integer user_id, String word, String lang) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", addWord_tag));
 		params.add(new BasicNameValuePair("user_id", user_id.toString()));
 		params.add(new BasicNameValuePair("word", word));
+		params.add(new BasicNameValuePair("idioma", lang));
 		
 		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
 

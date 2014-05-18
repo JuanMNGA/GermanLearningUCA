@@ -16,7 +16,7 @@ public class PlayStatistics extends ActionBarActivity {
 
 	static int ACTIVITY_NO = 3;
 
-	TextView success, total, bestCategory, worstCategory, level;
+	TextView success, total, bestCategory, worstCategory, level, levels;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -40,6 +40,7 @@ public class PlayStatistics extends ActionBarActivity {
 		bestCategory = (TextView) findViewById(R.id.mejorCategoria);
 		worstCategory = (TextView) findViewById(R.id.peorCategoria);
 		level = (TextView) findViewById(R.id.nivelJugado);
+		levels = (TextView) findViewById(R.id.nivelesJugados);
 		
 		// Initialize statistics
 		float ratio = (float) sm.getIRatio();
@@ -51,6 +52,7 @@ public class PlayStatistics extends ActionBarActivity {
 		bestCategory.setText(sm.getIBestCat());
 		worstCategory.setText(sm.getIWorstCat());
 		level.setText(String.valueOf(sm.getIMostPlayedLevel()));
+		levels.setText(sm.getIPlayedLevels());
 		
 		// Header button to show left menu
 		ViewGroup tabBar = (ViewGroup) app.findViewById(R.id.tabBar);

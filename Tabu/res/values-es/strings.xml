@@ -108,6 +108,7 @@
     <string name="lastGame"> Última Partida </string>
     <string name="playStatistics"> Estadísticas de Juego</string>
     <string name="defStatistics"> Estadísticas de Definiciones</string>
+    <string name="playedlevels"> Niveles jugados</string>
     
     <!-- General -->
     <string name="Send"> Enviar </string>

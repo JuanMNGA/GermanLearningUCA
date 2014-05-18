@@ -245,7 +245,7 @@ public class TabuUtils {
 		return pattern.matcher(nfdNormalizedString).replaceAll("");
 	}
 
-	public static String accentGerman(String str) {
+	public static String changeBeta(String str) {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
@@ -257,7 +257,33 @@ public class TabuUtils {
 		}
 		return result;
 	}
+	
+	public static String inverseChangeBeta(String str) {
+		String result;
+		if(Character.isUpperCase(str.charAt(0))) {
+			str.toLowerCase();
+			result = str.replaceAll("ß", "ss");
+			Character.toUpperCase(result.charAt(0));
+		}
+		else {
+			result = str.replaceAll("ß", "ss");
+		}
+		return result;
+	}
 
+	public static String deAccentGermanVowel(String str) {
+		String result;
+		if(Character.isUpperCase(str.charAt(0))) {
+			str.toLowerCase();
+			result = str.replaceAll("ö", "oe").replaceAll("ä", "ae").replaceAll("ü", "ue");
+			Character.toUpperCase(result.charAt(0));
+		}
+		else {
+			result = str.replaceAll("ö", "oe").replaceAll("ä", "ae").replaceAll("ü", "ue");
+		}
+		return result;
+	}
+	
 	public static String accentGermanVowel(String str) {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {

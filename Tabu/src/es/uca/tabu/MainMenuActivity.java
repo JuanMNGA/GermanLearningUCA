@@ -100,7 +100,7 @@ public class MainMenuActivity extends Activity {
 
 			if(ConnectionManager.getInstance(MainMenuActivity.this).networkWorks()) {
 				return ConnectionManager.getInstance().getNotes(
-						loginPreferences.getInt("id", -1));
+						loginPreferences.getInt("id", -1), loginPreferences.getString("language", ""));
 			}
 			else
 				return null;
@@ -252,6 +252,7 @@ public class MainMenuActivity extends Activity {
 					sm.setIMostPlayedLevel(jsonPlayStatistics.getInt("nivelmasjugado"));
 					sm.setIBestCat(jsonPlayStatistics.getString("mejorcategoria"));
 					sm.setIPlayed(jsonPlayStatistics.getInt("jugadas"));
+					sm.setIPlayedLevels(jsonPlayStatistics.getString("niveles"));
 					
 					JSONObject jsonDefStatistics  = json.getJSONObject(KEY_DEFSTATISTICS);
 					sm.setIAVGDefRating(jsonDefStatistics.getDouble("estrellas"));

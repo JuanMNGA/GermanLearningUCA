@@ -286,6 +286,7 @@ public class NewDefinitionActivity extends Activity {
 
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(NewDefinitionActivity.this).networkWorks()) {
+				
 				return ConnectionManager.getInstance().sendDefinition(
 						loginPreferences.getInt("id", -1),
 						article.getSelectedItem().toString(),

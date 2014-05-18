@@ -160,15 +160,19 @@ android.speech.tts.TextToSpeech.OnInitListener {
 
 	public Boolean validWord(Integer id, String word) {
 		
-		System.out.println("Palabra: " + word);
+		/*System.out.println("Palabra: " + word);
 		System.out.println("Solución: " + getCurrentQuestion().getName());
-		System.out.println("Respuesta1: " + TabuUtils.accentGerman(word));
+		System.out.println("Respuesta1: " + TabuUtils.changeBeta(word));
 		System.out.println("Respuesta2: " + TabuUtils.accentGermanVowel(word));
-		System.out.println("Respuesta3: " + TabuUtils.accentGerman(TabuUtils.accentGermanVowel(word)));
+		System.out.println("Respuesta3: " + TabuUtils.changeBeta(TabuUtils.accentGermanVowel(word)));*/
 		
-		return questions.contains(new Question(id, word, "", "", "", "", false)) || questions.contains(new Question(id, TabuUtils.accentGermanVowel(word), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.accentGerman(word), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.accentGerman(TabuUtils.accentGermanVowel(word)), "", "", "", "", false));
+		return questions.contains(new Question(id, word, "", "", "", "", false)) || 
+				questions.contains(new Question(id, TabuUtils.deAccentGermanVowel(word), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.inverseChangeBeta(word), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.inverseChangeBeta(TabuUtils.deAccentGermanVowel(word)), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.accentGermanVowel(word), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.changeBeta(word), "", "", "", "", false)) ||
+				questions.contains(new Question(id, TabuUtils.changeBeta(TabuUtils.accentGermanVowel(word)), "", "", "", "", false));
 	}
 
 	public void addWordToBloc(Integer id, String word) {
@@ -306,12 +310,15 @@ android.speech.tts.TextToSpeech.OnInitListener {
 		@Override
 		protected JSONObject doInBackground(Object... word) {
 			this.word = (String)word[1];
-
+			SharedPreferences loginPreferences;
+			loginPreferences = c.getSharedPreferences("loginPrefs", c.MODE_PRIVATE);
+			
 			//If there is access to Internet
 			if(ConnectionManager.getInstance(c).networkWorks()) {
 				return ConnectionManager.getInstance().addWordToBloc(
 						(Integer)word[0],
-						(String)word[1]);
+						(String)word[1],
+						loginPreferences.getString("language", ""));
 			}
 			else
 				return null;

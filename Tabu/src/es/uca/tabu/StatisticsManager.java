@@ -12,6 +12,7 @@ public class StatisticsManager {
 	private double IAVGDefRating;
 	private double IDefRate;
 	private int INumOfReports;
+	private String IPlayedLevels;
 	
 	private static StatisticsManager instance = null;
 	
@@ -103,6 +104,14 @@ public class StatisticsManager {
 
 	public void setINumOfReports(int iNumOfReports) {
 		INumOfReports = iNumOfReports;
+	}
+
+	public String getIPlayedLevels() {
+		return IPlayedLevels;
+	}
+
+	public void setIPlayedLevels(String iPlayedLevels) {
+		IPlayedLevels = iPlayedLevels;
 	}
 	
 }

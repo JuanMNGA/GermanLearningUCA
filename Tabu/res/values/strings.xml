@@ -118,6 +118,7 @@
     <string name="bestCat"> Best category</string>
     <string name="WorstCat"> Worst category</string>
     <string name="mostplayedlevel"> Most played level</string>
+    <string name="playedlevels"> Played levels</string>
     
     <!-- General -->
     <string name="Send"> Send </string>
