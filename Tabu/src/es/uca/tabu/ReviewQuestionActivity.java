@@ -224,11 +224,16 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 					int startSelection = definition.getSelectionStart();
 					int endSelection = definition.getSelectionEnd();
 
+					SharedPreferences loginPreferences;
+					loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+					GameManager gm = GameManager.getInstance(ReviewQuestionActivity.this);
+					
 					if(startSelection != endSelection) {
 						String selectedText = definition.getText().toString().substring(startSelection, endSelection);
 						if(!selectedText.contains(" ")) {
-							Toast.makeText(ReviewQuestionActivity.this, selectedText + " " + getString(R.string.added), Toast.LENGTH_SHORT)
-							.show();
+							gm.addWordToBloc(loginPreferences.getInt("id", -1), selectedText);
+							/*Toast.makeText(ReviewQuestionActivity.this, selectedText + " " + getString(R.string.added), Toast.LENGTH_SHORT)
+							.show();*/
 						}
 						else {
 							Toast.makeText(ReviewQuestionActivity.this, getString(R.string.oneword), Toast.LENGTH_SHORT)

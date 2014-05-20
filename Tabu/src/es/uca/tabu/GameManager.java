@@ -2,6 +2,7 @@ package es.uca.tabu;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -186,22 +187,37 @@ android.speech.tts.TextToSpeech.OnInitListener {
 
 	public void saveCurrentGame() {
 		//Creating a shared preference
-		Type arrayListOfQuestions = new TypeToken<ArrayList<Question>>(){}.getType();
+		SharedPreferences loginPreferences;
+		loginPreferences = c.getSharedPreferences("loginPrefs", c.MODE_PRIVATE);
+		
+		Type arrayListOfQuestions = new TypeToken<HashMap<String, ArrayList<Question>>>(){}.getType();
 		SharedPreferences  prefs = c.getSharedPreferences("last_game", c.MODE_PRIVATE);
 		Editor prefsEditor = prefs.edit();
 		Gson gson = new Gson();
-		String json_questions = gson.toJson(questions, arrayListOfQuestions);
-		prefsEditor.putString("questions", json_questions);
+		
+		HashMap<String, ArrayList<Question>> lastgames = new HashMap<String, ArrayList<Question>>();
+		lastgames.put(loginPreferences.getString("language", ""), questions);
+		
+		String json_questions = gson.toJson(lastgames, arrayListOfQuestions);
+		prefsEditor.putString("games", json_questions);
+		
 		prefsEditor.commit();
 	}
 	
 	public boolean initializeFromSharedPreferences() {
+		SharedPreferences loginPreferences;
+		loginPreferences = c.getSharedPreferences("loginPrefs", c.MODE_PRIVATE);
+		
 		SharedPreferences  prefs = c.getSharedPreferences("last_game", c.MODE_PRIVATE);
 		Gson gson = new Gson();
-	    String json = prefs.getString("questions", "");
+	    String json = prefs.getString("games", "");
 	    if(json.compareTo("") != 0) {
-	    	Type arrayListOfQuestions = new TypeToken<ArrayList<Question>>(){}.getType();
-	    	questions = gson.fromJson(json, arrayListOfQuestions);
+	    	Type arrayListOfQuestions = new TypeToken<HashMap<String, ArrayList<Question>>>(){}.getType();
+	    	
+	    	questions = ((HashMap<String, ArrayList<Question>>)gson.fromJson(json, arrayListOfQuestions)).get(loginPreferences.getString("language", ""));
+	    	if(questions == null) // No hay para ese idioma
+	    		return false;
+	    	
 	    	numberOfQuestions = questions.size();
 	    	return true;
 	    }
