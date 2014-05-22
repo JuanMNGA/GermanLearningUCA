@@ -321,7 +321,8 @@ public class ConnectionManager {
 		//server = new String("http://192.168.1.35/tabu/");
 		//server = new String("http://94.247.31.212/tabu/");
 		//server = new String("http://94.247.31.212/tabu/Granada/");
-		server = new String("http://94.247.31.212/tabu/UCA_Multilingue/");
+		//server = new String("http://94.247.31.212/tabu/UCA_Multilingue/");
+		server = new String("http://94.247.31.212/tabu/EOI_Multilingue/");
 		jsonParser = new JSONParser();
 	}
 	

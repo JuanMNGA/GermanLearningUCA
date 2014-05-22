@@ -3,6 +3,7 @@ package es.uca.tabu;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -167,14 +168,23 @@ android.speech.tts.TextToSpeech.OnInitListener {
 		System.out.println("Respuesta2: " + TabuUtils.accentGermanVowel(word));
 		System.out.println("Respuesta3: " + TabuUtils.changeBeta(TabuUtils.accentGermanVowel(word)));*/
 		
-		return questions.contains(new Question(id, word, "", "", "", "", false)) || 
-				questions.contains(new Question(id, TabuUtils.deAccentGermanVowel(word), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.inverseChangeBeta(word), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.inverseChangeBeta(TabuUtils.deAccentGermanVowel(word)), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.accentGermanVowel(word), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.changeBeta(word), "", "", "", "", false)) ||
-				questions.contains(new Question(id, TabuUtils.changeBeta(TabuUtils.accentGermanVowel(word)), "", "", "", "", false));
-	}
+		Locale current = c.getResources().getConfiguration().locale;
+		if(current == Locale.GERMAN) {
+			return questions.contains(new Question(id, word, "", "", "", "", false)) || 
+					questions.contains(new Question(id, TabuUtils.deAccentGermanVowel(word), "", "", "", "", false)) ||
+					questions.contains(new Question(id, TabuUtils.inverseChangeBeta(word), "", "", "", "", false)) ||
+					questions.contains(new Question(id, TabuUtils.inverseChangeBeta(TabuUtils.deAccentGermanVowel(word)), "", "", "", "", false)) ||
+					questions.contains(new Question(id, TabuUtils.accentGermanVowel(word), "", "", "", "", false)) ||
+					questions.contains(new Question(id, TabuUtils.changeBeta(word), "", "", "", "", false)) ||
+					questions.contains(new Question(id, TabuUtils.changeBeta(TabuUtils.accentGermanVowel(word)), "", "", "", "", false));
+		}
+		else if(current == Locale.UK) {
+			return questions.contains(new Question(id, word, "", "", "", "", false));
+		}
+		
+		return false;
+		
+		}
 
 	public void addWordToBloc(Integer id, String word) {
 		new addWord().execute(id,word);
