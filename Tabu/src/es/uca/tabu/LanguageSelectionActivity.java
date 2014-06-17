@@ -14,7 +14,7 @@ import android.widget.ImageView;
 
 public class LanguageSelectionActivity extends Activity {
 	
-	ImageView uk, germany;
+	ImageView uk, germany, russia;
 
 	private SharedPreferences loginPreferences;
 	private SharedPreferences.Editor loginPrefsEditor;
@@ -42,11 +42,28 @@ public class LanguageSelectionActivity extends Activity {
 		
 		uk = (ImageView) findViewById(R.id.uk);
 		germany = (ImageView) findViewById(R.id.germany);
+		russia = (ImageView) findViewById(R.id.russia);
 		
 		uk.setOnClickListener(new View.OnClickListener() {
 			   //@Override
 			   public void onClick(View v) {
 					conf.locale = Locale.UK;
+					res.updateConfiguration(conf, dm);
+					
+					loginPrefsEditor.putString("language", conf.locale.toString());
+					loginPrefsEditor.commit();
+
+					Intent mainmenu = new Intent(getApplicationContext(), LoginActivity.class);
+					mainmenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(mainmenu);
+					
+			   }        
+			});
+		
+		russia.setOnClickListener(new View.OnClickListener() {
+			   //@Override
+			   public void onClick(View v) {
+					conf.locale = new Locale("ru");
 					res.updateConfiguration(conf, dm);
 					
 					loginPrefsEditor.putString("language", conf.locale.toString());

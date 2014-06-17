@@ -1,6 +1,9 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +43,7 @@ import android.support.v4.app.NavUtils;
 public class PlayMenuActivity extends FragmentActivity implements NumberPicker.OnValueChangeListener {
 
 	private static String KEY_QUESTIONS = "questions";
+	private static String KEY_CATEGORIES = "info";
 
 	NumberPicker np;
 	NumberPicker lp;
@@ -54,6 +58,34 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 	Animation fadeIn;
 	ImageCategoriesAdapter adapter;
+	
+	public class Category {
+		public int id;
+		public String name;
+		private Map<Integer, Integer> questionsPerLevel = new HashMap<Integer, Integer>();
+		
+		public Category(int id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+		
+		public void addLevelInfo(Integer level, Integer numQuestions) {
+			questionsPerLevel.put(level, numQuestions);
+		}
+		
+		public int getNumOfQuestionsForLevel(Integer level) {
+			return questionsPerLevel.get(level);
+		}
+		
+		public int getTotal() {
+			int total=0;
+			for(int i : questionsPerLevel.values())
+				total+=i;
+			return total;
+		}
+	}
+	
+	List<Category> categoriesModel = new ArrayList<Category>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +131,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 			public void onClick(View v) {
 				applyToAllInGridView(toApply);
 				toApply=!toApply;
-				new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
+				updateQuestionsWheel(lp.getValue(), getCheckedCategories());
 			} 
 		});
 
@@ -495,16 +527,26 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.noNetwork),PlayMenuActivity.this);
 				}
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
-					final ArrayList<String> parsedCategories = new ArrayList<String>();
-					ArrayList<Integer> parsedIds = new ArrayList<Integer>();
-					JSONArray categories = json.getJSONArray(TabuUtils.KEY_CATEGORIES);
-					JSONArray ids = json.getJSONArray(TabuUtils.KEY_IDS);
-					for(int i=0; i<categories.length(); i++) {
-						parsedCategories.add((String) categories.get(i));
-						parsedIds.add(ids.getInt(i));
+					
+					
+					
+					JSONObject categoriesInfo = json.getJSONObject(KEY_CATEGORIES);
+					
+					// Populate categoriesModel
+					for(int i=0; i<categoriesInfo.length(); i++) {
+						int id_category = i+1;
+						JSONObject categoryInfo = categoriesInfo.getJSONObject(String.valueOf(id_category));
+						Category c = new Category(id_category, categoryInfo.getString("nombre"));
+						for(int j=1; j<=4; j++)
+							c.addLevelInfo(j, categoryInfo.getInt(String.valueOf(j)));
+						categoriesModel.add(c);
 					}
+					
+					adapter = new ImageCategoriesAdapter(PlayMenuActivity.this, categoriesModel);
+					
+					dialog.cancel();
 
-					adapter = new ImageCategoriesAdapter(PlayMenuActivity.this, parsedCategories, parsedIds);
+					//adapter = new ImageCategoriesAdapter(PlayMenuActivity.this, parsedCategories, parsedIds);
 					ViewGroup.LayoutParams glp = gridview.getLayoutParams();
 					ViewGroup.LayoutParams settingsLp = settings.getLayoutParams();
 					ViewGroup.LayoutParams selectAllLp = selectAllBtn.getLayoutParams();
@@ -538,13 +580,13 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 								MarkableImageView miv = (MarkableImageView) v;
 								miv.setChecked(!miv.isChecked());
 								toast.cancel();
-								toast = Toast.makeText(PlayMenuActivity.this, parsedCategories.get(position-1), Toast.LENGTH_SHORT);
+								toast = Toast.makeText(PlayMenuActivity.this, categoriesModel.get(position-1).name, Toast.LENGTH_SHORT);
 								toast.show();
 							}
-							new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
+							
+							updateQuestionsWheel(lp.getValue(), getCheckedCategories());
 						}
 					});
-					//selectAll.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, np.getHeight()));
 
 					settings.startAnimation(fadeIn);
 					fadeIn.setAnimationListener(new AnimationListener() {
@@ -589,6 +631,11 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 			MarkableImageView imageView = (MarkableImageView) ica.getView(i,null,null);
 			imageView.setChecked(checked);
 		}
+		// Display All or None according to checked value
+		if(checked)
+			selectAllBtn.setText(getResources().getString(R.string.none));
+		else
+			selectAllBtn.setText(getResources().getString(R.string.selectAll));
 	}
 
 	private ArrayList<Integer> getCheckedCategories() {
@@ -601,6 +648,27 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		return checkedCategories;
 	}
 
+	private void updateQuestionsWheel(Integer level, List<Integer> checkedCategories) {
+		int total=0;
+		
+		for(Integer i : checkedCategories) {
+			for(Category cat : categoriesModel) {
+				if(i == cat.id) {
+					if(level == 5) { //All
+						total += cat.getTotal();
+					}
+					else {
+						total += cat.getNumOfQuestionsForLevel(level);
+					}
+					break;
+				}
+			}
+		}
+		np.setMaxValue(total);
+		if(np.getMaxValue() > 0)
+			np.setValue(1);
+	}
+	
 	private boolean atLeastOneCategorySelected() {
 		for(int i=1; i<gridview.getCount(); i++) {
 			MarkableImageView imageView = (MarkableImageView) gridview.getAdapter().getView(i,null,null);
@@ -614,7 +682,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 	@Override
 	public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 		// TODO Auto-generated method stub
-		new QuestionsQuery().execute(newVal, getCheckedCategories());
+		updateQuestionsWheel(lp.getValue(), getCheckedCategories());
 
 	}
 }

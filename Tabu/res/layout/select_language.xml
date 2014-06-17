@@ -11,17 +11,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30px"
-        android:padding="0px"
         android:clickable="true"
+        android:padding="0px"
         android:src="@drawable/uk" />
 
     <ImageView
         android:id="@+id/germany"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30px"
         android:layout_marginTop="30px"
-        android:padding="0px"
         android:clickable="true"
+        android:padding="0px"
         android:src="@drawable/germany" />
+
+    <ImageView
+        android:id="@+id/russia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30px"
+        android:clickable="true"
+        android:padding="0px"
+        android:src="@drawable/russia" />
 
 </LinearLayout>

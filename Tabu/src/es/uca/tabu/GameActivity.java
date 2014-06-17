@@ -378,6 +378,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		rb.setVisibility(View.GONE);
 		dictionary.setVisibility(View.GONE);
 		audioBtn.setVisibility(View.GONE);
+		submit.setText(this.getResources().getString(R.string.guess));
 		if(bh != null)
 			bh.dismiss();
 		palabra.requestFocus();
@@ -421,6 +422,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		
 		// Rate definition ballonhint!
 		showRateTip();
+		submit.setText(this.getResources().getString(R.string.rate));
 		submit.setEnabled(true);
 		
 		imm.hideSoftInputFromWindow(palabra.getWindowToken(), 0);

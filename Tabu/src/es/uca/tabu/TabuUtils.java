@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -396,30 +397,54 @@ public class TabuUtils {
 			return "#9CCB19"; //GREEN
 	}
 	
-	public static String translateCategory(String category) {
-		Map<String, String> englishCategories = new HashMap<String, String>();
-		englishCategories.put("food_drink", "essen_trinken");
-		englishCategories.put("weather_seasons", "wetter_jahreszeiten");
-		englishCategories.put("weeks_months", "wochentage_monate");
-		englishCategories.put("free_time", "freizeit");
-		englishCategories.put("appearance", "aussehen");
-		englishCategories.put("personality", "charaktereigenschaften");
-		englishCategories.put("jobs", "berufe");
-		englishCategories.put("opinions", "eine_meinung_aussern");
-		englishCategories.put("home", "wohnung");
-		englishCategories.put("clothes_fashion", "kleidung_mode");
-		englishCategories.put("countries_languages_nationalities", "lander_sprachen_nationalitat");
-		englishCategories.put("studies", "studium_universitat");
-		englishCategories.put("family_friends", "familie_freunde");
-		englishCategories.put("meeting_a_person", "begrussen_sich_vorstellen");
-		englishCategories.put("feelings", "gefuhle_befinden");
-		englishCategories.put("city", "stadt");
-		englishCategories.put("daily_life", "tagesablauf");
-		
-		if(englishCategories.containsKey(category))
-			return englishCategories.get(category);
-		else 
-			return category;
+	public static String translateCategory(Context c, String category) {
+		Locale current = c.getResources().getConfiguration().locale;
+		if(current == Locale.UK) {
+			Map<String, String> englishCategories = new HashMap<String, String>();
+			englishCategories.put("food_drink", "essen_trinken");
+			englishCategories.put("weather_seasons", "wetter_jahreszeiten");
+			englishCategories.put("weeks_months", "wochentage_monate");
+			englishCategories.put("free_time", "freizeit");
+			englishCategories.put("appearance", "aussehen");
+			englishCategories.put("personality", "charaktereigenschaften");
+			englishCategories.put("jobs", "berufe");
+			englishCategories.put("opinions", "eine_meinung_aussern");
+			englishCategories.put("home", "wohnung");
+			englishCategories.put("clothes_fashion", "kleidung_mode");
+			englishCategories.put("countries_languages_nationalities", "lander_sprachen_nationalitat");
+			englishCategories.put("studies", "studium_universitat");
+			englishCategories.put("family_friends", "familie_freunde");
+			englishCategories.put("meeting_a_person", "begrussen_sich_vorstellen");
+			englishCategories.put("feelings", "gefuhle_befinden");
+			englishCategories.put("city", "stadt");
+			englishCategories.put("daily_life", "tagesablauf");
+			
+			if(englishCategories.containsKey(category))
+				return englishCategories.get(category);
+		}
+		else if(current.getCountry().compareTo("ru") != 0) {
+			Map<String, String> russianCategories = new HashMap<String, String>();
+			russianCategories.put("еда_и_напитки", "essen_trinken");
+			russianCategories.put("погода_и_времена_года", "wetter_jahreszeiten");
+			russianCategories.put("свободное_время", "freizeit");
+			russianCategories.put("внешность", "aussehen");
+			russianCategories.put("характер", "charaktereigenschaften");
+			russianCategories.put("профессии", "berufe");
+			russianCategories.put("Мнения", "eine_meinung_aussern");
+			russianCategories.put("дом", "wohnung");
+			russianCategories.put("Одежда__мода", "kleidung_mode");
+			russianCategories.put("страны_языки_национальност", "lander_sprachen_nationalitat");
+			russianCategories.put("обучение", "studium_universitat");
+			russianCategories.put("семья_друзья", "familie_freunde");
+			russianCategories.put("при_встрече", "begrussen_sich_vorstellen");
+			russianCategories.put("чувства", "gefuhle_befinden");
+			russianCategories.put("город", "stadt");
+			
+			if(russianCategories.containsKey(category))
+				return russianCategories.get(category);
+		}
+		return category;
+
 	}
 	
 }

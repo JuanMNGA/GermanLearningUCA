@@ -74,6 +74,7 @@
     <string name="startGame"> Empezar </string>
     <string name="allLevels">Todos</string>
     <string name="selectAll"> Todas </string>
+    <string name="none"> Ninguna </string>
     <string name="atLeastOneCategory"> Selecciona al menos una categoría </string>
     <string name="atLeastOneQuestion"> Selecciona al menos una pregunta </string>
 
@@ -112,6 +113,8 @@
     
     <!-- General -->
     <string name="Send"> Enviar </string>
+	<string name="guess"> Guess </string>
+    <string name="rate"> Evalúa </string>
     <string name="updating"> Actualizando </string>
     <string name="loading"> Cargando</string>
     <string name="ok"> Ok </string>

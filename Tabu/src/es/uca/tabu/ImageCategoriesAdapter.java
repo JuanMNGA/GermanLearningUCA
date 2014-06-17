@@ -1,7 +1,9 @@
 package es.uca.tabu;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import es.uca.tabu.PlayMenuActivity.Category;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,10 +17,10 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 
 	private ArrayList<MarkableImageView> mImageList;
 
-	public ImageCategoriesAdapter(Context c, ArrayList<String> parsedCategories, ArrayList<Integer> parsedIds) {
+	public ImageCategoriesAdapter(Context c, List<Category> categoriesModel) {
 		context = c;
-		Integer idImage;
 		mImageList = (ArrayList<MarkableImageView>) new ArrayList<MarkableImageView>();
+		Integer idImage;
 		MarkableImageView imageView;
 		
 		// Random Icon
@@ -26,8 +28,6 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 		BitmapDrawable bd = (BitmapDrawable) c.getResources().getDrawable(idImage);
 		int w = bd.getBitmap().getWidth();
 		int h = bd.getBitmap().getHeight();
-		//System.out.println("ALTURA: " + h + ", ANCHURA: " + w);
-		
 		if(idImage != 0) {
 			imageView = new MarkableImageView(context, -1, false);
 			//imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
@@ -36,24 +36,25 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 			imageView.setImageResource(idImage);
 			mImageList.add(imageView);
 		}
-
-		for(int i=0; i<parsedCategories.size(); i++) {
-			idImage = TabuUtils.getDrawable(c, TabuUtils.translateCategory(adaptResource(parsedCategories.get(i))));
+		
+		for(Category cat : categoriesModel) {
+			idImage = TabuUtils.getDrawable(c, TabuUtils.translateCategory(context, adaptResource(cat.name)));
 			if(idImage != 0) {
 				bd = (BitmapDrawable) c.getResources().getDrawable(idImage);
 				w = bd.getBitmap().getWidth();
 				h = bd.getBitmap().getHeight();
-				imageView = new MarkableImageView(context, parsedIds.get(i), false);
+				imageView = new MarkableImageView(context, cat.id, false);
 				//imageView.setLayoutParams(new GridView.LayoutParams(125, 125));
 				imageView.setLayoutParams(new GridView.LayoutParams(w, h));
 				imageView.setScaleType(MarkableImageView.ScaleType.CENTER_CROP);
 				imageView.setImageResource(idImage);
 				mImageList.add(imageView);
 				
-				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", added");
+				System.out.println("Imagen( " + idImage + " ) " + adaptResource(cat.name) + ", added");
 			} else
-				System.out.println("Imagen( " + idImage + " ) " + adaptResource(parsedCategories.get(i)) + ", no existe");
+				System.out.println("Imagen( " + idImage + " ) " + adaptResource(cat.name) + ", no existe");
 		}
+		
 	}
 
 	private String adaptResource(String str) {

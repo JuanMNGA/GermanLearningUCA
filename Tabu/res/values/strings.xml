@@ -75,6 +75,7 @@
     <string name="numQuestions"> Questions: </string>
     <string name="startGame"> Start </string>
     <string name="selectAll"> All </string>
+    <string name="none"> None </string>
     <string name="allLevels">All</string>
     <string name="atLeastOneCategory"> You must select at least one category </string>
     <string name="atLeastOneQuestion"> You must select at least one question </string>
@@ -122,6 +123,8 @@
     
     <!-- General -->
     <string name="Send"> Send </string>
+    <string name="guess"> Guess </string>
+    <string name="rate"> Rate </string>
     <string name="updating"> Updating </string>
     <string name="loading"> Loading</string>
     <string name="ok"> Ok </string>

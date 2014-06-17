@@ -181,10 +181,11 @@ android.speech.tts.TextToSpeech.OnInitListener {
 		else if(current == Locale.UK) {
 			return questions.contains(new Question(id, word, "", "", "", "", false));
 		}
-		
-		return false;
-		
+		else {
+			return questions.contains(new Question(id, word, "", "", "", "", false));
 		}
+				
+	}
 
 	public void addWordToBloc(Integer id, String word) {
 		new addWord().execute(id,word);
