@@ -4,7 +4,7 @@
     <string name="app_name">Guess It! Language Trainer</string>
     <string name="action_settings">Optionen</string>
     <string name="hello_world">Hallo!</string>
-    <string name="new_register">Bist du neu? Registrier dich hier!</string>
+    <string name="new_register">Neue Benutzer</string>
     <string name="email">E-Mail</string>
     <string name="password">Kennwort</string>
     <string name="login">Login</string>
@@ -66,6 +66,7 @@
     <string name="reportReason"> Selektier das Motiv!</string>
     <string name="sureExit"> Are you sure you want to QUIT? </string>
     <string name="punish"> Please complete the game </string>
+    <string name="gameSettings"> Game Settings</string>
 
     <!-- Play Menu Activity -->
     <string name="PlayerVsComputer"> Single Player Mode</string>

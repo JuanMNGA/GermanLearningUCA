@@ -4,7 +4,7 @@
     <string name="app_name">Guess It! Language Trainer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="new_register">New to Tabu? Register here!</string>
+    <string name="new_register">New user</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -77,6 +77,7 @@
     <string name="selectAll"> All </string>
     <string name="none"> None </string>
     <string name="allLevels">All</string>
+    <string name="gameSettings"> Game Settings</string>
     <string name="atLeastOneCategory"> You must select at least one category </string>
     <string name="atLeastOneQuestion"> You must select at least one question </string>
 

@@ -2,20 +2,20 @@ package es.uca.tabu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import es.uca.tabu.utils.Environment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,13 +26,10 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,7 +50,8 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 	View questionsLayout;
 	Button selectAllBtn;
 	Button startGameBtn;
-
+	TextView title;
+	
 	Boolean toApply=true;
 
 	Animation fadeIn;
@@ -74,7 +72,8 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		}
 		
 		public int getNumOfQuestionsForLevel(Integer level) {
-			return questionsPerLevel.get(level);
+			Object numQuestions = questionsPerLevel.get(level);
+			return (Integer) ((numQuestions != null) ? numQuestions : 0);
 		}
 		
 		public int getTotal() {
@@ -94,15 +93,9 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		// Show the Up button in the action bar.
 		setupActionBar();
 
-		final Button playerVsComputer = (Button) findViewById(R.id.PlayerVsComputerBtn);
-		final Button playerVsPlayer = (Button) findViewById(R.id.PlayerVsPlayerBtn);
-		final Button groupQueue = (Button) findViewById(R.id.GroupQueueBtn);
-
-		playerVsPlayer.setEnabled(false);
-		groupQueue.setEnabled(false);
-
 		selectAllBtn = (Button) findViewById(R.id.selectAllBtn);
 		startGameBtn = (Button) findViewById(R.id.startBtn);
+		title = (TextView) findViewById(R.id.title);
 
 		settings = (View) findViewById(R.id.settings);
 		np = (NumberPicker) findViewById(R.id.numberPicker);
@@ -126,6 +119,13 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 		gridview = (GridView) findViewById(R.id.gridview);
 
+		
+
+		//Set title font size
+		title.setTextSize(TabuUtils.getFontSizeFromBounds(title.getText().toString(), 
+				TabuUtils.dpToPx(Environment.getInstance().getScreenWidth()-150), 
+				TabuUtils.dpToPx(Environment.getInstance().getScreenHeight()/7)));
+		
 		//Set as (un)checked all categories
 		selectAllBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -134,7 +134,64 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 				updateQuestionsWheel(lp.getValue(), getCheckedCategories());
 			} 
 		});
+	
+		settings.setVisibility(View.INVISIBLE);
 
+		//StartGameBtn height
+		BitmapDrawable bd = (BitmapDrawable) getResources().getDrawable(R.drawable.start_game);
+		int startBtnHeight = bd.getBitmap().getHeight();
+		int lettersInfoHeight = ((TextView) findViewById(R.id.textView2)).getHeight();
+		RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) np.getLayoutParams();
+		layoutParams.height = startBtnHeight;
+		np.setLayoutParams(layoutParams);
+
+		layoutParams = (android.widget.RelativeLayout.LayoutParams) lp.getLayoutParams();
+		layoutParams.height = startBtnHeight;
+		lp.setLayoutParams(layoutParams);
+
+		//np.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
+		// Show settings layout
+		np.setMinValue(1);
+		np.setMaxValue(2);
+		//Levels
+		//lp.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
+		lp.setMinValue(1);
+		lp.setMaxValue(5);
+		lp.setDisplayedValues(new String[] { "1", "2", "3", "4", PlayMenuActivity.this.getResources().getString(R.string.allLevels)});
+		lp.setValue(5);
+
+		//settings.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (height<<2), 2.5f));
+
+
+		new CategoriesQuery().execute();
+		new QuestionsQuery().execute(lp.getValue(), getCheckedCategories());
+
+		startGameBtn.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				if(atLeastOneCategorySelected()) {
+					if(np.getValue() > 0) {
+						startGameBtn.setEnabled(false);
+						Intent startGame = new Intent(getApplicationContext(), GameActivity.class);
+						startGame.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startGame.putExtra("EXTRA_CHECKED_CATEGORIES", getCheckedCategories());
+						startGame.putExtra("EXTRA_NUM_OF_QUESTIONS", np.getValue());
+						startGame.putExtra("EXTRA_LEVEL", lp.getValue());
+						startActivity(startGame);
+						finish();
+					}
+					else {
+						TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneQuestion),PlayMenuActivity.this);
+					}
+				}
+				else {
+					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.atLeastOneCategory),PlayMenuActivity.this);
+				}
+			} 
+		});
+		
+	}
+
+		/*
 		// When clicking PvsC button fade out the rest and place it in the top
 		playerVsComputer.setOnClickListener(new View.OnClickListener() {
 
@@ -176,7 +233,6 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 						layoutParams.height = startBtnHeight;
 						lp.setLayoutParams(layoutParams);
 
-						System.out.println("START: " + String.valueOf(startBtnHeight) + " LETTERS: " + String.valueOf(lettersInfoHeight));
 
 						//np.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, startGameBtn.getHeight()));
 						// Show settings layout
@@ -409,7 +465,7 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 
 	}
 
-
+	*/
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
@@ -528,17 +584,23 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 				}
 				if (!json.isNull(TabuUtils.KEY_SUCCESS)) {
 					
-					
-					
 					JSONObject categoriesInfo = json.getJSONObject(KEY_CATEGORIES);
+					Iterator<?> keys = categoriesInfo.keys();
 					
-					// Populate categoriesModel
-					for(int i=0; i<categoriesInfo.length(); i++) {
-						int id_category = i+1;
-						JSONObject categoryInfo = categoriesInfo.getJSONObject(String.valueOf(id_category));
-						Category c = new Category(id_category, categoryInfo.getString("nombre"));
-						for(int j=1; j<=4; j++)
-							c.addLevelInfo(j, categoryInfo.getInt(String.valueOf(j)));
+					//Populate categoriesModel
+					while(keys.hasNext()) {
+						String key = (String) keys.next();
+						JSONObject categoryInfo = categoriesInfo.getJSONObject(key);
+						System.out.println(categoryInfo.toString());
+						Category c = new Category(Integer.valueOf(key), categoryInfo.getString("nombre"));
+						for(int j=1; j<=4; j++) {
+							try {
+								c.addLevelInfo(j, categoryInfo.getInt(String.valueOf(j)));
+							}
+							catch(JSONException e) {
+								System.out.println("There are no questions for level " + j + " in category " + key);
+							}
+						}
 						categoriesModel.add(c);
 					}
 					
@@ -551,9 +613,10 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 					ViewGroup.LayoutParams settingsLp = settings.getLayoutParams();
 					ViewGroup.LayoutParams selectAllLp = selectAllBtn.getLayoutParams();
 
-					DisplayMetrics displaymetrics = new DisplayMetrics();
+					/*DisplayMetrics displaymetrics = new DisplayMetrics();
 					getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-					int height = displaymetrics.heightPixels;
+					int height = displaymetrics.heightPixels;*/
+					int height = Environment.getInstance().getScreenHeight();
 
 					int location[] = new int[2];
 					selectAllBtn.getLocationOnScreen(location);

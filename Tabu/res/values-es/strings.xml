@@ -4,7 +4,7 @@
     <string name="app_name">Guess It! Language Trainer</string>
     <string name="action_settings">Opciones</string>
     <string name="hello_world">Hola Mundo!</string>
-    <string name="new_register">¿Nuevo en Tabú? ¡Registrate aquí!</string>
+    <string name="new_register">Nuevo usuario</string>
     <string name="email">Email</string>
     <string name="password">Contraseña</string>
     <string name="login">Entrar</string>
@@ -75,6 +75,7 @@
     <string name="allLevels">Todos</string>
     <string name="selectAll"> Todas </string>
     <string name="none"> Ninguna </string>
+    <string name="gameSettings"> Opciones de juego</string>
     <string name="atLeastOneCategory"> Selecciona al menos una categoría </string>
     <string name="atLeastOneQuestion"> Selecciona al menos una pregunta </string>
 
