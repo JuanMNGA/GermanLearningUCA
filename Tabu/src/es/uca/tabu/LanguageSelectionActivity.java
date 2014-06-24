@@ -22,7 +22,7 @@ public class LanguageSelectionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.select_language);
 		
 		/* Temporalmente en alem�n */

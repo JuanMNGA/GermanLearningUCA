@@ -77,6 +77,16 @@
                 android:layout_marginTop="10dip"
                 android:background="@layout/rounded_button"
                 android:text="@string/newdef" />
+            
+            <!-- About Button -->
+
+            <Button
+                android:id="@+id/btnAbout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="@layout/rounded_button"
+                android:text="@string/about" />
         </LinearLayout>
         <!-- Login Form Ends -->
     </RelativeLayout>

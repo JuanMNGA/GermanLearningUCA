@@ -33,6 +33,7 @@ public class RegisterActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// Set View to register.xml
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.register);
 
 		TextView loginScreen = (TextView) findViewById(R.id.link_to_login);

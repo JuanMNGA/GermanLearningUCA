@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -44,9 +45,10 @@ public class NewDefinitionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.activity_new_definition);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		//setupActionBar();
 
 		article = (Spinner) findViewById(R.id.article);
 		word = (TextView) findViewById(R.id.writeNewDef);

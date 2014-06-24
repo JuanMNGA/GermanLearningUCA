@@ -18,6 +18,7 @@
     <string name="stats">Estadísticas</string>
     <string name="dictionary">Bloc de notas</string>
     <string name="newdef">Nueva definición</string>
+    <string name="about">Acerca de</string>
     <string name="title_activity_dictionary">Bloc de notas</string>
     <string name="title_activity_new_definition">Nueva Definición</string>
     <string name="title_activity_play_menu">Menú Jugar</string>
@@ -96,6 +97,15 @@
     <string name="newPassword"> Te hemos enviado una nueva contraseña al email. </string>
     <string name="sureReset"> ¿Seguro que quieres una NUEVA contraseña?</string>
     
+    <!-- About -->
+    <string name="implemented"> Desarrollado por </string>
+    <string name="designed"> Diseñado por </string>
+    <string name="languages"> Idiomas </string>
+    <string name="english"> Inglés </string>
+    <string name="german"> Alemán </string>
+    <string name="russian"> Ruso </string>
+    <string name="newCollaborator"> ¿Quieres que tu nombre aparezca aquí? Ponte en contacto con nosotros en </string>
+    <string name="guessItEmail"> guessit.languagetrainer@gmail.com </string>
     <!-- Reports -->
     <string name="improperContent"> Contenido no es correcto </string>
     <string name="offensiveContent"> Contenido ofensivo </string>

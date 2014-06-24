@@ -20,6 +20,7 @@ public class DictionaryActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TabuUtils.hideActionBar(this);
         setContentView(R.layout.activity_dictionary);
         
 		Bundle extras = getIntent().getExtras();
@@ -40,7 +41,7 @@ public class DictionaryActivity extends Activity {
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					// TODO Auto-generated method stub
-					//System.out.println("Elemento en posición: " + arg2);
+					//System.out.println("Elemento en posiciï¿½n: " + arg2);
 
 				}
 			});
@@ -57,7 +58,7 @@ public class DictionaryActivity extends Activity {
     
     private class ContentAdapter extends ArrayAdapter<String> implements SectionIndexer {
     	
-    	private String mSections = "#AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzÜüÄä";
+    	private String mSections = "#AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZzï¿½ï¿½ï¿½ï¿½";
     	
 		public ContentAdapter(Context context, int textViewResourceId,
 				List<String> objects) {

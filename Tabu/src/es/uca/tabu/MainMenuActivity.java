@@ -27,6 +27,7 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.main_menu);
 
 		StatisticsManager.reset();
@@ -63,6 +64,15 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				new initializeStatistics().execute();
+			}
+		});
+		
+		Button about = (Button) findViewById(R.id.btnAbout);
+		about.setOnClickListener(new View.OnClickListener() {
+
+			public void onClick(View v) {
+				Intent i = new Intent(getApplicationContext(), AboutActivity.class);
+				startActivity(i);
 			}
 		});
 		

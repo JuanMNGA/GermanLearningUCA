@@ -89,9 +89,10 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.activity_play_menu);
-		// Show the Up button in the action bar.
-		setupActionBar();
+		//setupActionBar();
+
 
 		selectAllBtn = (Button) findViewById(R.id.selectAllBtn);
 		startGameBtn = (Button) findViewById(R.id.startBtn);

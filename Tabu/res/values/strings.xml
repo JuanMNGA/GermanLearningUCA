@@ -18,6 +18,7 @@
     <string name="stats">Statistics</string>
     <string name="dictionary">Notebook</string>
     <string name="newdef">New Definition</string>
+    <string name="about">About</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_play_menu">Play Menu</string>
@@ -97,7 +98,17 @@
     <string name="recover"> Forgot my password</string>
     <string name="newPassword"> A new password has been sent to your email</string>
     <string name="sureReset"> Are you sure that you want to RESET your password?</string>
-
+    
+    <!-- About -->
+    <string name="implemented"> Developed by </string>
+    <string name="designed"> Designed by </string>
+    <string name="languages"> Languages </string>
+    <string name="english"> English </string>
+    <string name="german"> German </string>
+    <string name="russian"> Russian </string>
+    <string name="newCollaborator"> Do you want your name to appear here? Contact us at</string>
+    <string name="guessItEmail"> guessit.languagetrainer@gmail.com </string>
+    
     <!-- Reports -->
     <string name="improperContent"> Improper content </string>
     <string name="offensiveContent"> Offensive content </string>
@@ -121,7 +132,7 @@
     <string name="WorstCat"> Worst category</string>
     <string name="mostplayedlevel"> Most played level</string>
     <string name="playedlevels"> Played levels</string>
-    
+
     <!-- General -->
     <string name="Send"> Send </string>
     <string name="guess"> Guess </string>
@@ -141,5 +152,6 @@
     <string name="title_activity_review_question">ReviewQuestionActivity</string>
     <string name="rateDef"> ¡Rate this definition! </string>
     <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>

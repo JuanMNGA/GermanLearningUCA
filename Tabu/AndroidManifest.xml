@@ -3,7 +3,7 @@
     package="es.uca.tabu"
     android:versionCode="1"
     android:versionName="1.0" >
-    
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
@@ -130,6 +130,14 @@
             android:configChanges="locale|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppBaseTheme" >
+        </activity>
+        <activity
+            android:name="es.uca.tabu.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:parentActivityName="es.uca.tabu.MainMenuActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.uca.tabu.MainMenuActivity" />
         </activity>
     </application>
 

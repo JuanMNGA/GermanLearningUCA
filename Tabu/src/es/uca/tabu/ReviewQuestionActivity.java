@@ -53,8 +53,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//Hide Action bar
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getActionBar().hide();
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.activity_review_question);
 
 		rated = false;

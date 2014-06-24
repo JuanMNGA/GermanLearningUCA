@@ -32,7 +32,7 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		
+		TabuUtils.hideActionBar(this);
 		// setting default screen to login.xml
 		setContentView(R.layout.login);
 

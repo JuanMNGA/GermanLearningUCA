@@ -35,9 +35,10 @@ public class ResultActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.activity_result);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		//setupActionBar();
 		
 		questions = (TextView) findViewById(R.id.questions);
 		clues = (TextView) findViewById(R.id.clues);
