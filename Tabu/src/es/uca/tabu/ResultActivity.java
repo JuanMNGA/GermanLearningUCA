@@ -32,6 +32,13 @@ public class ResultActivity extends Activity {
 		super.onDestroy();
 	}
 	
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

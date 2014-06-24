@@ -80,6 +80,13 @@ public class RegisterActivity extends Activity {
 		});
 	}
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
+	
 	private class addUserTask extends AsyncTask<String, Object, JSONObject> {
 		ProgressDialog dialog;
 

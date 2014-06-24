@@ -482,6 +482,13 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		return true;
 	}
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

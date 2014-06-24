@@ -21,6 +21,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -399,7 +401,7 @@ public class TabuUtils {
 	
 	public static String translateCategory(Context c, String category) {
 		Locale current = c.getResources().getConfiguration().locale;
-		if(current == Locale.UK) {
+		if(current.getCountry().compareTo("en_gb") != 0) {
 			Map<String, String> englishCategories = new HashMap<String, String>();
 			englishCategories.put("food_drink", "essen_trinken");
 			englishCategories.put("weather_seasons", "wetter_jahreszeiten");
@@ -447,4 +449,17 @@ public class TabuUtils {
 
 	}
 	
+	public static void updateLanguage(Context c) {
+		SharedPreferences loginPreferences;
+		
+		final Resources res = c.getResources();
+		// Change locale settings in the app.
+		final DisplayMetrics dm = res.getDisplayMetrics();
+		final android.content.res.Configuration conf = res.getConfiguration();
+		
+		loginPreferences = c.getSharedPreferences("loginPrefs", c.MODE_PRIVATE);
+
+		conf.locale = new Locale(loginPreferences.getString("language", ""));
+		res.updateConfiguration(conf, dm);
+	}
 }

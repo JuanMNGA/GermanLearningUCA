@@ -2,6 +2,7 @@ package es.uca.tabu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import es.uca.tabu.PlayMenuActivity.Category;
 import android.content.Context;
@@ -50,10 +51,12 @@ public class ImageCategoriesAdapter extends BaseAdapter {
 				imageView.setImageResource(idImage);
 				mImageList.add(imageView);
 				
-				System.out.println("Imagen( " + idImage + " ) " + adaptResource(cat.name) + ", added");
+				System.out.println("Imagen( " + idImage + " ) " + TabuUtils.translateCategory(context, adaptResource(cat.name)) + ", added");
 			} else
-				System.out.println("Imagen( " + idImage + " ) " + adaptResource(cat.name) + ", no existe");
+				System.out.println("Imagen( " + idImage + " ) " + TabuUtils.translateCategory(context, adaptResource(cat.name)) + ", no existe");
 		}
+		//System.out.println(context.getResources().getConfiguration().locale.toString());
+		//System.out.println(Locale.UK.toString());
 		
 	}
 

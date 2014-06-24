@@ -137,6 +137,12 @@ public class LoginActivity extends Activity {
 		finish();
 	}
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -25,7 +25,6 @@ public class LanguageSelectionActivity extends Activity {
 		TabuUtils.hideActionBar(this);
 		setContentView(R.layout.select_language);
 		
-		/* Temporalmente en alem�n */
 		final Resources res = this.getResources();
 		// Change locale settings in the app.
 		final DisplayMetrics dm = res.getDisplayMetrics();

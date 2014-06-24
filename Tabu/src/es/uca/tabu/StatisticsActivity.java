@@ -121,10 +121,14 @@ public class StatisticsActivity extends ActionBarActivity {
 		finish();
 	}
 	
+
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 		overridePendingTransition(0, 0);
+		TabuUtils.updateLanguage(this);
+
 	}
 
 	/**

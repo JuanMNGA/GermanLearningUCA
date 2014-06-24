@@ -78,6 +78,13 @@ public class MainMenuActivity extends Activity {
 		
 	}
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		Intent mainmenu = new Intent(getApplicationContext(), LoginActivity.class);

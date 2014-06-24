@@ -177,6 +177,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
+            android:textStyle="bold"
             android:text="@string/guessItEmail"
             android:textSize="18sp" />
 

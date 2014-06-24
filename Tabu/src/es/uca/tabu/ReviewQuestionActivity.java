@@ -275,6 +275,13 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 		finish();
 	}
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

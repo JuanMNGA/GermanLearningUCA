@@ -66,6 +66,8 @@ public class PlayStatistics extends ActionBarActivity {
 
 	}
 
+	
+	
 	@Override
 	public void onBackPressed() {
 		Intent mainmenu = new Intent(getApplicationContext(), IndividualStatistics.class);
@@ -96,5 +98,6 @@ public class PlayStatistics extends ActionBarActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		overridePendingTransition(0, 0);
+		TabuUtils.updateLanguage(this);
 	}
 }

@@ -55,6 +55,12 @@ public class DictionaryActivity extends Activity {
     private String firstToUpper(String input) {
     	return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
     
     private class ContentAdapter extends ArrayAdapter<String> implements SectionIndexer {
     	

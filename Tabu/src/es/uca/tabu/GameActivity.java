@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 import com.google.common.base.Function;
+
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,6 +74,13 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	
 	InputMethodManager imm;
 
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		TabuUtils.updateLanguage(this);
+	}
+	
 	@Override
 	public void onBackPressed() {
 		TabuUtils.showConfirmDialog(getString(R.string.sureExit), getResources().getString(R.string.punish),
@@ -608,7 +616,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				int location[] = new int[] {15,height};
 
 				bh.setBalloonConfig(getString(R.string.rateDef), 
-						TabuUtils.getFontSizeFromBounds(getString(R.string.rateDef), width-30, height-30), 
+						TabuUtils.getFontSizeFromBounds(getString(R.string.rateDef), width-30, height-40), 
 						false, Color.WHITE, width, height);
 				bh.setBackgroundDrawable(getResources().getDrawable(R.drawable.bocadillo));
 				bh.delayedShow(10, location);

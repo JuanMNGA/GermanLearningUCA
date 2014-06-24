@@ -18,7 +18,7 @@
     <string name="stats">Statistiken</string>
     <string name="dictionary">Notizblock</string>
     <string name="newdef">Neue Definition</string>
-    <string name="about">About</string>
+    <string name="about">Credits</string>
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="title_activity_play_menu">Menü anzeigen</string>
@@ -100,13 +100,13 @@
     <string name="sureReset"> Are you sure that you want to RESET your password?</string>
 
     <!-- About -->
-    <string name="implemented"> Developed by </string>
-    <string name="designed"> Designed by </string>
-    <string name="languages"> Languages </string>
-    <string name="english"> English </string>
-    <string name="german"> German </string>
-    <string name="russian"> Russian </string>
-    <string name="newCollaborator"> Do you want your name to appear here? Contact us at </string>
+    <string name="implemented"> Entwickelt von </string>
+    <string name="designed"> Designed von </string>
+    <string name="languages"> Sprachen </string>
+    <string name="english"> Englisch </string>
+    <string name="german"> Deutsch </string>
+    <string name="russian"> Russisch </string>
+    <string name="newCollaborator"> Möchtest du, dass Dein Name hier erscheint? Schreib uns eine E-Mail an: </string>
     <string name="guessItEmail"> guessit.languagetrainer@gmail.com </string>
     
     <!-- Reports -->

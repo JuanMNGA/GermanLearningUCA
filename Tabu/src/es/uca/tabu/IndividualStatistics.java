@@ -122,5 +122,6 @@ public class IndividualStatistics extends ActionBarActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		overridePendingTransition(0, 0);
+		TabuUtils.updateLanguage(this);
 	}
 }
