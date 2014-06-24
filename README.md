@@ -6,6 +6,9 @@ Para ampliar información en español vaya a http://blogfacade.wordpress.com/
 
 It focuses on encouraging learners to communicate with each other and the language instructor through community driven learning activities. This way, students interact, amongst each other, by sharing, assessing and co-constructing their knowledge based on a highly interactive, ubiquitous and constructive learning approach that the APP implements.
 
+You can download it from:
+https://play.google.com/store/apps/details?id=es.uca.tabu
+
 It currently supports the following languages:
 * German version, coordinated by Anke Berns. Content created by Anke Berns, Sebastian Pitula, Andrea Calderón Márquez, Ignacio Calleja Olmedo and Pilar Romero Sevilla.
 * English version, coordinated by Anke Berns. Content created by Anke Berns, Sebastian Pitula, Andrea Calderón Márquez and Ignacio Calleja Olmedo.
