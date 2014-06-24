@@ -8,7 +8,7 @@ It focuses on encouraging learners to communicate with each other and the langua
 
 It currently supports the following languages:
 * German version, coordinated by Anke Berns. Content created by Anke Berns, Sebastian Pitula, Andrea Calderón Márquez, Ignacio Calleja Olmedo and Pilar Romero Sevilla.
-* English version, coordinated by Anke Berns. Content created by Anke Berns and Sebastian Pitula.
+* English version, coordinated by Anke Berns. Content created by Anke Berns, Sebastian Pitula, Andrea Calderón Márquez and Ignacio Calleja Olmedo.
 * Russian version, coordinated by Andrés Santana Arribas. Content created by Mariya Maiseyenka and Anna Kazakova
 
 If you want to provide definitions for a new language, let us know here: guessit.languagetrainer@gmail.com
