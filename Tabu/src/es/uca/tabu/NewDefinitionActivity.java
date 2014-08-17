@@ -29,7 +29,7 @@ import android.support.v4.app.NavUtils;
 
 public class NewDefinitionActivity extends Activity {
 
-	Spinner category=null;
+	Spinner categorySpinner=null;
 	NumberPicker np;
 	Button send;
 	Spinner article;
@@ -87,6 +87,18 @@ public class NewDefinitionActivity extends Activity {
 			np.setEnabled(false);
 			article.setSelection(articles.indexOf(articulo));
 			article.setEnabled(false);
+			
+			categorySpinner = (Spinner) findViewById(R.id.spinner1);
+
+			//Add items to spinner
+			ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(NewDefinitionActivity.this,
+					android.R.layout.simple_spinner_item);
+			categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			categorySpinner.setAdapter(categoryAdapter);
+			categoryAdapter.add(categoria);
+			categorySpinner.setSelection(categoryAdapter.getPosition(categoria));
+			categorySpinner.setEnabled(false);
+			
 		}
 		else
 		{
@@ -95,7 +107,7 @@ public class NewDefinitionActivity extends Activity {
 		
 		
 		//Initialize categories
-		new CategoriesQuery().execute();
+		//new CategoriesQuery().execute();
 
 		//If click send
 		send.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +123,7 @@ public class NewDefinitionActivity extends Activity {
 				else if(hint.getText().toString().isEmpty()) {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.emptyHint),NewDefinitionActivity.this);
 				}
-				else if(category==null) {
+				else if(categorySpinner==null) {
 					TabuUtils.showDialog(getResources().getString(R.string.error), getResources().getString(R.string.invalidCategory),NewDefinitionActivity.this);
 				}
 				else if(definition.getText().toString().compareTo(word.getText().toString()) == 0) {
@@ -186,7 +198,7 @@ public class NewDefinitionActivity extends Activity {
 		}
 	}
 
-	private class CategoriesQuery extends AsyncTask<Void, Void, JSONObject> {
+	/*private class CategoriesQuery extends AsyncTask<Void, Void, JSONObject> {
 		ProgressDialog dialog;
 
 		@Override
@@ -225,16 +237,16 @@ public class NewDefinitionActivity extends Activity {
 						parsedIds.add(ids.getInt(i));
 					}
 
-					category = (Spinner) findViewById(R.id.spinner1);
+					categorySpinner = (Spinner) findViewById(R.id.spinner1);
 
 					//Add items to spinner
 					ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(NewDefinitionActivity.this,
 							android.R.layout.simple_spinner_item, parsedCategories);
 					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					category.setAdapter(dataAdapter);
+					categorySpinner.setAdapter(dataAdapter);
 					
-					category.setSelection(parsedCategories.indexOf(categoria));
-					category.setEnabled(false);
+					categorySpinner.setSelection(parsedCategories.indexOf(categoria));
+					categorySpinner.setEnabled(false);
 					
 					dialog.dismiss();
 				}
@@ -247,7 +259,7 @@ public class NewDefinitionActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 	private class sendNewDefinition extends AsyncTask<Void, Void, JSONObject> {
 		ProgressDialog dialog;
@@ -304,7 +316,7 @@ public class NewDefinitionActivity extends Activity {
 						postpalabra,
 						hint.getText().toString(),
 						np.getValue(),
-						parsedIds.get(parsedCategories.indexOf(category.getSelectedItem().toString())),
+						categoria,
 						loginPreferences.getString("language", ""));
 			}
 			else

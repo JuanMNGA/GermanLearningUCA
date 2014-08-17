@@ -85,7 +85,9 @@ public class LoginActivity extends Activity {
 						loginPrefsEditor.putString("password", pass);
 						loginPrefsEditor.commit();
 					} else {
-						loginPrefsEditor.clear();
+						loginPrefsEditor.remove("saveLogin");
+						loginPrefsEditor.remove("email");
+						loginPrefsEditor.remove("password");
 						loginPrefsEditor.commit();
 					}
 

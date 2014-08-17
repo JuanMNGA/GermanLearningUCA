@@ -401,7 +401,12 @@ public class TabuUtils {
 	
 	public static String translateCategory(Context c, String category) {
 		Locale current = c.getResources().getConfiguration().locale;
-		if(current.getCountry().compareTo("en_gb") != 0) {
+		
+		System.out.println("Current locale: " + current.toString());
+
+		
+		if(current.toString().compareTo("en_gb") == 0) {
+			System.out.println("Translating from english...");
 			Map<String, String> englishCategories = new HashMap<String, String>();
 			englishCategories.put("food_drink", "essen_trinken");
 			englishCategories.put("weather_seasons", "wetter_jahreszeiten");
@@ -424,7 +429,10 @@ public class TabuUtils {
 			if(englishCategories.containsKey(category))
 				return englishCategories.get(category);
 		}
-		else if(current.getCountry().compareTo("ru") != 0) {
+		else if(current.toString().compareTo("ru") == 0) {
+			System.out.println("Translating from russian...");
+
+			
 			Map<String, String> russianCategories = new HashMap<String, String>();
 			russianCategories.put("еда_и_напитки", "essen_trinken");
 			russianCategories.put("погода_и_времена_года", "wetter_jahreszeiten");
@@ -461,5 +469,43 @@ public class TabuUtils {
 
 		conf.locale = new Locale(loginPreferences.getString("language", ""));
 		res.updateConfiguration(conf, dm);
+	}
+	
+	/**
+	 * Compares two version strings. 
+	 * 
+	 * Use this instead of String.compareTo() for a non-lexicographical 
+	 * comparison that works for version strings. e.g. "1.10".compareTo("1.6").
+	 * 
+	 * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
+	 * 
+	 * @param str1 a string of ordinal numbers separated by decimal points. 
+	 * @param str2 a string of ordinal numbers separated by decimal points.
+	 * @return The result is a negative integer if str1 is _numerically_ less than str2. 
+	 *         The result is a positive integer if str1 is _numerically_ greater than str2. 
+	 *         The result is zero if the strings are _numerically_ equal.
+	 */
+	static public Integer versionCompare(String str1, String str2)
+	{
+	    String[] vals1 = str1.split("\\.");
+	    String[] vals2 = str2.split("\\.");
+	    int i = 0;
+	    // set index to first non-equal ordinal or length of shortest version string
+	    while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) 
+	    {
+	      i++;
+	    }
+	    // compare first non-equal ordinal number
+	    if (i < vals1.length && i < vals2.length) 
+	    {
+	        int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+	        return Integer.signum(diff);
+	    }
+	    // the strings are equal or one string is a substring of the other
+	    // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
+	    else
+	    {
+	        return Integer.signum(vals1.length - vals2.length);
+	    }
 	}
 }

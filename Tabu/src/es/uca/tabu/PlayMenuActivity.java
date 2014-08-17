@@ -93,7 +93,6 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		setContentView(R.layout.activity_play_menu);
 		//setupActionBar();
 
-
 		selectAllBtn = (Button) findViewById(R.id.selectAllBtn);
 		startGameBtn = (Button) findViewById(R.id.startBtn);
 		title = (TextView) findViewById(R.id.title);
@@ -119,8 +118,6 @@ public class PlayMenuActivity extends FragmentActivity implements NumberPicker.O
 		scale.setDuration(1000);
 
 		gridview = (GridView) findViewById(R.id.gridview);
-
-		
 
 		//Set title font size
 		title.setTextSize(TabuUtils.getFontSizeFromBounds(title.getText().toString(), 

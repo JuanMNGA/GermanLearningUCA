@@ -46,6 +46,7 @@ public class ConnectionManager {
 	private static String addWord_tag = "addWord";
 	private static String sendReport_tag = "sendReport";
 	private static String getStatistics_tag = "get_statistics";
+	private static String getVersion_tag = "version";
 	
 	private static Context c = null;
 
@@ -270,7 +271,7 @@ public class ConnectionManager {
 		return json;
 	}
 	
-	public JSONObject sendDefinition(Integer user_id, String article, String word, String prepalabra, String postpalabra, String hint, Integer level, Integer category_id, String lang) {
+	public JSONObject sendDefinition(Integer user_id, String article, String word, String prepalabra, String postpalabra, String hint, Integer level, String category, String lang) {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", sendDefinition_tag));
 		params.add(new BasicNameValuePair("id_user", user_id.toString()));
@@ -280,7 +281,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("postpalabra", postpalabra));
 		params.add(new BasicNameValuePair("clue", hint));
 		params.add(new BasicNameValuePair("level", level.toString()));
-		params.add(new BasicNameValuePair("id_category", category_id.toString()));
+		params.add(new BasicNameValuePair("category", category));
 		params.add(new BasicNameValuePair("idioma", lang));
 		
 		System.out.println(params.toString());
@@ -312,13 +313,23 @@ public class ConnectionManager {
 		return json;
 	}
 	
+	public JSONObject getLastVersion() {
+		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
+		params.add(new BasicNameValuePair("tag", getVersion_tag));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+
+		return json;
+	}
+	
 	private ConnectionManager() {
 		httpclient = new DefaultHttpClient();
 		//server = new String("http://192.168.1.35/tabu/");
 		//server = new String("http://94.247.31.212/tabu/");
 		//server = new String("http://94.247.31.212/tabu/Granada/");
 		//server = new String("http://94.247.31.212/tabu/UCA_Multilingue/");
-		server = new String("http://94.247.31.212/tabu/EOI_Multilingue/");
+		//server = new String("http://94.247.31.212/tabu/EOI_Multilingue/");
+		server = new String("http://94.247.31.212/tabu/Australia/");
 		jsonParser = new JSONParser();
 	}
 	
