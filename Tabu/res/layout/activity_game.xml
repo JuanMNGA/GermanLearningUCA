@@ -34,6 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/wordHint"
+                    android:paddingLeft="0dp"
                     android:paddingRight="20dp"
                     android:singleLine="true"
                     android:visibility="gone" >
@@ -88,14 +89,36 @@
                         android:textSize="20sp" />
                 </FrameLayout>
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
+                <LinearLayout
+                    android:id="@+id/layoutRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:numStars="5"
-                    android:stepSize="1.0"
-                    android:visibility="gone" />
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/reportBtn"
+                        android:layout_width="40dp"
+                        android:layout_height="35dp"
+						android:layout_marginLeft="15dp"
+						android:layout_marginRight="5dp"
+						android:background="@drawable/report_icon"
+                        android:visibility="gone" />
+                    
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:numStars="3"
+                        android:stepSize="1.0"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/dummyView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Contiene botones -->

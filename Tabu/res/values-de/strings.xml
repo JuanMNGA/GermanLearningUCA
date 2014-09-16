@@ -111,10 +111,10 @@
     
     <!-- Reports -->
     <string name="improperContent"> Inhalt ist nicht korrekt </string>
-    <string name="offensiveContent"> Inhalt ist offensiv </string>
+    <string name="offensiveContent"> Inhalt ist beleidigend </string>
     <string name="orthographicError"> Orthographiefehler </string>
     <string name="sintaxError"> Syntax ist nicht korrekt </string>
-    <string name="grammarError"> Grammatikfehler </string>
+    <string name="grammarError"> Grammatik, Syntax/ Orthographie sind falsch </string>
     <string name="difficultDefinition"> Definition ist kompliziert </string>
     <string name="badAudio"> Audio so lala</string>
 

@@ -110,12 +110,12 @@
     <string name="guessItEmail"> guessit.languagetrainer@gmail.com </string>
     
     <!-- Reports -->
-    <string name="improperContent"> Improper content </string>
+    <string name="improperContent"> Wrong content </string>
     <string name="offensiveContent"> Offensive content </string>
     <string name="orthographicError"> Ortographic error </string>
     <string name="sintaxError"> Sintax error </string>
-    <string name="grammarError"> Grammar error </string>
-    <string name="difficultDefinition"> Hard definition</string>
+    <string name="grammarError"> Wrong grammar, syntax or spelling</string>
+    <string name="difficultDefinition"> Difficult to guess</string>
     <string name="badAudio"> Audio quality is not good</string>
 
     <!-- Statistics -->

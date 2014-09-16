@@ -4,12 +4,6 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import com.google.common.base.Function;
-
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +12,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -30,7 +30,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -41,8 +40,8 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.speech.tts.TextToSpeech;
-import android.support.v4.app.NavUtils;
+
+import com.google.common.base.Function;
 
 public class GameActivity extends Activity implements RatingBar.OnRatingBarChangeListener {
 
@@ -55,6 +54,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	private TextView remember;
 	private LinearLayout rememberBox;
 	private TextView rememberInside; 
+	private Button reportBtn;
 
 	private TextView prepalabra;
 	private TextView postpalabra;
@@ -64,14 +64,13 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 	BalloonHint bh = null;
 
 	RatingBar rb;
-	boolean rated; // To make rating optional
-	float lastRating=0;
+	boolean rated;
 
 	ProgressDialog dialog;
 
 	//TabuCountDownTimer timerCount;
 	float fontSize;
-	
+
 	InputMethodManager imm;
 
 
@@ -80,7 +79,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		super.onResume();
 		TabuUtils.updateLanguage(this);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		TabuUtils.showConfirmDialog(getString(R.string.sureExit), getResources().getString(R.string.punish),
@@ -97,7 +96,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		},
 		GameActivity.this);
 	}
-	
+
 	@Override
 	public void onDestroy()
 	{
@@ -114,13 +113,13 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		super.onCreate(savedInstanceState);
 		
 		TabuUtils.hideActionBar(this);
-		
+
 		// Set xml view
 		setContentView(R.layout.activity_game);
-		
+
 		// To hide/show keyboard
-		imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
-		
+		imm = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+
 		submit = (MarkableButton)findViewById(R.id.submit);
 		clue = (MarkableButton) findViewById(R.id.pista);
 		dictionary = (MarkableButton) findViewById(R.id.dictionary);
@@ -131,7 +130,9 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		postpalabra = (TextView) findViewById(R.id.postpalabra);
 		time = (TextView) findViewById(R.id.timer);
 		rb = (RatingBar) findViewById(R.id.ratingBar);
-		
+		reportBtn = (Button) findViewById(R.id.reportBtn);
+		rated = false;
+
 		audioBtn = (Button) findViewById(R.id.audio);
 		audioBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {	
@@ -139,85 +140,8 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				gameManager.getTTS().speak(prepalabra.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
 			} 
 		});
-		
+
 		fontSize = new TextView(this).getTextSize();
-		
-		rated = false;
-		rb.setOnRatingBarChangeListener(this);
-		rb.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					float touchPositionX = event.getX();
-					float width = rb.getWidth();
-					float starsf = (touchPositionX / width) * 5.0f;
-					int stars = (int)starsf + 1;
-
-					if(stars == lastRating) {
-						rb.setRating(0.0f);
-						// Report dialog
-						AlertDialog.Builder editalert = new AlertDialog.Builder(GameActivity.this);
-						editalert.setTitle(getResources().getString(R.string.report));
-						editalert.setMessage(getResources().getString(R.string.reportReason));
-						final Spinner reason = new Spinner(GameActivity.this);
-						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.MATCH_PARENT,
-								LinearLayout.LayoutParams.MATCH_PARENT);
-						reason.setLayoutParams(lp);
-						editalert.setView(reason);
-						final ArrayList<String> reasons = new ArrayList<String>();
-						TabuUtils.fillReportReasons(GameActivity.this, reasons);
-						ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(GameActivity.this,
-								android.R.layout.simple_spinner_item, reasons);
-						dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-						reason.setAdapter(dataAdapter);
-
-						editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								gameManager.getCurrentQuestion().setReport(String.valueOf(reasons.indexOf(reason.getSelectedItem().toString())));
-								requestNextQuestion();
-							}
-						});
-						editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-							}
-						});
-
-
-						editalert.show();
-					}
-					else
-						rb.setRating(stars);
-
-					lastRating = rb.getRating();
-
-					//Toast.makeText(MainActivity.this, String.valueOf("test"), Toast.LENGTH_SHORT).show();                   
-					v.setPressed(false);
-				}
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					v.setPressed(true);
-				}
-
-				if (event.getAction() == MotionEvent.ACTION_CANCEL) {
-					v.setPressed(false);
-				}
-				return true;
-			}});
-
-		/*
-		rb.setOnTouchListener(new OnTouchListener() {
-		    @Override
-		    public boolean onTouch(View v, MotionEvent event) {
-		        if (event.getAction() == MotionEvent.ACTION_UP) {
-		            // TODO perform your action here
-					if(rb.getRating() == lastRating)
-						rb.setRating(0.0f);
-
-					lastRating = rb.getRating();
-		        }
-		        return false;
-		    }
-		});*/
 
 		// Show the Up button in the action bar.
 		//setupActionBar();
@@ -303,15 +227,71 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					else {
 						// Next
 						if(rated) {
-							current.setPuntuacion((int) rb.getRating());
+							if(current.getReport().isEmpty())
+								current.setPuntuacion((int) rb.getRating());
+							else
+								current.setPuntuacion(0);
 							requestNextQuestion();
 						} else {
 							//Dialog ... you haven't rate
 						}
-						
+
 					}
 				} // Empty answer... else
 			} 
+		});
+
+		rb.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_UP) {
+					float touchPositionX = event.getX();
+					float width = rb.getWidth();
+					float starsf = (touchPositionX / width) * rb.getNumStars();
+					int stars = (int)starsf + 1;
+					
+					rb.setRating(stars);
+					
+					rated = true;
+				}
+				return true;
+			}
+		});
+
+		reportBtn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Report dialog
+				AlertDialog.Builder editalert = new AlertDialog.Builder(GameActivity.this);
+				editalert.setTitle(getResources().getString(R.string.report));
+				editalert.setMessage(getResources().getString(R.string.reportReason));
+				final Spinner reason = new Spinner(GameActivity.this);
+				LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT,
+						LinearLayout.LayoutParams.MATCH_PARENT);
+				reason.setLayoutParams(lp);
+				editalert.setView(reason);
+				final ArrayList<String> reasons = new ArrayList<String>();
+				TabuUtils.fillReportReasons(GameActivity.this, reasons);
+				ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(GameActivity.this,
+						android.R.layout.simple_spinner_item, reasons);
+				dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				reason.setAdapter(dataAdapter);
+
+				editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						gameManager.getCurrentQuestion().setReport(String.valueOf(reasons.indexOf(reason.getSelectedItem().toString())));
+						requestNextQuestion();
+					}
+				});
+				editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+					}
+				});
+
+
+				editalert.show();
+			}
 		});
 	}
 
@@ -319,7 +299,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		final Question current = gameManager.getCurrentQuestion();
 		current.increaseTries();
 		if(finalWord.compareTo("") != 0 && gameManager.validWord(current.getId(), finalWord)) {
-			
+
 			/*submit.setChecked(true);
 			current.setSuccess(true);
 			if(rated)
@@ -384,6 +364,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		postpalabra.setVisibility(View.VISIBLE);
 		clue.setVisibility(View.VISIBLE);
 		rb.setVisibility(View.GONE);
+		reportBtn.setVisibility(View.GONE);
 		dictionary.setVisibility(View.GONE);
 		audioBtn.setVisibility(View.GONE);
 		submit.setText(this.getResources().getString(R.string.guess));
@@ -392,12 +373,12 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		palabra.requestFocus();
 		imm.showSoftInput(palabra, 0);
 	}
-	
+
 	public void showRatingMode(Question q) {
 		palabra.setVisibility(View.GONE);
 		postpalabra.setVisibility(View.GONE);
 		clue.setVisibility(View.GONE);
-		
+
 		//Adapt prepalabra
 		String color;
 		if(q.isSuccess()) {
@@ -410,14 +391,13 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 		coloredWord += "<font color=" + color + ">" + q.getName() + " </font> ";
 		coloredWord += "<font color=#000000>" + q.getPostpalabra() + " </font> ";
 		prepalabra.setText(Html.fromHtml(coloredWord));
-		
-		rb.setVisibility(View.VISIBLE);
 
-		lastRating=0;
-		
+		rb.setVisibility(View.VISIBLE);
+		reportBtn.setVisibility(View.VISIBLE);
+
 		audioBtn.setVisibility(View.VISIBLE);
 		dictionary.setVisibility(View.VISIBLE);
-		
+
 		// If article not null, update remember box with the correct answer
 		if(rememberBox.getVisibility() == View.VISIBLE) {
 			int max_width2 = TabuUtils.dpToPx((int) (rememberBox.getWidth() - 20));
@@ -427,15 +407,15 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			rememberInside.setText(Html.fromHtml(formattedText));
 			rememberInside.setTextSize(TabuUtils.getFontSizeFromBounds(text, max_width2, 40));
 		}
-		
+
 		// Rate definition ballonhint!
 		showRateTip();
 		submit.setText(this.getResources().getString(R.string.rate));
 		submit.setEnabled(true);
-		
+
 		imm.hideSoftInputFromWindow(palabra.getWindowToken(), 0);
 	}
-	
+
 	public void requestNextQuestion(){
 		final Question current = gameManager.next();
 		if(current != null) {
@@ -516,7 +496,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			showQuestionMode();
 		}
 		else {
-			
+
 			new SendStadistics().execute(gameManager.getQuestions());
 		}
 	}
@@ -541,18 +521,18 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 				// Creates a remember textview and place it at the right-top corner of rememberbox
 				remember = (TextView) findViewById(R.id.remember);
 				rememberInside = (TextView) findViewById(R.id.rememberInside);
-				
+
 				// Display remember! message on top-right corner of rememberBox
 				// width and height of remember box
 				final int width = rememberBox.getWidth();
 				final int height = rememberBox.getHeight();
-				
+
 				//remember dimensions	
 				int max_height1 = TabuUtils.dpToPx((int) (height*0.18));
 				int max_width1 = TabuUtils.dpToPx((int) (width*0.177));
 
 				remember.setTextSize(TabuUtils.getFontSizeFromBounds(remember.getText().toString(), max_width1, max_height1));
-				
+
 				//Display remember contain
 				//final int max_height2 = TabuUtils.dpToPx((int)height - max_height1*4);
 				final int max_height2 = 40;
@@ -590,7 +570,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					}
 
 				});
-				
+
 				ViewTreeObserver obs = rememberBox.getViewTreeObserver();
 
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -609,7 +589,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			@SuppressLint("NewApi")
 			@Override
 			public void onGlobalLayout() {
-				int width = rb.getWidth();
+				int width = prepalabra.getWidth();
 				int height = rb.getHeight();
 
 				bh = new BalloonHint(GameActivity.this, rb, MeasureSpec.AT_MOST);

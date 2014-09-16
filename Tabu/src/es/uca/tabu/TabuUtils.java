@@ -252,11 +252,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("ss", "ß");
+			result = str.replaceAll("ss", "ÃŸ");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("ss", "ß");
+			result = str.replaceAll("ss", "ÃŸ");
 		}
 		return result;
 	}
@@ -265,11 +265,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("ß", "ss");
+			result = str.replaceAll("ÃŸ", "ss");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("ß", "ss");
+			result = str.replaceAll("ÃŸ", "ss");
 		}
 		return result;
 	}
@@ -278,11 +278,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("ö", "oe").replaceAll("ä", "ae").replaceAll("ü", "ue");
+			result = str.replaceAll("Ã¶", "oe").replaceAll("Ã¤", "ae").replaceAll("Ã¼", "ue");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("ö", "oe").replaceAll("ä", "ae").replaceAll("ü", "ue");
+			result = str.replaceAll("Ã¶", "oe").replaceAll("Ã¤", "ae").replaceAll("Ã¼", "ue");
 		}
 		return result;
 	}
@@ -291,11 +291,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü");
+			result = str.replaceAll("oe", "Ã¶").replaceAll("ae", "Ã¤").replaceAll("ue", "Ã¼");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü");
+			result = str.replaceAll("oe", "Ã¶").replaceAll("ae", "Ã¤").replaceAll("ue", "Ã¼");
 		}
 		return result;
 	}
@@ -369,11 +369,8 @@ public class TabuUtils {
 	public static void fillReportReasons(Context c, ArrayList<String> al) {
 		al.add(c.getString(R.string.improperContent));
 		al.add(c.getString(R.string.offensiveContent));
-		al.add(c.getString(R.string.orthographicError));
-		al.add(c.getString(R.string.sintaxError));
 		al.add(c.getString(R.string.grammarError));
 		al.add(c.getString(R.string.difficultDefinition));
-		al.add(c.getString(R.string.badAudio));
 	}
 
 	@SuppressLint("NewApi")
@@ -434,21 +431,21 @@ public class TabuUtils {
 
 			
 			Map<String, String> russianCategories = new HashMap<String, String>();
-			russianCategories.put("еда_и_напитки", "essen_trinken");
-			russianCategories.put("погода_и_времена_года", "wetter_jahreszeiten");
-			russianCategories.put("свободное_время", "freizeit");
-			russianCategories.put("внешность", "aussehen");
-			russianCategories.put("характер", "charaktereigenschaften");
-			russianCategories.put("профессии", "berufe");
-			russianCategories.put("Мнения", "eine_meinung_aussern");
-			russianCategories.put("дом", "wohnung");
-			russianCategories.put("Одежда__мода", "kleidung_mode");
-			russianCategories.put("страны_языки_национальност", "lander_sprachen_nationalitat");
-			russianCategories.put("обучение", "studium_universitat");
-			russianCategories.put("семья_друзья", "familie_freunde");
-			russianCategories.put("при_встрече", "begrussen_sich_vorstellen");
-			russianCategories.put("чувства", "gefuhle_befinden");
-			russianCategories.put("город", "stadt");
+			russianCategories.put("ÐµÐ´Ð°_Ð¸_Ð½Ð°Ð¿Ð¸Ñ‚ÐºÐ¸", "essen_trinken");
+			russianCategories.put("Ð¿Ð¾Ð³Ð¾Ð´Ð°_Ð¸_Ð²Ñ€ÐµÐ¼ÐµÐ½Ð°_Ð³Ð¾Ð´Ð°", "wetter_jahreszeiten");
+			russianCategories.put("Ñ�Ð²Ð¾Ð±Ð¾Ð´Ð½Ð¾Ðµ_Ð²Ñ€ÐµÐ¼Ñ�", "freizeit");
+			russianCategories.put("Ð²Ð½ÐµÑˆÐ½Ð¾Ñ�Ñ‚ÑŒ", "aussehen");
+			russianCategories.put("Ñ…Ð°Ñ€Ð°ÐºÑ‚ÐµÑ€", "charaktereigenschaften");
+			russianCategories.put("Ð¿Ñ€Ð¾Ñ„ÐµÑ�Ñ�Ð¸Ð¸", "berufe");
+			russianCategories.put("ÐœÐ½ÐµÐ½Ð¸Ñ�", "eine_meinung_aussern");
+			russianCategories.put("Ð´Ð¾Ð¼", "wohnung");
+			russianCategories.put("ÐžÐ´ÐµÐ¶Ð´Ð°__Ð¼Ð¾Ð´Ð°", "kleidung_mode");
+			russianCategories.put("Ñ�Ñ‚Ñ€Ð°Ð½Ñ‹_Ñ�Ð·Ñ‹ÐºÐ¸_Ð½Ð°Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ñ�Ñ‚", "lander_sprachen_nationalitat");
+			russianCategories.put("Ð¾Ð±ÑƒÑ‡ÐµÐ½Ð¸Ðµ", "studium_universitat");
+			russianCategories.put("Ñ�ÐµÐ¼ÑŒÑ�_Ð´Ñ€ÑƒÐ·ÑŒÑ�", "familie_freunde");
+			russianCategories.put("Ð¿Ñ€Ð¸_Ð²Ñ�Ñ‚Ñ€ÐµÑ‡Ðµ", "begrussen_sich_vorstellen");
+			russianCategories.put("Ñ‡ÑƒÐ²Ñ�Ñ‚Ð²Ð°", "gefuhle_befinden");
+			russianCategories.put("Ð³Ð¾Ñ€Ð¾Ð´", "stadt");
 			
 			if(russianCategories.containsKey(category))
 				return russianCategories.get(category);

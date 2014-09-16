@@ -55,8 +55,8 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:isIndicator="true"
-        android:max="5"
-        android:numStars="5"
+        android:max="3"
+        android:numStars="3"
         android:stepSize="0.1" />
 
     <TableLayout
