@@ -40,6 +40,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 	private TextView remember;
 	private LinearLayout rememberBox;
 	private TextView rememberInside; 
+	private Button reportBtn;
 
 	RatingBar rb;
 	boolean rated; // To make rating optional
@@ -77,6 +78,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 
 			definition = (TextView) findViewById(R.id.definition);
 			rememberBox = (LinearLayout) findViewById(R.id.rememberBox);
+			reportBtn = (Button) findViewById(R.id.reportBtn);
 
 			String color;
 			if(q.isSuccess()) {
@@ -112,68 +114,52 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 					if (event.getAction() == MotionEvent.ACTION_UP) {
 						float touchPositionX = event.getX();
 						float width = rb.getWidth();
-						float starsf = (touchPositionX / width) * 5.0f;
+						float starsf = (touchPositionX / width) * rb.getNumStars();
 						int stars = (int)starsf + 1;
-
-						if(stars == lastRating) {
-							rb.setRating(0.0f);
-
-							// Report dialog
-							AlertDialog.Builder editalert = new AlertDialog.Builder(ReviewQuestionActivity.this);
-							editalert.setTitle(getResources().getString(R.string.report));
-							editalert.setMessage(getResources().getString(R.string.reportReason));
-							final Spinner reason = new Spinner(ReviewQuestionActivity.this);
-							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-									LinearLayout.LayoutParams.MATCH_PARENT,
-									LinearLayout.LayoutParams.MATCH_PARENT);
-							reason.setLayoutParams(lp);
-							editalert.setView(reason);
-							final ArrayList<String> reasons = new ArrayList<String>();
-							TabuUtils.fillReportReasons(ReviewQuestionActivity.this, reasons);
-							ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ReviewQuestionActivity.this,
-									android.R.layout.simple_spinner_item, reasons);
-							dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-							reason.setAdapter(dataAdapter);
-
-
-							/*final EditText input = new EditText(ReviewQuestionActivity.this);
-							LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-									LinearLayout.LayoutParams.MATCH_PARENT,
-									LinearLayout.LayoutParams.MATCH_PARENT);
-							input.setLayoutParams(lp);
-							editalert.setView(input);*/
-
-							editalert.setPositiveButton(getResources().getString(R.string.report), new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int whichButton) {
-									q.setReport(String.valueOf(reasons.indexOf(reason.getSelectedItem().toString())));
-								}
-							});
-							editalert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int whichButton) {
-								}
-							});
-
-
-							editalert.show();
-						}
-						else
-							rb.setRating(stars);
-
-						lastRating = rb.getRating();
-
-						//Toast.makeText(MainActivity.this, String.valueOf("test"), Toast.LENGTH_SHORT).show();                   
-						v.setPressed(false);
-					}
-					if (event.getAction() == MotionEvent.ACTION_DOWN) {
-						v.setPressed(true);
-					}
-
-					if (event.getAction() == MotionEvent.ACTION_CANCEL) {
-						v.setPressed(false);
+						
+						rb.setRating(stars);
+						
+						rated = true;
 					}
 					return true;
-				}});
+				}
+			});
 
+			reportBtn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// Report dialog
+					AlertDialog.Builder editalert = new AlertDialog.Builder(ReviewQuestionActivity.this);
+					editalert.setTitle(getResources().getString(R.string.report));
+					editalert.setMessage(getResources().getString(R.string.reportReason));
+					final Spinner reason = new Spinner(ReviewQuestionActivity.this);
+					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+							LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.MATCH_PARENT);
+					reason.setLayoutParams(lp);
+					editalert.setView(reason);
+					final ArrayList<String> reasons = new ArrayList<String>();
+					TabuUtils.fillReportReasons(ReviewQuestionActivity.this, reasons);
+					ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(ReviewQuestionActivity.this,
+							android.R.layout.simple_spinner_item, reasons);
+					dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+					reason.setAdapter(dataAdapter);
+
+					editalert.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							q.setReport(String.valueOf(reasons.indexOf(reason.getSelectedItem().toString())));
+						}
+					});
+					editalert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+						}
+					});
+
+
+					editalert.show();
+				}
+			});
+			
 			// Check if there is an article
 			if((q.getArticle() != null && !q.getArticle().isEmpty())) {
 				// Get left margin in dp

@@ -38,12 +38,29 @@
                     android:textIsSelectable="true"
                     android:textSize="20sp" />
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
+                <LinearLayout
+                    android:id="@+id/layoutRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:stepSize="1.0" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/reportBtn"
+                        android:layout_width="40dp"
+                        android:layout_height="35dp"
+						android:layout_marginLeft="15dp"
+						android:layout_marginRight="5dp"
+						android:background="@drawable/report_icon" />
+                    
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:numStars="3"
+                        android:stepSize="1.0" />
+                 </LinearLayout>
             </LinearLayout>
 
             <!-- Contiene botones -->

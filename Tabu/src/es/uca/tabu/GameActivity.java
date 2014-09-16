@@ -227,7 +227,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 					else {
 						// Next
 						if(rated) {
-							if(current.getReport().isEmpty())
+							if(current.getReport() == null)
 								current.setPuntuacion((int) rb.getRating());
 							else
 								current.setPuntuacion(0);
