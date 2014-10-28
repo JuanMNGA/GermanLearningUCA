@@ -428,24 +428,23 @@ public class TabuUtils {
 		}
 		else if(current.toString().compareTo("ru") == 0) {
 			System.out.println("Translating from russian...");
-
 			
-			Map<String, String> russianCategories = new HashMap<String, String>();
-			russianCategories.put("ÐµÐ´Ð°_Ð¸_Ð½Ð°Ð¿Ð¸Ñ‚ÐºÐ¸", "essen_trinken");
-			russianCategories.put("Ð¿Ð¾Ð³Ð¾Ð´Ð°_Ð¸_Ð²Ñ€ÐµÐ¼ÐµÐ½Ð°_Ð³Ð¾Ð´Ð°", "wetter_jahreszeiten");
-			russianCategories.put("Ñ�Ð²Ð¾Ð±Ð¾Ð´Ð½Ð¾Ðµ_Ð²Ñ€ÐµÐ¼Ñ�", "freizeit");
-			russianCategories.put("Ð²Ð½ÐµÑˆÐ½Ð¾Ñ�Ñ‚ÑŒ", "aussehen");
-			russianCategories.put("Ñ…Ð°Ñ€Ð°ÐºÑ‚ÐµÑ€", "charaktereigenschaften");
-			russianCategories.put("Ð¿Ñ€Ð¾Ñ„ÐµÑ�Ñ�Ð¸Ð¸", "berufe");
-			russianCategories.put("ÐœÐ½ÐµÐ½Ð¸Ñ�", "eine_meinung_aussern");
-			russianCategories.put("Ð´Ð¾Ð¼", "wohnung");
-			russianCategories.put("ÐžÐ´ÐµÐ¶Ð´Ð°__Ð¼Ð¾Ð´Ð°", "kleidung_mode");
-			russianCategories.put("Ñ�Ñ‚Ñ€Ð°Ð½Ñ‹_Ñ�Ð·Ñ‹ÐºÐ¸_Ð½Ð°Ñ†Ð¸Ð¾Ð½Ð°Ð»ÑŒÐ½Ð¾Ñ�Ñ‚", "lander_sprachen_nationalitat");
-			russianCategories.put("Ð¾Ð±ÑƒÑ‡ÐµÐ½Ð¸Ðµ", "studium_universitat");
-			russianCategories.put("Ñ�ÐµÐ¼ÑŒÑ�_Ð´Ñ€ÑƒÐ·ÑŒÑ�", "familie_freunde");
-			russianCategories.put("Ð¿Ñ€Ð¸_Ð²Ñ�Ñ‚Ñ€ÐµÑ‡Ðµ", "begrussen_sich_vorstellen");
-			russianCategories.put("Ñ‡ÑƒÐ²Ñ�Ñ‚Ð²Ð°", "gefuhle_befinden");
-			russianCategories.put("Ð³Ð¾Ñ€Ð¾Ð´", "stadt");
+ 			Map<String, String> russianCategories = new HashMap<String, String>();
+ 			russianCategories.put("еда_и_напитки", "essen_trinken");
+ 			russianCategories.put("погода_и_времена_года", "wetter_jahreszeiten");
+ 			russianCategories.put("свободное_время", "freizeit");
+ 			russianCategories.put("внешность", "aussehen");
+ 			russianCategories.put("характер", "charaktereigenschaften");
+ 			russianCategories.put("профессии", "berufe");
+ 			russianCategories.put("Мнения", "eine_meinung_aussern");
+ 			russianCategories.put("дом", "wohnung");
+ 			russianCategories.put("Одежда__мода", "kleidung_mode");
+ 			russianCategories.put("страны_языки_национальност", "lander_sprachen_nationalitat");
+ 			russianCategories.put("обучение", "studium_universitat");
+ 			russianCategories.put("семья_друзья", "familie_freunde");
+ 			russianCategories.put("при_встрече", "begrussen_sich_vorstellen");
+ 			russianCategories.put("чувства", "gefuhle_befinden");
+ 			russianCategories.put("город", "stadt");
 			
 			if(russianCategories.containsKey(category))
 				return russianCategories.get(category);
