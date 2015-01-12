@@ -376,6 +376,7 @@ android.speech.tts.TextToSpeech.OnInitListener {
         if (status == TextToSpeech.SUCCESS) {
         	Resources res = c.getResources();
     		android.content.res.Configuration conf = res.getConfiguration();
+    		System.out.println("Google-Speech: " + conf.locale);
             int result = tts.setLanguage(conf.locale);
  
             if (result == TextToSpeech.LANG_MISSING_DATA

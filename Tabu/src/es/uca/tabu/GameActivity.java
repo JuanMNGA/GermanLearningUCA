@@ -482,7 +482,7 @@ public class GameActivity extends Activity implements RatingBar.OnRatingBarChang
 			}
 
 			// Check if there is an article
-			if((current.getArticle() != null && !current.getArticle().isEmpty())) {
+			if((current.getArticle() != null && !current.getArticle().isEmpty()) && current.getArticle() != "null") {
 				rememberBox.setVisibility(View.VISIBLE);
 				showRememberArticle();
 			}

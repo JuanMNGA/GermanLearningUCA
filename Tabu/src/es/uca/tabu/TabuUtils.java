@@ -16,6 +16,7 @@ import com.google.common.base.Function;
 
 import es.uca.tabu.utils.Environment;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -252,11 +253,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("ss", "ÃŸ");
+			result = str.replaceAll("ss", "ß");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("ss", "ÃŸ");
+			result = str.replaceAll("ss", "ß");
 		}
 		return result;
 	}
@@ -265,11 +266,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("ÃŸ", "ss");
+			result = str.replaceAll("ß", "ss");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("ÃŸ", "ss");
+			result = str.replaceAll("ß", "ss");
 		}
 		return result;
 	}
@@ -278,11 +279,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("Ã¶", "oe").replaceAll("Ã¤", "ae").replaceAll("Ã¼", "ue");
+			result = str.replaceAll("ö", "oe").replaceAll("ä", "ae").replaceAll("ü", "ue");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("Ã¶", "oe").replaceAll("Ã¤", "ae").replaceAll("Ã¼", "ue");
+			result = str.replaceAll("ö", "oe").replaceAll("ä", "ae").replaceAll("ü", "ue");
 		}
 		return result;
 	}
@@ -291,11 +292,11 @@ public class TabuUtils {
 		String result;
 		if(Character.isUpperCase(str.charAt(0))) {
 			str.toLowerCase();
-			result = str.replaceAll("oe", "Ã¶").replaceAll("ae", "Ã¤").replaceAll("ue", "Ã¼");
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü");
 			Character.toUpperCase(result.charAt(0));
 		}
 		else {
-			result = str.replaceAll("oe", "Ã¶").replaceAll("ae", "Ã¤").replaceAll("ue", "Ã¼");
+			result = str.replaceAll("oe", "ö").replaceAll("ae", "ä").replaceAll("ue", "ü");
 		}
 		return result;
 	}
@@ -378,12 +379,15 @@ public class TabuUtils {
 		//Hide Action bar
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			((Activity) c).getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-			((Activity) c).getActionBar().hide();
+			ActionBar ab = ((Activity) c).getActionBar();
+			if(ab != null)
+				ab.hide();
 		}
 		else {
 			((Activity) c).getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 			android.support.v7.app.ActionBar actionBar = ((ActionBarActivity) c).getSupportActionBar();
-			actionBar.hide();
+			if(actionBar != null)
+				actionBar.hide();
 		}
 	}
 	

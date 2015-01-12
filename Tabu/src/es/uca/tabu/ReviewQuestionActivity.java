@@ -161,7 +161,7 @@ public class ReviewQuestionActivity extends Activity implements RatingBar.OnRati
 			});
 			
 			// Check if there is an article
-			if((q.getArticle() != null && !q.getArticle().isEmpty())) {
+			if((q.getArticle() != null && !q.getArticle().isEmpty()) && !q.getArticle().contains("null")) {
 				// Get left margin in dp
 				rememberBox.setVisibility(View.VISIBLE);
 				showRememberArticle();
