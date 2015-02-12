@@ -329,7 +329,7 @@ public class ConnectionManager {
 		//server = new String("http://94.247.31.212/tabu/Granada/");
 		//server = new String("http://94.247.31.212/tabu/UCA_Multilingue/");
 		//server = new String("http://94.247.31.212/tabu/EOI_Multilingue/");
-		server = new String("http://94.247.31.212/tabu/Australia/");
+		server = new String("http://104.236.215.116/tabu/Australia/");
 		jsonParser = new JSONParser();
 	}
 	
