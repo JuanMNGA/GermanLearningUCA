@@ -111,7 +111,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("email", email));
 		params.add(new BasicNameValuePair("rol", rol));
 
-		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register_2.php", params);
 
 		return json;
 	}
@@ -123,7 +123,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("password", password));
 		params.add(new BasicNameValuePair("email", email));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register_2.php", params);
 
 		return json;
 	}
@@ -133,7 +133,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("tag", reset_pass_tag));
 		params.add(new BasicNameValuePair("email", email));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"login_register_2.php", params);
 
 		return json;
 	}
@@ -159,7 +159,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("numOfQuestions", Integer.toString(numQuestions)));
 		params.add(new BasicNameValuePair("user_id", Integer.toString(user_id)));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 		
 		return json;
 	}
@@ -182,7 +182,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("tag", numQuestions_tag));
 		params.add(new BasicNameValuePair("object", jsCategories.toString()));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -193,7 +193,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("id", Integer.toString(id)));
 		params.add(new BasicNameValuePair("palabra", word));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -203,7 +203,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("tag", categories_tag));
 		params.add(new BasicNameValuePair("idioma", lang));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -233,7 +233,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("tag", storeStadistics_tag));
 		params.add(new BasicNameValuePair("object", jsQuestions.toString()));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -245,7 +245,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("question_id", question_id.toString()));
 		params.add(new BasicNameValuePair("rate", rate.toString()));
 		params.add(new BasicNameValuePair("reason", reason));
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 		return json;
 	}
 	
@@ -254,7 +254,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("tag", getNotes_tag));
 		params.add(new BasicNameValuePair("user_id", user_id.toString()));
 		params.add(new BasicNameValuePair("idioma", lang));
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 		
 		return json;
 	}
@@ -266,7 +266,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("word", word));
 		params.add(new BasicNameValuePair("idioma", lang));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -286,7 +286,7 @@ public class ConnectionManager {
 		
 		System.out.println(params.toString());
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -297,7 +297,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("user_id", user_id.toString()));
 		params.add(new BasicNameValuePair("idioma", lang));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -308,7 +308,7 @@ public class ConnectionManager {
 		params.add(new BasicNameValuePair("user_id", user_id.toString()));
 		params.add(new BasicNameValuePair("idioma", lang));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
@@ -317,7 +317,7 @@ public class ConnectionManager {
 		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
 		params.add(new BasicNameValuePair("tag", getVersion_tag));
 		
-		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager.php", params);
+		JSONObject json = jsonParser.getJSONFromUrl(server+"playManager_2.php", params);
 
 		return json;
 	}
